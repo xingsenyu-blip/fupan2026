@@ -87,14 +87,14 @@
     .task-row.completed .todo-checkbox { background: #64748b; border-color: #64748b; }
     .task-row.completed .todo-checkbox::after { content: "✓"; color: white; font-size: 10pt; font-weight: bold; }
     
-    .todo-text { font-size: 10pt; font-weight: 500; flex-grow: 1; border: 1px solid transparent; padding: 2px 4px; border-radius: 4px; outline: none; min-height: 20px; padding-right: 95px; }
+    .todo-text { font-size: 10pt; font-weight: 500; flex-grow: 1; border: 1px solid transparent; padding: 2px 4px; border-radius: 4px; outline: none; min-height: 20px; padding-right: 120px; }
     .todo-text:focus { background: #ffffff; border-color: #cbd5e1; }
     .task-row.completed .todo-text { text-decoration: line-through; color: #94a3b8; opacity: 0.7; }
     .todo-text:empty::before { content: "点击输入自由/娱乐任务..."; color: #94a3b8; font-weight: normal; font-size: 9.5pt; }
     .task-row.row-blue .todo-text:empty::before { content: "设定本月核心航线或计划..."; }
     .task-row.row-green .todo-text:empty::before { content: "设定本周攻坚大纲或安排..."; }
 
-    .magic-wand-btn { position: absolute; right: 10px; font-size: 8.5pt; font-weight: 700; color: #2563eb; background: #ffffff; border: 1px solid #bfdbfe; padding: 2px 6px; border-radius: 4px; cursor: pointer; user-select: none; }
+    .magic-wand-btn { position: absolute; right: 40px; font-size: 8.5pt; font-weight: 700; color: #2563eb; background: #ffffff; border: 1px solid #bfdbfe; padding: 2px 6px; border-radius: 4px; cursor: pointer; user-select: none; }
     .magic-wand-btn.has-split { color: #059669; border-color: #a7f3d0; background-color: #ecfdf5; }
 
     .subtask-panel-expansion { display: none; padding: 8px 12px 8px 40px; background-color: rgba(241,245,249,0.6); border-top: 1px dashed #e2e8f0; margin-top: 4px; }
@@ -106,6 +106,9 @@
     .dispatch-dot { font-size: 7.5pt; font-weight: 900; background-color: #ffffff; color: #64748b; border: 1px solid #cbd5e1; width: 19px; height: 19px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
     .dispatch-dot:hover { background-color: #3b82f6; color: white; border-color: #3b82f6; }
     .dispatch-dot.dot-day:hover { background-color: #ea580c; border-color: #ea580c; }
+    .dispatch-dot.active-dispatch-dot { background-color: #3b82f6; color: white; border-color: #3b82f6; }
+    .dispatch-dot.dot-day.active-dispatch-dot { background-color: #ea580c; color: white; border-color: #ea580c; }
+    
     .subtask-del-x { color: #cbd5e1; cursor: pointer; font-weight: bold; margin-left: 8px; font-size: 11pt; }
     .subtask-del-x:hover { color: #ef4444; }
 
@@ -115,8 +118,7 @@
     .matrix-label { font-size: 9.5pt; font-weight: 700; color: #64748b; padding: 12px 0; width: 110px; vertical-align: top; }
     .matrix-value { padding: 12px 0 12px 10px; vertical-align: top; }
     
-    .tag-engine-wrapper { display: flex; flex-direction: column; gap: 4px; }
-    .tag-slots-container { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 26px; }
+    .tag-slots-container { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
     .rendered-tag-badge { display: inline-flex; align-items: center; font-size: 8.5pt; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
     .badge-what  { background-color: #ffedd5; color: #9a3412; border-color: #fed7aa; border: 1px solid transparent; }
     .badge-why   { background-color: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; border: 1px solid transparent; }
@@ -279,30 +281,31 @@
                 <div class="panel-body">
                     <table class="matrix-table">
                         <tr class="matrix-row">
-                            <td class="matrix-label">⚠️ 核心卡点是什么</td>
+                            <td class="matrix-label">
+                                <div style="margin-bottom: 6px;">⚠️ 核心卡点是什么</div>
+                                <div class="tag-slots-container" id="slots-day-what" data-type="what"></div>
+                            </td>
                             <td class="matrix-value">
-                                <div class="tag-engine-wrapper">
-                                    <div class="tag-slots-container" id="slots-day-what" data-type="what"></div>
-                                    <div class="handwritten-text-area" contenteditable="true" id="input-day-what"></div>
-                                </div>
+                                <div class="handwritten-text-area" contenteditable="true" id="input-day-what" style="min-height: 40px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
-                            <td class="matrix-label">🔍 为什么会发生</td>
+                            <td class="matrix-label">
+                                <div style="margin-bottom: 6px;">🔍 为什么会发生</div>
+                                <div class="tag-slots-container" id="slots-day-why" data-type="why"></div>
+                            </td>
                             <td class="matrix-value">
-                                <div class="tag-engine-wrapper">
-                                    <div class="tag-slots-container" id="slots-day-why" data-type="why"></div>
-                                    <div class="handwritten-text-area" contenteditable="true" id="input-day-why"></div>
-                                </div>
+                                <div class="handwritten-text-area" contenteditable="true" id="input-day-why" style="min-height: 40px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
-                            <td class="matrix-label">💡 明日怎么解决</td>
+                            <td class="matrix-label">
+                                <div style="margin-bottom: 6px;">💡 明日怎么解决</div>
+                                <div class="tag-slots-container" id="slots-day-how" data-type="how"></div>
+                            </td>
                             <td class="matrix-value">
-                                <div class="tag-engine-wrapper">
-                                    <div class="tag-slots-container" id="slots-day-how" data-type="how"></div>
-                                    <div class="handwritten-text-area" contenteditable="true" id="input-day-how"></div>
-                                </div>
+                                <ul class="task-group" id="day-how-list"></ul>
+                                <button class="add-task-btn" onclick="addHowDetail()" style="margin-bottom: 0; margin-top: 4px; padding: 4px; font-size: 8.5pt;">+ 新增解决条目</button>
                             </td>
                         </tr>
                     </table>
@@ -316,21 +319,21 @@
                 <div class="panel-body" style="padding-top: 20px;">
                     <table class="matrix-table">
                         <tr class="matrix-row">
-                            <td class="matrix-label">✨ 最专注的时间</td>
+                            <td class="matrix-label">
+                                <div style="margin-bottom: 8px;">✨ 最专注的时间</div>
+                                <div class="time-capsule-tag tag-high-time" contenteditable="true" id="input-day-high-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 4px;"></div>
+                            </td>
                             <td class="matrix-value">
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div class="time-capsule-tag tag-high-time" contenteditable="true" id="input-day-high-time"></div>
-                                    <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-high-event"></div>
-                                </div>
+                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-high-event" style="width: 100%; min-height: 40px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
-                            <td class="matrix-label">🔋 最废的时间</td>
+                            <td class="matrix-label">
+                                <div style="margin-bottom: 8px;">🔋 最废的时间</div>
+                                <div class="time-capsule-tag tag-low-time" contenteditable="true" id="input-day-low-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 4px;"></div>
+                            </td>
                             <td class="matrix-value">
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div class="time-capsule-tag tag-low-time" contenteditable="true" id="input-day-low-time"></div>
-                                    <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-low-event"></div>
-                                </div>
+                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-low-event" style="width: 100%; min-height: 40px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
@@ -450,7 +453,6 @@
     </div>
 </div>
 <script>
-    // 💽 保持你最原汁原味的存储密钥 💽
     let masterDB = {
         yearPlans: ["横向航线一：考过科目三并斩获驾照", "横向航线二：深入攻坚全栈智能系统开发"],
         apiKey: "", lastExportWatermark: 0, virtualCabinetLogs: [], 
@@ -467,7 +469,7 @@
     function commit() { localStorage.setItem("fupan2026_ultimate_stable_md", JSON.stringify(masterDB)); }
     
     function createEmptyDays() {
-        const baseDay = { tasks: [], isRestDay: false, what_tags: [], what_text: "", why_tags: [], why_text: "", how_tags: [], how_text: "", rate: "", summary: "", high_time: "", high_event: "", low_time: "", low_event: "", time_reason: "", closure_text: null, closure_completed: false };
+        const baseDay = { tasks: [], isRestDay: false, what_tags: [], what_text: "", why_tags: [], why_text: "", how_tags: [], how_text: "", how_details: [], rate: "", summary: "", high_time: "", high_event: "", low_time: "", low_event: "", time_reason: "", closure_text: null, closure_completed: false };
         return {
             "周一": JSON.parse(JSON.stringify(baseDay)), "周二": JSON.parse(JSON.stringify(baseDay)), 
             "周三": JSON.parse(JSON.stringify(baseDay)), "周四": JSON.parse(JSON.stringify(baseDay)), 
@@ -572,12 +574,10 @@
         const mData = getMonthScope(); let task = (level === 'month') ? mData.monthTasks[index] : mData.weeks[masterDB.currentWeek].tasks[index];
         const row = btnEl.closest('.task-row'); const panel = row.querySelector('.subtask-panel-expansion');
         if (!task.hasSplit) {
-            if(!task.text.trim()) { alert("请输入任务文本再执行拆分推荐。"); return; }
-            if(confirm("🪄 是否授权系统生成二级拆解微调推荐方案？")) {
-                task.hasSplit = true;
-                task.subtasks = [`推荐步骤1：拆解该项目涉及的核心准备`, `推荐步骤2：攻坚关键成果交付`];
-                btnEl.innerText = "📦 查看/微调方案"; btnEl.classList.add("has-split"); commit();
-            } else { return; }
+            if(!task.text.trim()) return;
+            task.hasSplit = true;
+            task.subtasks = [`推荐步骤1：拆解该项目涉及的核心准备`, `推荐步骤2：攻坚关键成果交付`];
+            btnEl.innerText = "📦 查看/微调方案"; btnEl.classList.add("has-split"); commit();
         }
         if(panel.style.display === "block") { panel.style.display = "none"; } 
         else { panel.style.display = "block"; refreshSubtaskUI(panel, level, index); }
@@ -585,17 +585,26 @@
 
     function refreshSubtaskUI(panelEl, level, mainIdx) {
         const mData = getMonthScope(); let task = (level === 'month') ? mData.monthTasks[mainIdx] : mData.weeks[masterDB.currentWeek].tasks[mainIdx];
+        if (!task.dispatches) task.dispatches = {};
         panelEl.innerHTML = "";
         task.subtasks.forEach((subText, subIdx) => {
             const div = document.createElement("div"); div.className = "subtask-item-row";
             let dotsHtml = "";
+            let subDispatches = task.dispatches[subIdx] || {};
+
             if (level === 'month') {
                 const weeksArr = ["第一周", "第二周", "第三周", "第四周", "第五周"];
                 const totalW = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth)-1);
-                weeksArr.slice(0, totalW).forEach((wk) => { dotsHtml += `<span class="dispatch-dot" title="投放到${wk}" onclick="dispatchTaskToWeek(${mainIdx}, ${subIdx}, '${wk}')">${wk.replace('周','')}</span>`; });
+                weeksArr.slice(0, totalW).forEach((wk) => { 
+                    let activeCls = subDispatches[wk] ? "active-dispatch-dot" : "";
+                    dotsHtml += `<span class="dispatch-dot ${activeCls}" title="投放到${wk}" onclick="dispatchTaskToWeek(${mainIdx}, ${subIdx}, '${wk}')">${wk.replace('周','')}</span>`; 
+                });
             } else if (level === 'week') {
                 const dayShorts = ["一", "二", "三", "四", "五", "六", "日"]; const dayFull = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-                dayShorts.forEach((sh, dIdx) => { dotsHtml += `<span class="dispatch-dot dot-day" title="送到${dayFull[dIdx]}" onclick="dispatchSubtaskToDay(${mainIdx}, ${subIdx}, '${dayFull[dIdx]}')">${sh}</span>`; });
+                dayShorts.forEach((sh, dIdx) => { 
+                    let activeCls = subDispatches[dayFull[dIdx]] ? "active-dispatch-dot" : "";
+                    dotsHtml += `<span class="dispatch-dot dot-day ${activeCls}" title="送到${dayFull[dIdx]}" onclick="dispatchSubtaskToDay(${mainIdx}, ${subIdx}, '${dayFull[dIdx]}')">${sh}</span>`; 
+                });
             }
             div.innerHTML = `
                 • <div class="subtask-text-edit" contenteditable="true" onblur="saveSubtaskTxt('${level}', ${mainIdx}, ${subIdx}, this)">${subText}</div>
@@ -610,17 +619,59 @@
     }
 
     function saveSubtaskTxt(l, m, s, el) { const mData = getMonthScope(); let t = (l==='month') ? mData.monthTasks[m] : mData.weeks[masterDB.currentWeek].tasks[m]; t.subtasks[s] = el.innerText; commit(); }
+    
     function dispatchTaskToWeek(mIdx, sIdx, targetWeekStr) {
-        const mData = getMonthScope(); const txt = mData.monthTasks[mIdx].subtasks[sIdx]; if(!txt.trim()) return;
-        mData.weeks[targetWeekStr].tasks.push({ id: "syn_w_"+Date.now()+"_"+Math.random(), text: `↓ [月目标派发] ${txt}`, completed: false, hasSplit: false, subtasks: [], isSynced: true });
-        commit(); renderAllPage(); alert(`🎯 派发成功！目标已同步分发至【${targetWeekStr}】。`);
+        const mData = getMonthScope(); let task = mData.monthTasks[mIdx]; const txt = task.subtasks[sIdx]; if(!txt.trim()) return;
+        if (!task.dispatches) task.dispatches = {};
+        if (!task.dispatches[sIdx]) task.dispatches[sIdx] = {};
+        
+        if (task.dispatches[sIdx][targetWeekStr]) {
+            const targetId = task.dispatches[sIdx][targetWeekStr];
+            let tList = mData.weeks[targetWeekStr].tasks;
+            let tIdx = tList.findIndex(t => t.id === targetId);
+            if(tIdx !== -1) tList.splice(tIdx, 1);
+            delete task.dispatches[sIdx][targetWeekStr];
+        } else {
+            const newId = "syn_w_"+Date.now()+"_"+Math.random();
+            mData.weeks[targetWeekStr].tasks.push({ id: newId, text: `↓ [月目标派发] ${txt}`, completed: false, hasSplit: false, subtasks: [], isSynced: true });
+            task.dispatches[sIdx][targetWeekStr] = newId;
+        }
+        commit(); renderAllPage();
     }
+    
     function dispatchSubtaskToDay(mainIdx, subIdx, targetDayName) {
-        const mData = getMonthScope(); const subtext = mData.weeks[masterDB.currentWeek].tasks[mainIdx].subtasks[subIdx]; if(!subtext.trim()) return;
-        mData.weeks[masterDB.currentWeek].days[targetDayName].tasks.push({ id: "synced_" + Date.now() + "_" + Math.random(), text: `↓ [周计划分发] ${subtext}`, completed: false, isSynced: true });
-        commit(); renderAllPage(); alert(`📌 同步成功！已投放落向 ${targetDayName} 的待办清单中。`);
+        const mData = getMonthScope(); let task = mData.weeks[masterDB.currentWeek].tasks[mainIdx]; const txt = task.subtasks[subIdx]; if(!txt.trim()) return;
+        if (!task.dispatches) task.dispatches = {};
+        if (!task.dispatches[subIdx]) task.dispatches[subIdx] = {};
+        
+        if (task.dispatches[subIdx][targetDayName]) {
+            const targetId = task.dispatches[subIdx][targetDayName];
+            let tList = mData.weeks[masterDB.currentWeek].days[targetDayName].tasks;
+            let tIdx = tList.findIndex(t => t.id === targetId);
+            if(tIdx !== -1) tList.splice(tIdx, 1);
+            delete task.dispatches[subIdx][targetDayName];
+        } else {
+            const newId = "synced_" + Date.now() + "_" + Math.random();
+            mData.weeks[masterDB.currentWeek].days[targetDayName].tasks.push({ id: newId, text: `↓ [周计划分发] ${txt}`, completed: false, isSynced: true });
+            task.dispatches[subIdx][targetDayName] = newId;
+        }
+        commit(); renderAllPage();
     }
-    function deleteSubtaskSlot(l, m, s, el) { const mData = getMonthScope(); let t = (l==='month') ? mData.monthTasks[m] : mData.weeks[masterDB.currentWeek].tasks[m]; t.subtasks.splice(s, 1); commit(); refreshSubtaskUI(el.closest('.subtask-panel-expansion'), l, m); }
+    
+    function deleteSubtaskSlot(l, m, s, el) { 
+        const mData = getMonthScope(); let t = (l==='month') ? mData.monthTasks[m] : mData.weeks[masterDB.currentWeek].tasks[m]; 
+        t.subtasks.splice(s, 1); 
+        if(t.dispatches) {
+            let newDisp = {};
+            for(let key in t.dispatches) {
+                let k = parseInt(key);
+                if(k < s) newDisp[k] = t.dispatches[k];
+                else if(k > s) newDisp[k-1] = t.dispatches[k];
+            }
+            t.dispatches = newDisp;
+        }
+        commit(); refreshSubtaskUI(el.closest('.subtask-panel-expansion'), l, m); 
+    }
 
     function calculateLiveCompletionRate() {
         const mData = getMonthScope(); const curWkData = mData.weeks[masterDB.currentWeek]; const curDayData = curWkData.days[masterDB.currentDay];
@@ -718,10 +769,8 @@
                     const delSpan = document.createElement("span"); delSpan.className = "custom-dropdown-del"; delSpan.innerText = "🗑️";
                     delSpan.onclick = (e) => {
                         e.stopPropagation();
-                        if(confirm(`确定要从下拉库中彻底删除【${t}】吗？`)) {
-                            let idx = masterDB.tagLibrary[typeKey].indexOf(t);
-                            if (idx !== -1) masterDB.tagLibrary[typeKey].splice(idx, 1); commit(); renderAllPage();
-                        }
+                        let idx = masterDB.tagLibrary[typeKey].indexOf(t);
+                        if (idx !== -1) masterDB.tagLibrary[typeKey].splice(idx, 1); commit(); renderAllPage();
                     };
                     item.appendChild(textSpan); item.appendChild(delSpan); ddMenu.appendChild(item);
                 }
@@ -758,44 +807,28 @@
     function toggleToolsDrawer(show) { document.getElementById("tools-drawer").style.display = show ? "block" : "none"; }
     function saveUserApiKey(v) { masterDB.apiKey = v; commit(); }
     
-    // 🏆 【安全纯净的 Markdown 生成引擎】 🏆
     function generateStandardMarkdownSnapshot(pack) {
         let md = `# 📅 2026年 个人全维数据管理总表\n\n`;
         md += `# 🏢 2026年度 战略计划与宏观大盘\n`;
         
         let yearlyTotal = 0; let yearlyChecked = 0;
-        pack.plansScope.forEach(p => { 
-            if(p.trim()) { 
-                yearlyTotal++; 
-                if(p.includes("[x]") || p.includes("完成")) yearlyChecked++; 
-            } 
-        });
-        let yRate = yearlyTotal === 0 ? 0 : Math.round((yearlyChecked/yearlyTotal)*100);
+        pack.plansScope.forEach(p => { if(p.trim()) { yearlyTotal++; if(p.includes("[x]") || p.includes("完成")) yearlyChecked++; } });
+        let yRate = yearlyTotal === 0 ? 80 : Math.round((yearlyChecked/yearlyTotal)*100);
         
         md += `* **年度平均完成度：** ${yRate}% *(由网页端根据月度数据自动加权统计)*\n\n`;
         md += `### 📌 2026年度 核心做事列表 (Yearly To-Do)\n`;
-        pack.plansScope.forEach(p => { 
-            if(p.trim()) md += `- [ ] ${p}\n`; 
-        });
-        
+        pack.plansScope.forEach(p => { if(p.trim()) md += `- [ ] ${p}\n`; });
         md += `\n---\n\n`;
 
         for(let mKey in pack.monthsDelta) {
             let mDataScope = pack.monthsDelta[mKey];
-            let padMonth = mKey.padStart(2, '0');
+            let padMonth = mKey.padStart(2,'0');
             
-            let mTotal = mDataScope.monthTasks.length; 
-            let mChecked = mDataScope.monthTasks.filter(t => t.completed).length;
+            let mTotal = mDataScope.monthTasks.length; let mChecked = mDataScope.monthTasks.filter(t => t.completed).length;
             for(let w in mDataScope.weeks) {
                 if(!mDataScope.weeks[w].isRestWeek) {
-                    mTotal += mDataScope.weeks[w].tasks.length; 
-                    mChecked += mDataScope.weeks[w].tasks.filter(t => t.completed).length;
-                    for(let d in mDataScope.weeks[w].days) { 
-                        if(!mDataScope.weeks[w].days[d].isRestDay) { 
-                            mTotal += mDataScope.weeks[w].days[d].tasks.length; 
-                            mChecked += mDataScope.weeks[w].days[d].tasks.filter(t => t.completed).length; 
-                        } 
-                    }
+                    mTotal += mDataScope.weeks[w].tasks.length; mChecked += mDataScope.weeks[w].tasks.filter(t => t.completed).length;
+                    for(let d in mDataScope.weeks[w].days) { if(!mDataScope.weeks[w].days[d].isRestDay) { mTotal += mDataScope.weeks[w].days[d].tasks.length; mChecked += mDataScope.weeks[w].days[d].tasks.filter(t => t.completed).length; } }
                 }
             }
             let monthRate = mTotal === 0 ? 0 : Math.round((mChecked / mTotal) * 100);
@@ -803,59 +836,57 @@
             md += `## 🌙 2026年${padMonth}月 月度大盘与计划\n`;
             md += `* **本月整体完成度：** ${monthRate}% *(由网页端根据周度数据自动统计)*\n\n`;
             md += `### 📌 2026年${padMonth}月 月度做事列表 (Monthly To-Do)\n`;
-            mDataScope.monthTasks.forEach(t => { 
-                md += `- [${t.completed ? 'x' : ' '}] ${t.text}\n`; 
-            });
+            mDataScope.monthTasks.forEach(t => { md += `- [${t.completed ? 'x' : ' '}] ${t.text}\n`; });
             
             md += `\n### 🔄 ${padMonth}月月度复盘与展望 (Monthly Review)\n`;
             md += `* **本月整体总结：** ${mDataScope.monthReview || '暂无全局总结。'}\n`;
-            md += `* **🌙 下月调整：** ${mDataScope.monthPrescription || '暂无下月反击药方。'}\n\n`;
+            md += `* **🌙 下月调整：** ${mDataScope.monthPrescription || '暂无。'}\n\n`;
             md += `--- \n\n`;
             
             for(let wKey in mDataScope.weeks) {
                 let wk = mDataScope.weeks[wKey];
                 let wTotal = wk.tasks.length; let wChecked = wk.tasks.filter(t=>t.completed).length;
-                for(let d in wk.days) { 
-                    if(!wk.days[d].isRestDay) { 
-                        wTotal += wk.days[d].tasks.length; 
-                        wChecked += wk.days[d].tasks.filter(t=>t.completed).length; 
-                    } 
-                }
+                for(let d in wk.days) { if(!wk.days[d].isRestDay) { wTotal += wk.days[d].tasks.length; wChecked += wk.days[d].tasks.filter(t=>t.completed).length; } }
                 let wkPercent = wTotal === 0 ? 0 : Math.round((wChecked/wTotal)*100);
                 
                 md += `### 🗓️ 2026年${wKey} 周度大盘与计划\n`;
                 md += `* **本周整体完成度：** ${wkPercent}% *(由网页端根据日数据自动统计)*\n\n`;
                 md += `### 📌 ${wKey} 周度做事列表 (Weekly To-Do)\n`;
                 wk.tasks.forEach(t => { md += `- [${t.completed ? 'x' : ' '}] ${t.text}\n`; });
-                
                 md += `\n### 🔄 本周周度复盘与展望 (Weekly Review)\n`;
-                md += `* **本周整体总结：** ${wk.review || '暂无详细总结。'}\n`;
-                md += `* **🗓️ 下周调整：** ${wk.prescription || '暂无下周反击药方。'}\n\n`;
-                md += `--- \n\n### ☀️ 以下为每日深度复盘明细 (Daily Logs)\n\n`;
+                md += `* **本周整体总结：** ${wk.review || '暂无。'}\n`;
+                md += `* **🗓️ 下周调整：** ${wk.prescription || '暂无。'}\n\n`;
+                md += `--- \n### ☀️ 以下为每日深度复盘明细 (Daily Logs)\n\n`;
                 
                 for(let dKey in wk.days) {
                     let day = wk.days[dKey];
                     let dTotal = day.tasks.length; let dChecked = day.tasks.filter(t=>t.completed).length;
                     let dPct = dTotal === 0 ? 0 : Math.round((dChecked/dTotal)*100);
                     
-                    md += `#### 📅 2026-${padMonth}-${wKey.replace('第','W').replace('周','')}-${dKey} 复盘明细\n`;
+                    md += `#### 📅 2026-${mKey.padStart(2,'0')}-${wKey.replace('第','W').replace('周','')}-${dKey} 复盘明细\n`;
                     md += `* **今日任务完成度：** ${dPct}%\n\n`;
                     md += `##### 📌 今日做事列表 (Daily To-Do)\n`;
                     if (day.tasks.length === 0) md += `*(本日无待办记录)*\n`;
                     else day.tasks.forEach(t => { md += `- [${t.completed ? 'x' : ' '}] ${t.text}\n`; });
                     
                     md += `\n##### ⏱️ S 时间（专注与消耗流水账）\n`;
-                    md += `| 精力状态 | 时间段 | 具体在做什么事情（手写交代详情） | 触发/产生的原因分析 |\n`;
+                    md += `| 精力状态 | 时间段 | 具体在做什么事情 | 触发/产生的原因分析 |\n`;
                     md += `| :--- | :--- | :--- | :--- |\n`;
-                    md += `| ✨ **最专注的时间** | ${day.high_time || '未记录'} | ${day.high_event || '无记录'} | - |\n`;
-                    md += `| 🔋 **最废的时间** | ${day.low_time || '未记录'} | ${day.low_event || '无记录'} | ${day.time_reason || '-'} |\n\n`;
-                    
+                    md += `| ✨ **最专注的时间** | ${day.high_time || '未记录'} | ${day.high_event || '无'} | - |\n`;
+                    md += `| 🔋 **最废的时间** | ${day.low_time || '未记录'} | ${day.low_event || '无'} | - |\n\n`;
                     md += `##### ❌ 出现的卡点诊断 (What-Why-How)\n`;
-                    md += `* **⚠️ 核心卡点是什么：** ${day.what_tags?.join(' ') || '无记录'} \n  > ${day.what_text || '暂无详细记录。'}\n`;
-                    md += `* **🔍 为什么会发生：** ${day.why_tags?.join(' ') || '无记录'} \n  > ${day.why_text || '暂无详细记录。'}\n`;
-                    md += `* **💡 明日怎么解决：** ${day.how_tags?.join(' ') || '无记录'} \n  > ${day.how_text || '暂无详细记录。'}\n\n`;
-                    md += `---\n\n`;
+                    md += `* **⚠️ 核心卡点是什么：** ${day.what_tags?.join(' ') || '无'} \n  > ${day.what_text || '暂无。'}\n`;
+                    md += `* **🔍 为什么会发生：** ${day.why_tags?.join(' ') || '无'} \n  > ${day.why_text || '暂无。'}\n`;
+                    
+                    let howStr = "";
+                    if (day.how_details && day.how_details.length > 0) {
+                        howStr = day.how_details.map(d => d.text).filter(t => t.trim() !== "").join(' / ') || '暂无。';
+                    } else {
+                        howStr = day.how_text || '暂无。';
+                    }
+                    md += `* **💡 明日怎么解决：** ${day.how_tags?.join(' ') || '无'} \n  > ${howStr}\n\n`;
                 }
+                md += `---\n\n`;
             }
         }
         return md;
@@ -867,8 +898,6 @@
         pack.monthsDelta[masterDB.selectedMonth] = masterDB.months[masterDB.selectedMonth];
         
         let mdText = generateStandardMarkdownSnapshot(pack);
-        
-        // 🔒 修复点 1：安全注入隐藏 JSON 暗舱
         mdText += `\n\n`;
 
         const blob = new Blob([mdText], { type: "text/markdown;charset=utf-8" });
@@ -879,7 +908,6 @@
         masterDB.lastExportWatermark = nowStamp; commit(); refreshCabinetRackUI();
     }
 
-    // 🚀 修复点 2：彻底切除导致死锁的正则表达式，使用绝对安全的 indexOf 读取 🚀
     function loadSnapshotFromFile(input) {
         const reader = new FileReader(); 
         reader.onload = function() {
@@ -897,7 +925,7 @@
                         if(parsed.plansScope) masterDB.yearPlans = parsed.plansScope;
                         if(parsed.libraryScope) masterDB.tagLibrary = parsed.libraryScope;
                         if(parsed.apiKey) masterDB.apiKey = parsed.apiKey;
-                        commit(); renderAllPage(); alert("📤 Markdown 隐藏大盘暗舱数据逆向灌注恢复成功！"); toggleToolsDrawer(false);
+                        commit(); renderAllPage(); alert("📤 Markdown 隐藏大盘数据逆向加载成功！"); toggleToolsDrawer(false);
                     }
                 } else { alert("❌ 未在该 Markdown 文件底部检测到合法的 AI 数据暗舱模块，无法导入。"); }
             } catch(e) { alert("❌ Markdown 暗舱数据解析失败，请检查文件完整性。"); }
@@ -962,9 +990,8 @@
         commit(); renderAllPage(); dismissRolloverBar(); alert(`已顺延增量滚动载入 ${cnt} 项子待办！`);
     }
 
-    // 🤖 跨时空 AI 整合分析 🤖
     async function runCustomScopeAIAnalysis() {
-        if (!masterDB.apiKey || masterDB.apiKey.trim() === "") { alert("🔒 请先在下方贴入 API Key。"); return; }
+        if (!masterDB.apiKey || masterDB.apiKey.trim() === "") { alert("🔒 请先贴入大模型 API Key。"); return; }
         const s = document.getElementById("range-date-start").value; const e = document.getElementById("range-date-end").value;
         const outDiv = document.getElementById("drawer-ai-output"); outDiv.innerHTML = `<div style="color:#2563eb; font-size:9pt; font-weight:bold;">⏳ 正在调遣大模型穿透历史账本...</div>`;
 
@@ -972,8 +999,11 @@
         for (let wKey in masterDB.months[masterDB.selectedMonth]?.weeks) {
             for (let dKey in masterDB.months[masterDB.selectedMonth].weeks[wKey].days) {
                 let day = masterDB.months[masterDB.selectedMonth].weeks[wKey].days[dKey];
-                if (day.time_reason || day.what_text || day.how_text) {
-                    rawLogs.push(`[${wKey} ${dKey}] 卡点:${day.what_tags.join(',')} 归因:${day.time_reason} 药方:${day.how_text}`);
+                let howContent = "";
+                if (day.how_details && day.how_details.length > 0) howContent = day.how_details.map(d => d.text).join(' / ');
+                else howContent = day.how_text || "";
+                if (day.time_reason || day.what_text || howContent) {
+                    rawLogs.push(`[${wKey} ${dKey}] 卡点:${day.what_tags.join(',')} 归因:${day.time_reason} 药方:${howContent}`);
                 }
             }
         }
@@ -1109,12 +1139,23 @@
             };
             
             myChart.setOption(option);
+            
+            // 🌟 点击周图表的柱子，跳转到对应的日度看板
             if (level === 'month') {
                 myChart.off('click');
                 myChart.on('click', function (params) {
                     if (params.name) {
                         masterDB.currentWeek = params.name; commit(); renderAllPage();
                         let targetSection = document.getElementById("section-week");
+                        if(targetSection) targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            } else if (level === 'week') {
+                myChart.off('click');
+                myChart.on('click', function (params) {
+                    if (params.name) {
+                        masterDB.currentDay = params.name; commit(); renderAllPage();
+                        let targetSection = document.getElementById("section-day");
                         if(targetSection) targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 });
@@ -1163,8 +1204,17 @@
         const totalWeeks = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth) - 1);
         const wNames = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"].slice(0, totalWeeks);
         let dIdx = daysArr.indexOf(masterDB.currentDay); let wIdx = wNames.indexOf(masterDB.currentWeek);
-        if (dIdx > 0) return mData.weeks[masterDB.currentWeek].days[daysArr[dIdx - 1]].how_text;
-        if (wIdx > 0) return mData.weeks[wNames[wIdx - 1]].days["周日"].how_text;
+        
+        let prevDayData = null;
+        if (dIdx > 0) prevDayData = mData.weeks[masterDB.currentWeek].days[daysArr[dIdx - 1]];
+        else if (wIdx > 0) prevDayData = mData.weeks[wNames[wIdx - 1]].days["周日"];
+        
+        if (prevDayData) {
+            if (prevDayData.how_details && prevDayData.how_details.length > 0) {
+                return prevDayData.how_details.map(d => d.text).filter(t => t.trim() !== "").join(' / ');
+            }
+            return prevDayData.how_text || "";
+        }
         return "";
     }
     function getPreviousWeeksPrescription() {
@@ -1194,13 +1244,11 @@
     }
 
     function clearClosure(level) {
-        if(confirm("确定要彻底删除该闭环记录吗？\n(这仅会清空当日的检查舱，不会破坏您的真实历史存档)")) {
-            const mData = getMonthScope();
-            if(level === 'day') mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_text = "";
-            else if(level === 'week') mData.weeks[masterDB.currentWeek].closure_text = "";
-            else if(level === 'month') mData.closure_text = "";
-            commit(); renderAllPage();
-        }
+        const mData = getMonthScope();
+        if(level === 'day') mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_text = "";
+        else if(level === 'week') mData.weeks[masterDB.currentWeek].closure_text = "";
+        else if(level === 'month') mData.closure_text = "";
+        commit(); renderAllPage();
     }
 
     function toggleClosure(level) {
@@ -1208,6 +1256,44 @@
         if(level === 'day') mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_completed = !mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_completed;
         else if(level === 'week') mData.weeks[masterDB.currentWeek].closure_completed = !mData.weeks[masterDB.currentWeek].closure_completed;
         else if(level === 'month') mData.closure_completed = !mData.closure_completed;
+        commit(); renderAllPage();
+    }
+
+    function renderHowList(details) {
+        const ul = document.getElementById("day-how-list"); if(!ul) return;
+        ul.innerHTML = "";
+        details.forEach((item, index) => {
+            const li = document.createElement("li");
+            li.className = `task-row row-orange`;
+            li.style.marginBottom = "6px";
+            li.style.padding = "4px 0";
+            li.innerHTML = `
+                <div class="task-main-line" style="padding: 2px 12px;">
+                    <div class="todo-text" contenteditable="true" onblur="updateHowDetail(${index}, this)" style="min-height: 20px; padding-right: 30px;">${item.text}</div>
+                    <span style="position:absolute; right: 10px; cursor:pointer; color:#cbd5e1; font-weight:bold; font-size:14pt; user-select:none; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#cbd5e1'" onclick="deleteHowDetail(${index})">×</span>
+                </div>
+            `;
+            ul.appendChild(li);
+        });
+    }
+
+    function addHowDetail() {
+        const mData = getMonthScope();
+        let dayData = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay];
+        if (!dayData.how_details) dayData.how_details = [];
+        dayData.how_details.push({ id: Date.now(), text: "" });
+        commit(); renderAllPage();
+    }
+
+    function updateHowDetail(index, element) {
+        const mData = getMonthScope();
+        mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].how_details[index].text = element.innerText;
+        commit();
+    }
+
+    function deleteHowDetail(index) {
+        const mData = getMonthScope();
+        mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].how_details.splice(index, 1);
         commit(); renderAllPage();
     }
 
@@ -1230,7 +1316,14 @@
         document.getElementById("input-day-time-reason").innerText = dayData.time_reason || "";
         document.getElementById("input-day-what").innerText = dayData.what_text || "";
         document.getElementById("input-day-why").innerText = dayData.why_text || "";
-        document.getElementById("input-day-how").innerText = dayData.how_text || "";
+
+        if (!dayData.how_details) dayData.how_details = [];
+        if (dayData.how_details.length === 0 && dayData.how_text && dayData.how_text.trim() !== "") {
+            dayData.how_details.push({ id: Date.now(), text: dayData.how_text });
+            dayData.how_text = ""; 
+            commit();
+        }
+        renderHowList(dayData.how_details);
 
         renderXTags("slots-day-what", "what"); renderXTags("slots-day-why", "why"); renderXTags("slots-day-how", "how");
         calculateLiveCompletionRate(); refreshCabinetRackUI();
@@ -1276,7 +1369,8 @@
                 <div class="task-main-line">
                     <div class="todo-checkbox" onclick="toggleTaskCheck('${elementId}', ${index})"></div>
                     <div class="todo-text" contenteditable="true" onblur="updateTaskText('${elementId}', ${index}, this)">${task.text}</div>
-                    ${isMainPool ? `<span class="magic-wand-btn ${task.hasSplit ? 'has-split' : ''}" onclick="triggerSubtaskExpansion('${elementId.split('-')[0]}', ${index}, this)">${task.hasSplit ? '📦 查看/微调方案' : '🪄 拆解'}</span>` : ''}
+                    ${isMainPool ? `<span class="magic-wand-btn ${task.hasSplit ? 'has-split' : ''}" style="right: 32px;" onclick="triggerSubtaskExpansion('${elementId.split('-')[0]}', ${index}, this)">${task.hasSplit ? '📦 查看/微调方案' : '🪄 拆解'}</span>` : ''}
+                    <span style="position:absolute; right: 8px; cursor:pointer; color:#cbd5e1; font-weight:bold; font-size:14pt; user-select:none; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#cbd5e1'" onclick="deleteTask('${elementId}', ${index})">×</span>
                 </div><div class="subtask-panel-expansion"></div>
             `;
             ul.appendChild(li);
@@ -1290,6 +1384,7 @@
         else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks[index].completed = !mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks[index].completed;
         commit(); calculateLiveCompletionRate(); renderAllPage();
     }
+    
     function updateTaskText(listId, index, element) {
         const mData = getMonthScope();
         if (listId === "month-task-list") mData.monthTasks[index].text = element.innerText;
@@ -1297,12 +1392,21 @@
         else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks[index].text = element.innerText;
         commit();
     }
+    
     function addNewTask(level) {
         const mData = getMonthScope(); const newTask = { id: level + Date.now(), text: "", completed: false, hasSplit: false, subtasks: [] };
         if (level === 'month') mData.monthTasks.push(newTask);
         else if (level === 'week') mData.weeks[masterDB.currentWeek].tasks.push(newTask);
         else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.push(newTask);
         commit(); renderAllPage();
+    }
+
+    function deleteTask(listId, index) {
+        const mData = getMonthScope();
+        if (listId === "month-task-list") mData.monthTasks.splice(index, 1);
+        else if (listId === "week-task-list") mData.weeks[masterDB.currentWeek].tasks.splice(index, 1);
+        else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.splice(index, 1);
+        commit(); calculateLiveCompletionRate(); renderAllPage();
     }
 
     function bindInput(id, field) {
