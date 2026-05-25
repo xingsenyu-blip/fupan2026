@@ -1140,7 +1140,6 @@
             
             myChart.setOption(option);
             
-            // 🌟 点击周图表的柱子，跳转到对应的日度看板
             if (level === 'month') {
                 myChart.off('click');
                 myChart.on('click', function (params) {
@@ -1417,6 +1416,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        // 🌟 核心升级：全局输入框“首击全选，次击修改”心流机制
+        document.addEventListener('focusin', (e) => {
+            if (e.target && e.target.isContentEditable) {
+                if (e.target.innerText.trim() !== "") {
+                    setTimeout(() => {
+                        const range = document.createRange();
+                        range.selectNodeContents(e.target);
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }, 10);
+                }
+            }
+        });
+
         document.getElementById("day-tabs").querySelectorAll(".tab-cell").forEach(cell => {
             cell.addEventListener("click", () => { masterDB.currentDay = cell.getAttribute("data-day"); commit(); renderAllPage(); });
         });
