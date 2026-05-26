@@ -93,30 +93,47 @@
     .task-row.completed .todo-checkbox { background: #64748b; border-color: #64748b; }
     .task-row.completed .todo-checkbox::after { content: "✓"; color: white; font-size: 10pt; font-weight: bold; }
     
-    .todo-text { font-size: 10pt; font-weight: 500; flex-grow: 1; border: 1px solid transparent; padding: 2px 4px; border-radius: 4px; outline: none; min-height: 20px; padding-right: 120px; }
+    .todo-text { font-size: 10pt; font-weight: 500; flex-grow: 1; border: 1px solid transparent; padding: 2px 4px; border-radius: 4px; outline: none; min-height: 20px; padding-right: 220px; }
     .todo-text:focus { background: #ffffff; border-color: #cbd5e1; }
     .task-row.completed .todo-text { text-decoration: line-through; color: #94a3b8; opacity: 0.7; }
     .todo-text:empty::before { content: "点击输入自由/娱乐任务..."; color: #94a3b8; font-weight: normal; font-size: 9.5pt; }
     .task-row.row-blue .todo-text:empty::before { content: "设定本月核心航线或计划..."; }
     .task-row.row-green .todo-text:empty::before { content: "设定本周攻坚大纲或安排..."; }
 
-    .magic-wand-btn { position: absolute; right: 40px; font-size: 8.5pt; font-weight: 700; color: #2563eb; background: #ffffff; border: 1px solid #bfdbfe; padding: 2px 6px; border-radius: 4px; cursor: pointer; user-select: none; }
+    .controls-wrapper { position: absolute; right: 8px; display: flex; align-items: center; gap: 6px; }
+
+    .main-task-dropdown-select {
+        font-size: 8.5pt; font-weight: 700; color: #8b5cf6; background: #ffffff; 
+        border: 1px solid #ddd6fe; padding: 2px 4px; border-radius: 4px; 
+        cursor: pointer; outline: none; transition: all 0.2s; max-width: 75px;
+    }
+    .main-task-dropdown-select:hover { background: #f5f3ff; border-color: #c4b5fd; }
+
+    .magic-wand-wrapper { position: relative; }
+    .magic-wand-btn { font-size: 8.5pt; font-weight: 700; color: #2563eb; background: #ffffff; border: 1px solid #bfdbfe; padding: 2px 6px; border-radius: 4px; cursor: pointer; user-select: none; display: block; }
     .magic-wand-btn.has-split { color: #059669; border-color: #a7f3d0; background-color: #ecfdf5; }
 
-    .subtask-panel-expansion { display: none; padding: 8px 12px 8px 40px; background-color: rgba(241,245,249,0.6); border-top: 1px dashed #e2e8f0; margin-top: 4px; }
-    .subtask-item-row { display: flex; align-items: center; justify-content: space-between; font-size: 9.5pt; color: #475569; padding: 4px 0; border-bottom: 1px solid rgba(0,0,0,0.02); }
-    .subtask-text-edit { outline: none; flex-grow: 1; cursor: text; min-height: 18px; }
-    .subtask-text-edit:empty::before { content: "输入子项执行方案..."; color: #cbd5e1; }
+    .subtask-panel-bubble {
+        display: none; position: absolute; top: calc(100% + 8px); right: 0; width: 360px;
+        background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 12px; z-index: 9999;
+        flex-direction: column; gap: 6px; cursor: default;
+    }
+    .subtask-panel-bubble::before { content: ""; position: absolute; top: -6px; right: 16px; width: 10px; height: 10px; background: #ffffff; border-top: 1px solid #cbd5e1; border-left: 1px solid #cbd5e1; transform: rotate(45deg); }
     
-    .dispatch-pill-selector { display: inline-flex; gap: 2px; margin-left: 10px; }
-    .dispatch-dot { font-size: 7.5pt; font-weight: 900; background-color: #ffffff; color: #64748b; border: 1px solid #cbd5e1; width: 19px; height: 19px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
-    .dispatch-dot:hover { background-color: #3b82f6; color: white; border-color: #3b82f6; }
-    .dispatch-dot.dot-day:hover { background-color: #ea580c; border-color: #ea580c; }
-    .dispatch-dot.active-dispatch-dot { background-color: #3b82f6; color: white; border-color: #3b82f6; }
-    .dispatch-dot.dot-day.active-dispatch-dot { background-color: #ea580c; color: white; border-color: #ea580c; }
+    .subtask-item-row { display: flex; align-items: flex-start; justify-content: space-between; font-size: 9.5pt; color: #475569; padding: 6px 0; border-bottom: 1px solid #f1f5f9; flex-direction: column; }
+    .subtask-text-edit { outline: none; flex-grow: 1; cursor: text; min-height: 22px; padding: 2px 4px; border: 1px solid transparent; border-radius: 4px; transition: all 0.2s; word-break: break-all; }
+    .subtask-text-edit:focus { border-color: #cbd5e1; background: #f8fafc; }
+    .subtask-text-edit:empty::before { content: "输入子项方案..."; color: #cbd5e1; }
     
-    .subtask-del-x { color: #cbd5e1; cursor: pointer; font-weight: bold; margin-left: 8px; font-size: 11pt; }
+    .subtask-dropdown-select { font-size: 8pt; font-weight: 700; padding: 4px 6px; border-radius: 4px; border: 1px solid #cbd5e1; background: #f8fafc; color: #334155; outline: none; cursor: pointer; max-width: 75px; }
+    .subtask-dropdown-select:hover { border-color: #94a3b8; }
+
+    .subtask-del-x { color: #cbd5e1; cursor: pointer; font-weight: bold; margin-left: 4px; font-size: 13pt; line-height: 1; transition: color 0.2s;}
     .subtask-del-x:hover { color: #ef4444; }
+    
+    .main-task-del-x { cursor: pointer; color: #cbd5e1; font-weight: bold; font-size: 14pt; user-select: none; transition: color 0.2s; padding: 0 4px; }
+    .main-task-del-x:hover { color: #ef4444; }
 
     .matrix-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
     .matrix-row { border-bottom: 1px dashed #e2e8f0; }
@@ -471,6 +488,9 @@
         months: {}
     };
 
+    // 🌟 全局气泡开启状态记录
+    window._openBubbleState = null;
+
     if (localStorage.getItem("fupan2026_ultimate_stable_md")) { masterDB = JSON.parse(localStorage.getItem("fupan2026_ultimate_stable_md")); }
     function commit() { localStorage.setItem("fupan2026_ultimate_stable_md", JSON.stringify(masterDB)); }
     
@@ -578,54 +598,85 @@
 
     function triggerSubtaskExpansion(level, index, btnEl) {
         const mData = getMonthScope(); let task = (level === 'month') ? mData.monthTasks[index] : mData.weeks[masterDB.currentWeek].tasks[index];
-        const row = btnEl.closest('.task-row'); const panel = row.querySelector('.subtask-panel-expansion');
+        const wrapper = btnEl.closest('.magic-wand-wrapper');
+        const panel = wrapper.querySelector('.subtask-panel-bubble');
+        
         if (!task.hasSplit) {
             if(!task.text.trim()) return;
             task.hasSplit = true;
             task.subtasks = [`推荐步骤1：拆解该项目涉及的核心准备`, `推荐步骤2：攻坚关键成果交付`];
-            btnEl.innerText = "📦 查看/微调方案"; btnEl.classList.add("has-split"); commit();
+            btnEl.innerText = "📦 微调方案"; btnEl.classList.add("has-split"); commit();
         }
-        if(panel.style.display === "block") { panel.style.display = "none"; } 
-        else { panel.style.display = "block"; refreshSubtaskUI(panel, level, index); }
+        
+        if(panel.style.display === "flex") {
+            panel.style.display = "none";
+            window._openBubbleState = null;
+        } else {
+            document.querySelectorAll('.subtask-panel-bubble').forEach(p => p.style.display = 'none');
+            panel.style.display = "flex";
+            window._openBubbleState = { level, index };
+            refreshSubtaskUI(panel, level, index);
+        }
     }
 
     function refreshSubtaskUI(panelEl, level, mainIdx) {
         const mData = getMonthScope(); let task = (level === 'month') ? mData.monthTasks[mainIdx] : mData.weeks[masterDB.currentWeek].tasks[mainIdx];
         if (!task.dispatches) task.dispatches = {};
-        panelEl.innerHTML = "";
+        
+        panelEl.innerHTML = `<div style="font-size: 9.5pt; font-weight: 800; color: #334155; margin-bottom: 4px;">🪄 任务拆解与派发</div>`;
+        
         task.subtasks.forEach((subText, subIdx) => {
             const div = document.createElement("div"); div.className = "subtask-item-row";
-            let dotsHtml = "";
+            let optionsHtml = `<option value="" disabled selected>🚀 派发</option>`;
             let subDispatches = task.dispatches[subIdx] || {};
 
             if (level === 'month') {
-                const weeksArr = ["第一周", "第二周", "第三周", "第四周", "第五周"];
+                const weeksArr = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"];
                 const totalW = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth)-1);
                 weeksArr.slice(0, totalW).forEach((wk) => { 
-                    let activeCls = subDispatches[wk] ? "active-dispatch-dot" : "";
-                    dotsHtml += `<span class="dispatch-dot ${activeCls}" title="投放到${wk}" onclick="dispatchTaskToWeek(${mainIdx}, ${subIdx}, '${wk}')">${wk.replace('周','')}</span>`; 
+                    let isDispatched = subDispatches[wk] ? " ✓" : "";
+                    optionsHtml += `<option value="${wk}">${wk}${isDispatched}</option>`;
                 });
             } else if (level === 'week') {
-                const dayShorts = ["一", "二", "三", "四", "五", "六", "日"]; const dayFull = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-                dayShorts.forEach((sh, dIdx) => { 
-                    let activeCls = subDispatches[dayFull[dIdx]] ? "active-dispatch-dot" : "";
-                    dotsHtml += `<span class="dispatch-dot dot-day ${activeCls}" title="送到${dayFull[dIdx]}" onclick="dispatchSubtaskToDay(${mainIdx}, ${subIdx}, '${dayFull[dIdx]}')">${sh}</span>`; 
+                const dayFull = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+                dayFull.forEach((d) => { 
+                    let isDispatched = subDispatches[d] ? " ✓" : "";
+                    optionsHtml += `<option value="${d}">${d}${isDispatched}</option>`;
                 });
             }
+
             div.innerHTML = `
-                • <div class="subtask-text-edit" contenteditable="true" onblur="saveSubtaskTxt('${level}', ${mainIdx}, ${subIdx}, this)">${subText}</div>
-                <div class="dispatch-pill-selector">${dotsHtml}</div><span class="subtask-del-x" onclick="deleteSubtaskSlot('${level}', ${mainIdx}, ${subIdx}, this)">×</span>
+                <div style="display: flex; width: 100%; align-items: center; gap: 6px;">
+                    <span style="color: #cbd5e1; font-size:14pt; line-height:1;">•</span>
+                    <div class="subtask-text-edit" contenteditable="true" onblur="saveSubtaskTxt('${level}', ${mainIdx}, ${subIdx}, this)">${subText}</div>
+                    <select class="subtask-dropdown-select" onchange="toggleDispatchFromSelect(this, '${level}', ${mainIdx}, ${subIdx})">
+                        ${optionsHtml}
+                    </select>
+                    <span class="subtask-del-x" onclick="deleteSubtaskSlot('${level}', ${mainIdx}, ${subIdx}, this)">×</span>
+                </div>
             `;
             panelEl.appendChild(div);
         });
-        const appendBtn = document.createElement("div"); appendBtn.style = "font-size:8.5pt; color:#2563eb; cursor:pointer; margin-top:5px; font-weight:700;";
-        appendBtn.innerText = "+ 手写添加一条个性化微调方案";
+        
+        const appendBtn = document.createElement("div");
+        appendBtn.style = "font-size:8.5pt; color:#4f46e5; cursor:pointer; margin-top:8px; font-weight:700; text-align: center; background: #e0e7ff; padding: 6px; border-radius: 6px; transition: background 0.2s;";
+        appendBtn.innerText = "+ 添加新拆解子项";
+        appendBtn.onmouseover = () => appendBtn.style.background = "#c7d2fe";
+        appendBtn.onmouseout = () => appendBtn.style.background = "#e0e7ff";
         appendBtn.onclick = () => { task.subtasks.push(""); commit(); refreshSubtaskUI(panelEl, level, mainIdx); };
         panelEl.appendChild(appendBtn);
     }
 
     function saveSubtaskTxt(l, m, s, el) { const mData = getMonthScope(); let t = (l==='month') ? mData.monthTasks[m] : mData.weeks[masterDB.currentWeek].tasks[m]; t.subtasks[s] = el.innerText; commit(); }
     
+    function toggleDispatchFromSelect(selectEl, level, mainIdx, subIdx) {
+        const val = selectEl.value;
+        if(!val) return;
+        if(level === 'month') dispatchTaskToWeek(mainIdx, subIdx, val);
+        else dispatchSubtaskToDay(mainIdx, subIdx, val);
+        selectEl.value = ""; 
+    }
+
     function dispatchTaskToWeek(mIdx, sIdx, targetWeekStr) {
         const mData = getMonthScope(); let task = mData.monthTasks[mIdx]; const txt = task.subtasks[sIdx]; if(!txt.trim()) return;
         if (!task.dispatches) task.dispatches = {};
@@ -639,7 +690,7 @@
             delete task.dispatches[sIdx][targetWeekStr];
         } else {
             const newId = "syn_w_"+Date.now()+"_"+Math.random();
-            mData.weeks[targetWeekStr].tasks.push({ id: newId, text: `↓ [月目标派发] ${txt}`, completed: false, hasSplit: false, subtasks: [], isSynced: true });
+            mData.weeks[targetWeekStr].tasks.push({ id: newId, text: txt, completed: false, hasSplit: false, subtasks: [], isSynced: true });
             task.dispatches[sIdx][targetWeekStr] = newId;
         }
         commit(); renderAllPage();
@@ -658,7 +709,7 @@
             delete task.dispatches[subIdx][targetDayName];
         } else {
             const newId = "synced_" + Date.now() + "_" + Math.random();
-            mData.weeks[masterDB.currentWeek].days[targetDayName].tasks.push({ id: newId, text: `↓ [周计划分发] ${txt}`, completed: false, isSynced: true });
+            mData.weeks[masterDB.currentWeek].days[targetDayName].tasks.push({ id: newId, text: txt, completed: false, isSynced: true });
             task.dispatches[subIdx][targetDayName] = newId;
         }
         commit(); renderAllPage();
@@ -676,7 +727,42 @@
             }
             t.dispatches = newDisp;
         }
-        commit(); refreshSubtaskUI(el.closest('.subtask-panel-expansion'), l, m); 
+        commit(); refreshSubtaskUI(el.closest('.subtask-panel-bubble'), l, m); 
+    }
+
+    function quickDispatchTaskFromSelect(selectEl, level, index) {
+        const target = selectEl.value;
+        if(!target) return;
+        const mData = getMonthScope();
+        let task, targetList;
+
+        if (level === 'month') {
+            task = mData.monthTasks[index];
+            targetList = mData.weeks[target].tasks;
+        } else if (level === 'week') {
+            task = mData.weeks[masterDB.currentWeek].tasks[index];
+            targetList = mData.weeks[masterDB.currentWeek].days[target].tasks;
+        }
+
+        if(!task.text.trim()) {
+            selectEl.value = ""; 
+            return;
+        }
+
+        if (!task.mainDispatches) task.mainDispatches = {};
+
+        if (task.mainDispatches[target]) {
+            const targetId = task.mainDispatches[target];
+            let tIdx = targetList.findIndex(t => t.id === targetId);
+            if(tIdx !== -1) targetList.splice(tIdx, 1);
+            delete task.mainDispatches[target];
+        } else {
+            const newId = "syn_main_"+Date.now()+"_"+Math.random();
+            targetList.push({ id: newId, text: task.text, completed: false, hasSplit: false, subtasks: [], isSynced: true });
+            task.mainDispatches[target] = newId;
+        }
+        
+        commit(); renderAllPage();
     }
 
     function calculateLiveCompletionRate() {
@@ -790,12 +876,6 @@
         }
     }
     function killSingleTag(slotId, typeKey, idx) { getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay][typeKey+'_tags'].splice(idx, 1); commit(); renderXTags(slotId, typeKey); }
-
-    document.addEventListener("click", (e) => {
-        if (!e.target.closest('.custom-dropdown-wrapper')) {
-            document.querySelectorAll(".custom-dropdown-menu").forEach(m => m.style.display = 'none');
-        }
-    });
 
     function renderAnnualGrid() {
         const wr = document.getElementById("annual-cards-wrapper"); wr.innerHTML = "";
@@ -1282,14 +1362,14 @@
             `;
             
             li.addEventListener('dragstart', (e) => {
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 window._draggedTask = { listId: "day-how-list", index: index };
                 e.dataTransfer.effectAllowed = 'move';
                 setTimeout(() => li.classList.add('dragging'), 0);
             });
             li.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 if (!window._draggedTask || window._draggedTask.listId !== "day-how-list") return;
                 const bounding = li.getBoundingClientRect();
                 const offset = e.clientY - bounding.top;
@@ -1307,7 +1387,7 @@
             });
             li.addEventListener('drop', (e) => {
                 e.preventDefault();
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 li.classList.remove('drag-over-top', 'drag-over-bottom');
                 const dragged = window._draggedTask;
                 if (!dragged || dragged.listId !== "day-how-list") return;
@@ -1327,7 +1407,7 @@
                 }
             });
             li.addEventListener('dragend', (e) => {
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 li.classList.remove('dragging');
                 document.querySelectorAll('.task-row').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bottom'));
                 window._draggedTask = null;
@@ -1407,7 +1487,7 @@
         if(dispMonth) dispMonth.innerText = mText ? mText : "无上月记录...";
         if(yMonthRow) { if (mData.closure_completed) yMonthRow.classList.add("completed"); else yMonthRow.classList.remove("completed"); }
 
-        document.querySelectorAll('.content-panel, .tab-navigator, .inline-select-adder, .todo-text, .handwritten-text-area, .annual-plan-card, .drawer-content').forEach(el => {
+        document.querySelectorAll('.content-panel, .tab-navigator, .inline-select-adder, .todo-text, .handwritten-text-area, .annual-plan-card, .drawer-content, .subtask-panel-bubble').forEach(el => {
             el.onmousedown = () => { 
                 const s = el.closest('.drag-section'); if(s) s.draggable = false; 
                 const t = el.closest('.task-row'); if(t) t.draggable = false; 
@@ -1421,36 +1501,104 @@
         let hasLeak = false; const currentWeekDays = mData.weeks[masterDB.currentWeek].days;
         for (let k in currentWeekDays) { if(k !== masterDB.currentDay) { currentWeekDays[k].tasks.forEach(t => { if(!t.completed) hasLeak = true; }); } }
         document.getElementById("rollover-bar").style.display = hasLeak ? "flex" : "none";
+
+        // 🌟 重新打开记忆中的气泡
+        if (window._openBubbleState) {
+            const { level, index } = window._openBubbleState;
+            const listId = level === 'month' ? 'month-task-list' : 'week-task-list';
+            const ul = document.getElementById(listId);
+            if (ul && ul.children[index]) {
+                const bubble = ul.children[index].querySelector('.subtask-panel-bubble');
+                if (bubble) {
+                    bubble.style.display = 'flex';
+                    refreshSubtaskUI(bubble, level, index);
+                }
+            } else {
+                window._openBubbleState = null;
+            }
+        }
     }
 
     function renderTaskList(elementId, tasksArray) {
         const ul = document.getElementById(elementId); if(!ul) return;
         ul.innerHTML = "";
+        
+        // 🌟 生成主任务的一键派发下拉菜单选项
+        let dispatchOptionsHtml = '';
+        if (elementId === 'month-task-list') {
+            const totalW = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth)-1);
+            const weeksArr = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"].slice(0, totalW);
+            dispatchOptionsHtml = `<option value="" disabled selected>🚀 派发</option>`;
+            weeksArr.forEach(wk => { dispatchOptionsHtml += `<option value="${wk}">${wk}</option>`; });
+        } else if (elementId === 'week-task-list') {
+            const dayFull = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+            dispatchOptionsHtml = `<option value="" disabled selected>🚀 派发</option>`;
+            dayFull.forEach(d => { dispatchOptionsHtml += `<option value="${d}">${d}</option>`; });
+        }
+
         tasksArray.forEach((task, index) => {
             const li = document.createElement("li");
             li.className = `task-row ${task.completed ? 'completed' : ''} ${elementId.startsWith('month') ? 'row-blue' : elementId.startsWith('week') ? 'row-green' : 'row-orange'} ${task.isSynced ? 'synced-task' : ''}`;
             const isMainPool = !elementId.startsWith('day');
             li.draggable = true;
             
+            // 🌟 动态生成主任务的一键派发下拉菜单选项（带打勾状态记忆）
+            let quickDispatchHtml = '';
+            if (isMainPool) {
+                let mainDisp = task.mainDispatches || {};
+                let currentOptionsHtml = `<option value="" disabled selected>🚀 派发</option>`;
+                
+                if (elementId === 'month-task-list') {
+                    const totalW = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth)-1);
+                    const weeksArr = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"].slice(0, totalW);
+                    weeksArr.forEach(wk => { 
+                        let check = mainDisp[wk] ? " ✓" : "";
+                        currentOptionsHtml += `<option value="${wk}">${wk}${check}</option>`; 
+                    });
+                    quickDispatchHtml = `<select class="main-task-dropdown-select" onchange="quickDispatchTaskFromSelect(this, 'month', ${index})">${currentOptionsHtml}</select>`;
+                } else if (elementId === 'week-task-list') {
+                    const dayFull = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+                    dayFull.forEach(d => { 
+                        let check = mainDisp[d] ? " ✓" : "";
+                        currentOptionsHtml += `<option value="${d}">${d}${check}</option>`; 
+                    });
+                    quickDispatchHtml = `<select class="main-task-dropdown-select" onchange="quickDispatchTaskFromSelect(this, 'week', ${index})">${currentOptionsHtml}</select>`;
+                }
+            }
+            
+            // 🌟 核心修复：把删除符号放入 controls-wrapper 弹性盒子中，完美防遮挡
+            let extraControls = isMainPool ? `
+                ${quickDispatchHtml}
+                <div class="magic-wand-wrapper">
+                    <span class="magic-wand-btn ${task.hasSplit ? 'has-split' : ''}" onclick="triggerSubtaskExpansion('${elementId.split('-')[0]}', ${index}, this)">
+                        ${task.hasSplit ? '📦 微调方案' : '🪄 拆解'}
+                    </span>
+                    <div class="subtask-panel-bubble"></div>
+                </div>
+            ` : '';
+
             li.innerHTML = `
                 <div class="task-main-line">
                     <span class="task-drag-handle" title="按住拖拽排序">⋮⋮</span>
                     <div class="todo-checkbox" onclick="toggleTaskCheck('${elementId}', ${index})"></div>
                     <div class="todo-text" contenteditable="true" onblur="updateTaskText('${elementId}', ${index}, this)">${task.text}</div>
-                    ${isMainPool ? `<span class="magic-wand-btn ${task.hasSplit ? 'has-split' : ''}" style="right: 32px;" onclick="triggerSubtaskExpansion('${elementId.split('-')[0]}', ${index}, this)">${task.hasSplit ? '📦 查看/微调方案' : '🪄 拆解'}</span>` : ''}
-                    <span style="position:absolute; right: 8px; cursor:pointer; color:#cbd5e1; font-weight:bold; font-size:14pt; user-select:none; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#cbd5e1'" onclick="deleteTask('${elementId}', ${index})">×</span>
-                </div><div class="subtask-panel-expansion"></div>
+                    
+                    <div class="controls-wrapper">
+                        ${extraControls}
+                        <span class="main-task-del-x" onclick="deleteTask('${elementId}', ${index})">×</span>
+                    </div>
+                </div>
             `;
             
             li.addEventListener('dragstart', (e) => {
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 window._draggedTask = { listId: elementId, index: index };
                 e.dataTransfer.effectAllowed = 'move';
                 setTimeout(() => li.classList.add('dragging'), 0);
             });
             li.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 if (!window._draggedTask || window._draggedTask.listId !== elementId) return;
                 const bounding = li.getBoundingClientRect();
                 const offset = e.clientY - bounding.top;
@@ -1468,7 +1616,7 @@
             });
             li.addEventListener('drop', (e) => {
                 e.preventDefault();
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 li.classList.remove('drag-over-top', 'drag-over-bottom');
                 const dragged = window._draggedTask;
                 if (!dragged || dragged.listId !== elementId) return;
@@ -1494,7 +1642,7 @@
                 }
             });
             li.addEventListener('dragend', (e) => {
-                e.stopPropagation(); // 阻止冒泡
+                e.stopPropagation(); 
                 li.classList.remove('dragging');
                 document.querySelectorAll('.task-row').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bottom'));
                 window._draggedTask = null;
@@ -1529,11 +1677,13 @@
     }
 
     function deleteTask(listId, index) {
-        const mData = getMonthScope();
-        if (listId === "month-task-list") mData.monthTasks.splice(index, 1);
-        else if (listId === "week-task-list") mData.weeks[masterDB.currentWeek].tasks.splice(index, 1);
-        else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.splice(index, 1);
-        commit(); calculateLiveCompletionRate(); renderAllPage();
+        if(confirm("确定要删除这条任务吗？")) {
+            const mData = getMonthScope();
+            if (listId === "month-task-list") mData.monthTasks.splice(index, 1);
+            else if (listId === "week-task-list") mData.weeks[masterDB.currentWeek].tasks.splice(index, 1);
+            else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.splice(index, 1);
+            commit(); calculateLiveCompletionRate(); renderAllPage();
+        }
     }
 
     function bindInput(id, field) {
@@ -1544,6 +1694,15 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        // 🌟 点击空白处关闭气泡（已修复：增加 DOM 脱离校验，防止分发后闪退）
+        document.addEventListener('click', (e) => {
+            if (!document.body.contains(e.target)) return;
+            if (!e.target.closest('.magic-wand-wrapper')) {
+                document.querySelectorAll('.subtask-panel-bubble').forEach(b => b.style.display = 'none');
+                window._openBubbleState = null;
+            }
+        });
+
         document.addEventListener('focusin', (e) => {
             if (e.target && e.target.isContentEditable) {
                 if (e.target.innerText.trim() !== "") {
