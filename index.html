@@ -78,11 +78,17 @@
     .live-week-badge { position: absolute; top: -4px; right: 2px; font-size: 7.5pt; font-weight: 900; background-color: #10b981; color: white; padding: 1px 4px; border-radius: 6px; line-height: 1; }
     
     .task-group { list-style: none; padding: 0; margin: 0; min-height: 10px; flex-grow: 1; }
-    .task-row { display: flex; flex-direction: column; padding: 4px 0; margin-bottom: 8px; background-color: #f8fafc; border-radius: 6px; border: 1px solid #edf2f7; }
+    .task-row { display: flex; flex-direction: column; padding: 4px 0; margin-bottom: 8px; background-color: #f8fafc; border-radius: 6px; border: 1px solid #edf2f7; transition: transform 0.2s, opacity 0.2s; }
     .task-main-line { display: flex; align-items: center; padding: 4px 12px; width: 100%; position: relative; }
     .row-blue { border-left: 4px solid #3b82f6; } .row-green { border-left: 4px solid #10b981; } .row-orange { border-left: 4px solid #ea580c; }
     .task-row.synced-task { border-left-style: dashed; background-color: rgba(248,250,252,0.6); } 
     
+    .task-drag-handle { cursor: grab; color: #cbd5e1; margin-right: 6px; font-size: 12pt; user-select: none; padding: 0 4px; transition: color 0.2s; }
+    .task-drag-handle:hover { color: #64748b; }
+    .task-row.dragging { opacity: 0.4; background-color: #e2e8f0; border: 1px dashed #94a3b8; }
+    .task-row.drag-over-top { border-top: 2px solid #3b82f6 !important; border-top-left-radius: 2px; border-top-right-radius: 2px; }
+    .task-row.drag-over-bottom { border-bottom: 2px solid #3b82f6 !important; border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
+
     .todo-checkbox { width: 16px; height: 16px; border: 2px solid #cbd5e1; border-radius: 4px; margin-right: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #ffffff; flex-shrink: 0; }
     .task-row.completed .todo-checkbox { background: #64748b; border-color: #64748b; }
     .task-row.completed .todo-checkbox::after { content: "✓"; color: white; font-size: 10pt; font-weight: bold; }
@@ -1266,12 +1272,67 @@
             li.className = `task-row row-orange`;
             li.style.marginBottom = "6px";
             li.style.padding = "4px 0";
+            li.draggable = true;
             li.innerHTML = `
                 <div class="task-main-line" style="padding: 2px 12px;">
+                    <span class="task-drag-handle" title="按住拖拽排序">⋮⋮</span>
                     <div class="todo-text" contenteditable="true" onblur="updateHowDetail(${index}, this)" style="min-height: 20px; padding-right: 30px;">${item.text}</div>
                     <span style="position:absolute; right: 10px; cursor:pointer; color:#cbd5e1; font-weight:bold; font-size:14pt; user-select:none; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#cbd5e1'" onclick="deleteHowDetail(${index})">×</span>
                 </div>
             `;
+            
+            li.addEventListener('dragstart', (e) => {
+                e.stopPropagation(); // 阻止冒泡
+                window._draggedTask = { listId: "day-how-list", index: index };
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => li.classList.add('dragging'), 0);
+            });
+            li.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // 阻止冒泡
+                if (!window._draggedTask || window._draggedTask.listId !== "day-how-list") return;
+                const bounding = li.getBoundingClientRect();
+                const offset = e.clientY - bounding.top;
+                if (offset > bounding.height / 2) {
+                    li.classList.remove('drag-over-top');
+                    li.classList.add('drag-over-bottom');
+                } else {
+                    li.classList.remove('drag-over-bottom');
+                    li.classList.add('drag-over-top');
+                }
+            });
+            li.addEventListener('dragleave', (e) => { 
+                e.stopPropagation();
+                li.classList.remove('drag-over-top', 'drag-over-bottom'); 
+            });
+            li.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // 阻止冒泡
+                li.classList.remove('drag-over-top', 'drag-over-bottom');
+                const dragged = window._draggedTask;
+                if (!dragged || dragged.listId !== "day-how-list") return;
+
+                const fromIndex = dragged.index;
+                let toIndex = index;
+                const bounding = li.getBoundingClientRect();
+                if (e.clientY - bounding.top > bounding.height / 2) toIndex++;
+                if (fromIndex < toIndex) toIndex--;
+
+                if (fromIndex !== toIndex) {
+                    const mData = getMonthScope();
+                    let arr = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].how_details;
+                    const [moved] = arr.splice(fromIndex, 1);
+                    arr.splice(toIndex, 0, moved);
+                    commit(); renderAllPage();
+                }
+            });
+            li.addEventListener('dragend', (e) => {
+                e.stopPropagation(); // 阻止冒泡
+                li.classList.remove('dragging');
+                document.querySelectorAll('.task-row').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bottom'));
+                window._draggedTask = null;
+            });
+
             ul.appendChild(li);
         });
     }
@@ -1347,8 +1408,14 @@
         if(yMonthRow) { if (mData.closure_completed) yMonthRow.classList.add("completed"); else yMonthRow.classList.remove("completed"); }
 
         document.querySelectorAll('.content-panel, .tab-navigator, .inline-select-adder, .todo-text, .handwritten-text-area, .annual-plan-card, .drawer-content').forEach(el => {
-            el.onmousedown = () => { const s = el.closest('.drag-section'); if(s) s.draggable = false; };
-            el.onmouseup = () => { const s = el.closest('.drag-section'); if(s) s.draggable = true; };
+            el.onmousedown = () => { 
+                const s = el.closest('.drag-section'); if(s) s.draggable = false; 
+                const t = el.closest('.task-row'); if(t) t.draggable = false; 
+            };
+            el.onmouseup = () => { 
+                const s = el.closest('.drag-section'); if(s) s.draggable = true; 
+                const t = el.closest('.task-row'); if(t) t.draggable = true; 
+            };
         });
         
         let hasLeak = false; const currentWeekDays = mData.weeks[masterDB.currentWeek].days;
@@ -1363,15 +1430,76 @@
             const li = document.createElement("li");
             li.className = `task-row ${task.completed ? 'completed' : ''} ${elementId.startsWith('month') ? 'row-blue' : elementId.startsWith('week') ? 'row-green' : 'row-orange'} ${task.isSynced ? 'synced-task' : ''}`;
             const isMainPool = !elementId.startsWith('day');
+            li.draggable = true;
             
             li.innerHTML = `
                 <div class="task-main-line">
+                    <span class="task-drag-handle" title="按住拖拽排序">⋮⋮</span>
                     <div class="todo-checkbox" onclick="toggleTaskCheck('${elementId}', ${index})"></div>
                     <div class="todo-text" contenteditable="true" onblur="updateTaskText('${elementId}', ${index}, this)">${task.text}</div>
                     ${isMainPool ? `<span class="magic-wand-btn ${task.hasSplit ? 'has-split' : ''}" style="right: 32px;" onclick="triggerSubtaskExpansion('${elementId.split('-')[0]}', ${index}, this)">${task.hasSplit ? '📦 查看/微调方案' : '🪄 拆解'}</span>` : ''}
                     <span style="position:absolute; right: 8px; cursor:pointer; color:#cbd5e1; font-weight:bold; font-size:14pt; user-select:none; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#cbd5e1'" onclick="deleteTask('${elementId}', ${index})">×</span>
                 </div><div class="subtask-panel-expansion"></div>
             `;
+            
+            li.addEventListener('dragstart', (e) => {
+                e.stopPropagation(); // 阻止冒泡
+                window._draggedTask = { listId: elementId, index: index };
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => li.classList.add('dragging'), 0);
+            });
+            li.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // 阻止冒泡
+                if (!window._draggedTask || window._draggedTask.listId !== elementId) return;
+                const bounding = li.getBoundingClientRect();
+                const offset = e.clientY - bounding.top;
+                if (offset > bounding.height / 2) {
+                    li.classList.remove('drag-over-top');
+                    li.classList.add('drag-over-bottom');
+                } else {
+                    li.classList.remove('drag-over-bottom');
+                    li.classList.add('drag-over-top');
+                }
+            });
+            li.addEventListener('dragleave', (e) => { 
+                e.stopPropagation();
+                li.classList.remove('drag-over-top', 'drag-over-bottom'); 
+            });
+            li.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // 阻止冒泡
+                li.classList.remove('drag-over-top', 'drag-over-bottom');
+                const dragged = window._draggedTask;
+                if (!dragged || dragged.listId !== elementId) return;
+
+                const fromIndex = dragged.index;
+                let toIndex = index;
+                const bounding = li.getBoundingClientRect();
+                if (e.clientY - bounding.top > bounding.height / 2) toIndex++;
+                if (fromIndex < toIndex) toIndex--;
+
+                if (fromIndex !== toIndex) {
+                    const mData = getMonthScope();
+                    let arr;
+                    if (elementId === "month-task-list") arr = mData.monthTasks;
+                    else if (elementId === "week-task-list") arr = mData.weeks[masterDB.currentWeek].tasks;
+                    else if (elementId === "day-task-list") arr = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks;
+                    
+                    if (arr) {
+                        const [moved] = arr.splice(fromIndex, 1);
+                        arr.splice(toIndex, 0, moved);
+                        commit(); renderAllPage();
+                    }
+                }
+            });
+            li.addEventListener('dragend', (e) => {
+                e.stopPropagation(); // 阻止冒泡
+                li.classList.remove('dragging');
+                document.querySelectorAll('.task-row').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bottom'));
+                window._draggedTask = null;
+            });
+
             ul.appendChild(li);
         });
     }
@@ -1416,7 +1544,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // 🌟 核心升级：全局输入框“首击全选，次击修改”心流机制
         document.addEventListener('focusin', (e) => {
             if (e.target && e.target.isContentEditable) {
                 if (e.target.innerText.trim() !== "") {
@@ -1455,7 +1582,7 @@
             });
             section.addEventListener('dragover', (e) => {
                 e.preventDefault(); section.classList.add('drag-over'); const currentDragging = document.querySelector('.dragging');
-                if (currentDragging && currentDragging !== section) {
+                if (currentDragging && currentDragging !== section && !currentDragging.classList.contains('task-row')) {
                     const bounding = section.getBoundingClientRect();
                     if (e.clientY - bounding.top - bounding.height / 2 > 0) section.after(currentDragging); else section.before(currentDragging);
                 }
