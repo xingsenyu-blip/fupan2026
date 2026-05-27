@@ -8,181 +8,185 @@
 <style>
     *, *::before, *::after { box-sizing: border-box; }
     body {
-        margin: 0; padding: 20px;
+        margin: 0; padding: 12px 20px;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", sans-serif;
-        color: #0f172a; background-color: #f1f5f9; line-height: 1.5;
+        color: #0f172a; background-color: #f1f5f9; line-height: 1.4;
     }
     .dashboard-container { max-width: 1280px; margin: 0 auto; position: relative; }
     
-    .app-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; padding: 0 4px; }
+    .app-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 16px; padding: 0 4px; }
     .logo-zone { display: flex; align-items: center; gap: 10px; }
-    .app-logo { font-size: 24pt; font-weight: 900; letter-spacing: 4px; color: #0f172a; }
-    .app-logo .version-dot { font-size: 13pt; font-weight: normal; color: #64748b; }
+    .app-logo { font-size: 22pt; font-weight: 900; letter-spacing: 3px; color: #0f172a; }
+    .app-logo .version-dot { font-size: 12pt; font-weight: normal; color: #64748b; }
     
-    .time-nav-zone { display: flex; align-items: center; gap: 10px; }
+    .time-nav-zone { display: flex; align-items: center; gap: 8px; }
     .month-dropdown-select {
-        font-size: 12pt; font-weight: 700; color: #334155; background: #ffffff; 
-        padding: 6px 12px; border-radius: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+        font-size: 11pt; font-weight: 700; color: #334155; background: #ffffff; 
+        padding: 4px 10px; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
         border: 1px solid #e2e8f0; cursor: pointer; outline: none;
     }
-    .snap-today-btn { font-size: 9.5pt; font-weight: 700; color: #ffffff; background-color: #475569; padding: 6px 14px; border-radius: 20px; border: none; cursor: pointer; }
-    .gear-toggle-btn { font-size: 15pt; background: none; border: none; cursor: pointer; color: #64748b; margin-left: 5px; user-select: none; }
+    .snap-today-btn { font-size: 9pt; font-weight: 700; color: #ffffff; background-color: #475569; padding: 5px 12px; border-radius: 16px; border: none; cursor: pointer; }
+    .gear-toggle-btn { font-size: 14pt; background: none; border: none; cursor: pointer; color: #64748b; margin-left: 2px; user-select: none; }
     .gear-toggle-btn:hover { color: #0f172a; }
 
     .rollover-alert-bar {
         display: none; width: 100%; background-color: #fef3c7; border: 1px solid #fde68a;
-        padding: 10px 16px; border-radius: 8px; margin-bottom: 15px;
-        align-items: center; justify-content: space-between; font-size: 10pt; font-weight: 600; color: #92400e;
+        padding: 8px 14px; border-radius: 8px; margin-bottom: 12px;
+        align-items: center; justify-content: space-between; font-size: 9.5pt; font-weight: 600; color: #92400e;
     }
-    .rollover-btn-group button { margin-left: 8px; font-size: 8.5pt; font-weight: 700; padding: 4px 12px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
+    .rollover-btn-group button { margin-left: 8px; font-size: 8pt; font-weight: 700; padding: 4px 10px; border-radius: 4px; cursor: pointer; border: 1px solid transparent; }
     .btn-roll-confirm { background-color: #d97706; color: white; }
     .btn-roll-cancel { background-color: transparent; border-color: #b45309; color: #b45309; }
 
-    .drag-section { background: transparent; margin-bottom: 25px; border: 2px dashed transparent; border-radius: 12px; transition: border 0.2s ease; }
+    .drag-section { background: transparent; margin-bottom: 20px; border: 2px dashed transparent; border-radius: 12px; transition: border 0.2s ease; }
     .drag-section.dragging { opacity: 0.3; background: #cbd5e1; }
     .drag-section.drag-over { border-color: #94a3b8; background: rgba(226, 232, 240, 0.4); }
 
-    .section-divider { display: flex; align-items: center; margin: 10px 0 15px 0; width: 100%; }
+    .section-divider { display: flex; align-items: center; margin: 8px 0 12px 0; width: 100%; }
     .divider-line { flex: 1; height: 1px; background-color: #cbd5e1; }
-    .divider-tag { padding: 4px 14px; font-size: 8.5pt; font-weight: 800; letter-spacing: 2px; border-radius: 12px; text-transform: uppercase; }
+    .divider-tag { padding: 3px 12px; font-size: 8pt; font-weight: 800; letter-spacing: 1px; border-radius: 12px; text-transform: uppercase; }
     .tag-year  { background-color: #1e293b; color: #f8fafc; border: 1px solid #334155; }
     .tag-month { background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
     .tag-week  { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
     .tag-day   { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
     .drag-handle { font-size: 9pt; color: #94a3b8; cursor: grab; padding: 2px 8px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; margin-left: 10px; user-select: none; }
 
-    .card-grid { display: flex; gap: 16px; width: 100%; align-items: stretch; }
-    .content-panel { flex: 1; background-color: #ffffff; border-radius: 10px; padding: 0; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); overflow: visible; position: relative; display: flex; flex-direction: column; }
+    .card-grid { display: flex; gap: 12px; width: 100%; align-items: stretch; }
+    .content-panel { flex: 1; background-color: #ffffff; border-radius: 8px; padding: 0; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05); overflow: visible; position: relative; display: flex; flex-direction: column; }
     .flex-double { flex: 2; }
     
-    .panel-header { padding: 12px 16px; font-size: 11.5pt; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); border-radius: 10px 10px 0 0; }
+    .panel-header { padding: 8px 12px; font-size: 10.5pt; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); border-radius: 8px 8px 0 0; }
     .header-year  { background-color: #e0e7ff; color: #4338ca; }
     .header-month { background-color: #eff6ff; color: #1d4ed8; }
     .header-week  { background-color: #f0fdf4; color: #15803d; }
     .header-day   { background-color: #fff7ed; color: #c2410c; }
-    .panel-body { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
+    .panel-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
     
-    .rate-header-badge { font-size: 9pt; font-weight: 800; padding: 2px 8px; border-radius: 12px; background-color: #f1f5f9; color: #475569; transition: all 0.3s; }
+    .rate-header-badge { font-size: 8.5pt; font-weight: 800; padding: 2px 6px; border-radius: 10px; background-color: #f1f5f9; color: #475569; transition: all 0.3s; }
     .rate-header-badge.completed-green { background-color: #d1fae5; color: #065f46; }
 
     .rest-mode-active { background-color: #faf5ff !important; border-color: #e9d5ff !important; box-shadow: 0 4px 6px -1px rgba(107,33,168,0.05) !important; }
     .rest-mode-header { background-color: #f3e8ff !important; color: #6b21a8 !important; }
-    .rest-toggle-btn { font-size: 8.5pt; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; padding: 3px 10px; border-radius: 6px; cursor: pointer; }
+    .rest-toggle-btn { font-size: 8pt; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; padding: 2px 8px; border-radius: 4px; cursor: pointer; }
     .rest-toggle-btn.active { background-color: #e9d5ff !important; color: #6b21a8 !important; border-color: #d8b4fe !important; }
 
-    .tab-navigator { display: flex; width: 100%; margin-bottom: 14px; background-color: #e2e8f0; padding: 3px; border-radius: 8px; }
-    .tab-cell { flex: 1; padding: 6px 12px; text-align: center; font-size: 9.5pt; font-weight: 700; color: #475569; border-radius: 6px; cursor: pointer; transition: all 0.15s ease; user-select: none; position: relative; }
+    .tab-navigator { display: flex; width: 100%; margin-bottom: 10px; background-color: #e2e8f0; padding: 3px; border-radius: 6px; }
+    .tab-cell { flex: 1; padding: 4px 8px; text-align: center; font-size: 9pt; font-weight: 700; color: #475569; border-radius: 4px; cursor: pointer; transition: all 0.15s ease; user-select: none; position: relative; }
     .active-week-tab { background-color: #10b981 !important; color: white !important; }
     .active-day-tab  { background-color: #ea580c !important; color: white !important; }
-    .live-today-badge { position: absolute; top: -4px; right: 2px; font-size: 7.5pt; font-weight: 900; background-color: #ef4444; color: white; padding: 1px 4px; border-radius: 6px; line-height: 1; }
-    .live-week-badge { position: absolute; top: -4px; right: 2px; font-size: 7.5pt; font-weight: 900; background-color: #10b981; color: white; padding: 1px 4px; border-radius: 6px; line-height: 1; }
+    .live-today-badge { position: absolute; top: -3px; right: 2px; font-size: 7pt; font-weight: 900; background-color: #ef4444; color: white; padding: 1px 3px; border-radius: 4px; line-height: 1; }
+    .live-week-badge { position: absolute; top: -3px; right: 2px; font-size: 7pt; font-weight: 900; background-color: #10b981; color: white; padding: 1px 3px; border-radius: 4px; line-height: 1; }
     
     .task-group { list-style: none; padding: 0; margin: 0; min-height: 10px; flex-grow: 1; }
-    .task-row { display: flex; flex-direction: column; padding: 4px 0; margin-bottom: 8px; background-color: #f8fafc; border-radius: 6px; border: 1px solid #edf2f7; transition: transform 0.2s, opacity 0.2s; }
-    .task-main-line { display: flex; align-items: center; padding: 4px 12px; width: 100%; position: relative; }
-    .row-blue { border-left: 4px solid #3b82f6; } .row-green { border-left: 4px solid #10b981; } .row-orange { border-left: 4px solid #ea580c; }
+    .task-row { display: flex; flex-direction: column; margin-bottom: 3px; background-color: #f8fafc; border-radius: 4px; border: 1px solid #edf2f7; transition: transform 0.2s, opacity 0.2s; }
+    .task-main-line { display: flex; align-items: center; padding: 2px 6px; width: 100%; position: relative; min-height: 26px; }
+    .row-blue { border-left: 3px solid #3b82f6; } .row-green { border-left: 3px solid #10b981; } .row-orange { border-left: 3px solid #ea580c; }
     .task-row.synced-task { border-left-style: dashed; background-color: rgba(248,250,252,0.6); } 
     
-    .task-drag-handle { cursor: grab; color: #cbd5e1; margin-right: 6px; font-size: 12pt; user-select: none; padding: 0 4px; transition: color 0.2s; }
+    .task-drag-handle { cursor: grab; color: #cbd5e1; margin-right: 4px; font-size: 11pt; user-select: none; padding: 0 2px; transition: color 0.2s; }
     .task-drag-handle:hover { color: #64748b; }
     .task-row.dragging { opacity: 0.4; background-color: #e2e8f0; border: 1px dashed #94a3b8; }
     .task-row.drag-over-top { border-top: 2px solid #3b82f6 !important; border-top-left-radius: 2px; border-top-right-radius: 2px; }
     .task-row.drag-over-bottom { border-bottom: 2px solid #3b82f6 !important; border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
 
-    .todo-checkbox { width: 16px; height: 16px; border: 2px solid #cbd5e1; border-radius: 4px; margin-right: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #ffffff; flex-shrink: 0; }
+    .todo-checkbox { width: 15px; height: 15px; border: 2px solid #cbd5e1; border-radius: 3px; margin-right: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #ffffff; flex-shrink: 0; }
     .task-row.completed .todo-checkbox { background: #64748b; border-color: #64748b; }
-    .task-row.completed .todo-checkbox::after { content: "✓"; color: white; font-size: 10pt; font-weight: bold; }
+    .task-row.completed .todo-checkbox::after { content: "✓"; color: white; font-size: 9pt; font-weight: bold; }
     
-    .todo-text { font-size: 10pt; font-weight: 500; flex-grow: 1; border: 1px solid transparent; padding: 2px 4px; border-radius: 4px; outline: none; min-height: 20px; padding-right: 220px; }
+    .todo-text { font-size: 10pt; font-weight: 500; flex-grow: 1; border: 1px solid transparent; padding: 0 4px; border-radius: 4px; outline: none; min-height: 18px; line-height: 1.4; min-width: 0; word-break: break-word; }
     .todo-text:focus { background: #ffffff; border-color: #cbd5e1; }
     .task-row.completed .todo-text { text-decoration: line-through; color: #94a3b8; opacity: 0.7; }
-    .todo-text:empty::before { content: "点击输入自由/娱乐任务..."; color: #94a3b8; font-weight: normal; font-size: 9.5pt; }
+    .todo-text:empty::before { content: "点击输入自由/娱乐任务..."; color: #94a3b8; font-weight: normal; font-size: 9pt; }
     .task-row.row-blue .todo-text:empty::before { content: "设定本月核心航线或计划..."; }
     .task-row.row-green .todo-text:empty::before { content: "设定本周攻坚大纲或安排..."; }
 
-    .controls-wrapper { position: absolute; right: 8px; display: flex; align-items: center; gap: 6px; }
+    #closure-day-text:empty::before { content: "昨日无新调整方案"; color: #94a3b8; font-weight: normal; font-size: 9pt; }
+    #closure-week-text:empty::before { content: "上周无新调整方案"; color: #94a3b8; font-weight: normal; font-size: 9pt; }
+    #closure-month-text:empty::before { content: "上月无新调整方案"; color: #94a3b8; font-weight: normal; font-size: 9pt; }
+
+    .controls-wrapper { display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 6px; }
 
     .main-task-dropdown-select {
-        font-size: 8.5pt; font-weight: 700; color: #8b5cf6; background: #ffffff; 
-        border: 1px solid #ddd6fe; padding: 2px 4px; border-radius: 4px; 
-        cursor: pointer; outline: none; transition: all 0.2s; max-width: 75px;
+        font-size: 8pt; font-weight: 700; color: #8b5cf6; background: #ffffff; 
+        border: 1px solid #ddd6fe; padding: 1px 4px; border-radius: 4px; 
+        cursor: pointer; outline: none; transition: all 0.2s; max-width: 65px; height: 20px;
     }
     .main-task-dropdown-select:hover { background: #f5f3ff; border-color: #c4b5fd; }
 
-    .magic-wand-wrapper { position: relative; }
-    .magic-wand-btn { font-size: 8.5pt; font-weight: 700; color: #2563eb; background: #ffffff; border: 1px solid #bfdbfe; padding: 2px 6px; border-radius: 4px; cursor: pointer; user-select: none; display: block; }
+    .magic-wand-wrapper { position: relative; display: flex; align-items: center; }
+    .magic-wand-btn { font-size: 8pt; font-weight: 700; color: #2563eb; background: #ffffff; border: 1px solid #bfdbfe; padding: 1px 4px; border-radius: 4px; cursor: pointer; user-select: none; display: flex; align-items: center; height: 20px; }
     .magic-wand-btn.has-split { color: #059669; border-color: #a7f3d0; background-color: #ecfdf5; }
 
     .subtask-panel-bubble {
-        display: none; position: absolute; top: calc(100% + 8px); right: 0; width: 360px;
-        background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 12px; z-index: 9999;
-        flex-direction: column; gap: 6px; cursor: default;
+        display: none; position: absolute; top: calc(100% + 4px); right: 0; width: 320px;
+        background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 8px; z-index: 9999;
+        flex-direction: column; gap: 4px; cursor: default;
     }
-    .subtask-panel-bubble::before { content: ""; position: absolute; top: -6px; right: 16px; width: 10px; height: 10px; background: #ffffff; border-top: 1px solid #cbd5e1; border-left: 1px solid #cbd5e1; transform: rotate(45deg); }
+    .subtask-panel-bubble::before { content: ""; position: absolute; top: -5px; right: 12px; width: 8px; height: 8px; background: #ffffff; border-top: 1px solid #cbd5e1; border-left: 1px solid #cbd5e1; transform: rotate(45deg); }
     
-    .subtask-item-row { display: flex; align-items: flex-start; justify-content: space-between; font-size: 9.5pt; color: #475569; padding: 6px 0; border-bottom: 1px solid #f1f5f9; flex-direction: column; }
-    .subtask-text-edit { outline: none; flex-grow: 1; cursor: text; min-height: 22px; padding: 2px 4px; border: 1px solid transparent; border-radius: 4px; transition: all 0.2s; word-break: break-all; }
+    .subtask-item-row { display: flex; align-items: flex-start; justify-content: space-between; font-size: 9pt; color: #475569; padding: 3px 0; border-bottom: 1px solid #f1f5f9; flex-direction: column; }
+    .subtask-text-edit { outline: none; flex-grow: 1; cursor: text; min-height: 18px; padding: 0 4px; border: 1px solid transparent; border-radius: 4px; transition: all 0.2s; word-break: break-all; min-width: 0; line-height: 1.4;}
     .subtask-text-edit:focus { border-color: #cbd5e1; background: #f8fafc; }
     .subtask-text-edit:empty::before { content: "输入子项方案..."; color: #cbd5e1; }
     
-    .subtask-dropdown-select { font-size: 8pt; font-weight: 700; padding: 4px 6px; border-radius: 4px; border: 1px solid #cbd5e1; background: #f8fafc; color: #334155; outline: none; cursor: pointer; max-width: 75px; }
+    .subtask-dropdown-select { font-size: 8pt; font-weight: 700; padding: 1px 4px; border-radius: 4px; border: 1px solid #cbd5e1; background: #f8fafc; color: #334155; outline: none; cursor: pointer; max-width: 65px; flex-shrink: 0; height: 20px;}
     .subtask-dropdown-select:hover { border-color: #94a3b8; }
 
-    .subtask-del-x { color: #cbd5e1; cursor: pointer; font-weight: bold; margin-left: 4px; font-size: 13pt; line-height: 1; transition: color 0.2s;}
+    .subtask-del-x { color: #cbd5e1; cursor: pointer; font-weight: bold; margin-left: 4px; font-size: 12pt; line-height: 1; transition: color 0.2s; flex-shrink: 0; padding: 0 2px;}
     .subtask-del-x:hover { color: #ef4444; }
     
-    .main-task-del-x { cursor: pointer; color: #cbd5e1; font-weight: bold; font-size: 14pt; user-select: none; transition: color 0.2s; padding: 0 4px; }
+    .main-task-del-x { cursor: pointer; color: #cbd5e1; font-weight: bold; font-size: 13pt; user-select: none; transition: color 0.2s; padding: 0 4px; flex-shrink: 0; margin-left: 4px; line-height: 1;}
     .main-task-del-x:hover { color: #ef4444; }
 
     .matrix-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
     .matrix-row { border-bottom: 1px dashed #e2e8f0; }
     .matrix-row:last-child { border-bottom: none; }
-    .matrix-label { font-size: 9.5pt; font-weight: 700; color: #64748b; padding: 12px 0; width: 110px; vertical-align: top; }
-    .matrix-value { padding: 12px 0 12px 10px; vertical-align: top; }
+    .matrix-label { font-size: 9pt; font-weight: 700; color: #64748b; padding: 8px 0; width: 100px; vertical-align: top; }
+    .matrix-value { padding: 8px 0 8px 8px; vertical-align: top; }
     
-    .tag-slots-container { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-    .rendered-tag-badge { display: inline-flex; align-items: center; font-size: 8.5pt; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+    .tag-slots-container { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+    .rendered-tag-badge { display: inline-flex; align-items: center; font-size: 8pt; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
     .badge-what  { background-color: #ffedd5; color: #9a3412; border-color: #fed7aa; border: 1px solid transparent; }
     .badge-why   { background-color: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; border: 1px solid transparent; }
     .badge-how   { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; border: 1px solid transparent; }
-    .tag-delete-x { margin-left: 6px; cursor: pointer; color: #94a3b8; font-weight: bold; font-size: 10pt; }
+    .tag-delete-x { margin-left: 4px; cursor: pointer; color: #94a3b8; font-weight: bold; font-size: 9pt; }
     .tag-delete-x:hover { color: #ef4444; }
     
-    .inline-select-adder { font-size: 8pt; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px dashed #cbd5e1; background: #ffffff; color: #64748b; outline: none; cursor: pointer; transition: all 0.2s; }
+    .inline-select-adder { font-size: 8pt; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px dashed #cbd5e1; background: #ffffff; color: #64748b; outline: none; cursor: pointer; transition: all 0.2s; }
     .inline-select-adder:hover { background: #f1f5f9; border-color: #94a3b8; }
     .custom-dropdown-wrapper { position: relative; display: inline-block; vertical-align: middle; }
-    .custom-dropdown-menu { display: none; position: absolute; top: 100%; left: 0; min-width: 180px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 1000; margin-top: 6px; overflow: hidden; padding: 4px 0; }
-    .custom-dropdown-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; font-size: 8.5pt; font-weight: 600; color: #334155; cursor: pointer; transition: background 0.15s; }
+    .custom-dropdown-menu { display: none; position: absolute; top: 100%; left: 0; min-width: 160px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); z-index: 1000; margin-top: 4px; overflow: hidden; padding: 4px 0; }
+    .custom-dropdown-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; font-size: 8pt; font-weight: 600; color: #334155; cursor: pointer; transition: background 0.15s; }
     .custom-dropdown-item:hover { background: #f8fafc; color: #0f172a; }
     .custom-dropdown-text { flex-grow: 1; }
-    .custom-dropdown-del { font-size: 8.5pt; color: #94a3b8; padding: 2px 6px; border-radius: 4px; margin-left: 10px; transition: all 0.15s; }
+    .custom-dropdown-del { font-size: 8pt; color: #94a3b8; padding: 1px 4px; border-radius: 4px; margin-left: 8px; transition: all 0.15s; }
     .custom-dropdown-del:hover { color: #ef4444; background: #fee2e2; }
-    .new-tag-item { color: #2563eb; font-weight: 700; justify-content: center; border-top: 1px solid #f1f5f9; margin-top: 4px; padding-top: 8px; }
+    .new-tag-item { color: #2563eb; font-weight: 700; justify-content: center; border-top: 1px solid #f1f5f9; margin-top: 2px; }
     .new-tag-item:hover { background: #eff6ff; }
     
-    .annual-flex-row { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: stretch; }
+    .annual-flex-row { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; align-items: stretch; }
     .annual-plan-card { 
-        flex: 1; min-width: 240px; 
+        flex: 1; min-width: 220px; 
         background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%); 
         border: 1px solid #334155; 
-        border-radius: 12px; padding: 16px; position: relative; display: flex; flex-direction: column; justify-content: space-between; 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+        border-radius: 8px; padding: 12px; position: relative; display: flex; flex-direction: column; justify-content: space-between; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15); 
     }
-    .annual-card-delete { position: absolute; top: 10px; right: 12px; cursor: pointer; color: #64748b; font-size: 13pt; font-weight: bold; transition: color 0.2s; }
+    .annual-card-delete { position: absolute; top: 8px; right: 10px; cursor: pointer; color: #64748b; font-size: 12pt; font-weight: bold; transition: color 0.2s; }
     .annual-card-delete:hover { color: #ef4444; }
-    .annual-card-text { font-size: 10.5pt; font-weight: 700; color: #f8fafc; outline: none; min-height: 40px; padding-right: 20px; margin-top: 5px; line-height: 1.6; letter-spacing: 0.5px; }
-    .annual-card-text:empty::before { content: "手写一项年度核心航线目标..."; color: #64748b; font-weight: normal; }
-    .add-annual-card-btn { display: flex; align-items: center; justify-content: center; min-width: 60px; border: 2px dashed #64748b; border-radius: 12px; background: transparent; color: #94a3b8; font-size: 20pt; cursor: pointer; transition: all 0.2s; }
+    .annual-card-text { font-size: 10pt; font-weight: 700; color: #f8fafc; outline: none; min-height: 30px; padding-right: 16px; margin-top: 2px; line-height: 1.4; letter-spacing: 0.5px; }
+    .annual-card-text:empty::before { content: "手写年度航线目标..."; color: #64748b; font-weight: normal; }
+    .add-annual-card-btn { display: flex; align-items: center; justify-content: center; min-width: 50px; border: 2px dashed #64748b; border-radius: 8px; background: transparent; color: #94a3b8; font-size: 18pt; cursor: pointer; transition: all 0.2s; }
     .add-annual-card-btn:hover { background: #e2e8f0; border-color: #0f172a; color: #0f172a; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-    .add-task-btn { margin-bottom: 12px; background: none; border: 1px dashed #cbd5e1; width: 100%; padding: 6px; border-radius: 6px; color: #64748b; cursor: pointer; font-size: 9.5pt; font-weight: 600; transition: all 0.2s; }
+    .add-task-btn { margin-bottom: 8px; background: none; border: 1px dashed #cbd5e1; width: 100%; padding: 4px; border-radius: 4px; color: #64748b; cursor: pointer; font-size: 9pt; font-weight: 600; transition: all 0.2s; }
     .add-task-btn:hover { background: #f8fafc; color: #0f172a; border-color: #94a3b8; }
     
-    .handwritten-text-area { font-size: 10pt; color: #1e293b; outline: none; border: 1px solid transparent; padding: 2px 4px; border-radius: 4px; min-height: 20px; font-weight: 500; display: inline-block; width: 100%; }
+    .handwritten-text-area { font-size: 10pt; color: #1e293b; outline: none; border: 1px solid transparent; padding: 1px 4px; border-radius: 4px; min-height: 20px; font-weight: 500; display: inline-block; width: 100%; line-height: 1.4;}
     .handwritten-text-area:focus { background: #fafbfc; border-color: #e2e8f0; }
     
-    .time-capsule-tag { display: inline-block; padding: 2px 10px; font-size: 8.5pt; font-weight: 800; border-radius: 12px; outline: none; min-width: 50px; text-align: center; border: 1px solid transparent; cursor: text; }
+    .time-capsule-tag { display: inline-block; padding: 1px 8px; font-size: 8pt; font-weight: 800; border-radius: 8px; outline: none; min-width: 40px; text-align: center; border: 1px solid transparent; cursor: text; }
     .time-capsule-tag:focus { border-color: #cbd5e1; background: #ffffff; }
     .tag-high-time { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; }
     .tag-high-time:empty::before { content: "如 6-7"; color: #a7f3d0; font-weight: normal; }
@@ -195,33 +199,33 @@
     #input-day-time-reason:empty::before { content: "客观记录产生波动的核心原因..."; color: #94a3b8; font-weight: normal; }
 
     .drawer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.3); z-index: 1000; backdrop-filter: blur(2px); }
-    .drawer-content { position: absolute; top: 0; right: 0; width: 400px; height: 100%; background: #ffffff; box-shadow: -4px 0 25px rgba(0,0,0,0.15); padding: 30px 24px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
-    .drawer-close-x { font-size: 16pt; color: #94a3b8; cursor: pointer; position: absolute; top: 15px; right: 20px; font-weight: bold; }
-    .drawer-title { font-size: 14pt; font-weight: 800; color: #0f172a; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; }
-    .drawer-section-title { font-size: 10.5pt; font-weight: 700; color: #475569; margin-bottom: 8px; }
-    .date-field { padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 10pt; cursor: pointer; outline: none; width: 100%; margin-bottom: 8px; }
-    .trigger-range-ai-btn { background-color: #1e293b; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 9.5pt; cursor: pointer; width: 100%; transition: all 0.2s; }
+    .drawer-content { position: absolute; top: 0; right: 0; width: 380px; height: 100%; background: #ffffff; box-shadow: -4px 0 25px rgba(0,0,0,0.15); padding: 24px 20px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+    .drawer-close-x { font-size: 16pt; color: #94a3b8; cursor: pointer; position: absolute; top: 12px; right: 16px; font-weight: bold; line-height: 1;}
+    .drawer-title { font-size: 13pt; font-weight: 800; color: #0f172a; border-bottom: 2px solid #cbd5e1; padding-bottom: 6px; }
+    .drawer-section-title { font-size: 10pt; font-weight: 700; color: #475569; margin-bottom: 6px; }
+    .date-field { padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-size: 9.5pt; cursor: pointer; outline: none; width: 100%; margin-bottom: 6px; }
+    .trigger-range-ai-btn { background-color: #1e293b; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 9pt; cursor: pointer; width: 100%; transition: all 0.2s; }
     .trigger-range-ai-btn:hover { background-color: #0f172a; }
     .trigger-range-ai-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
-    .api-input-box { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; outline: none; font-size: 9.5pt; font-family: monospace; }
+    .api-input-box { width: 100%; padding: 6px 10px; border-radius: 4px; border: 1px solid #cbd5e1; outline: none; font-size: 9pt; font-family: monospace; }
     
-    .archive-cabinet-rack { display: flex; flex-direction: column; gap: 6px; max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; padding: 6px; border-radius: 6px; background: #f8fafc; }
-    .archive-rack-row { display: flex; justify-content: space-between; align-items: center; font-size: 8.5pt; padding: 4px 6px; background: white; border: 1px solid #edf2f7; border-radius: 4px; cursor: pointer; }
+    .archive-cabinet-rack { display: flex; flex-direction: column; gap: 4px; max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px; background: #f8fafc; }
+    .archive-rack-row { display: flex; justify-content: space-between; align-items: center; font-size: 8pt; padding: 3px 6px; background: white; border: 1px solid #edf2f7; border-radius: 4px; cursor: pointer; }
     .archive-rack-row:hover { background: #eff6ff; border-color: #bfdbfe; }
     .rack-del-x { color: #cbd5e1; font-weight: bold; cursor: pointer; padding: 0 2px; }
     .rack-del-x:hover { color: #ef4444; }
 
-    .focal-timeline-axis-row { display: flex; align-items: center; width: 100%; position: relative; margin-bottom: 10px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; }
-    .focal-mini-rate-circle { font-size: 9pt; font-weight: 800; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; margin-right: 15px; }
-    .focal-axis-nodes-container { display: flex; gap: 10px; flex-grow: 1; align-items: center; color:#64748b; font-size:9.5pt; font-weight:bold; }
+    .focal-timeline-axis-row { display: flex; align-items: center; width: 100%; position: relative; margin-bottom: 8px; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9; }
+    .focal-mini-rate-circle { font-size: 8.5pt; font-weight: 800; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; margin-right: 12px; }
+    .focal-axis-nodes-container { display: flex; gap: 8px; flex-grow: 1; align-items: center; color:#64748b; font-size:9pt; font-weight:bold; }
 
-    .focal-impact-box { display: flex; flex-direction: column; width: 100%; position: relative; margin-bottom: 15px; }
-    .focal-heavy-body-text { font-size: 11.5pt; font-weight: 800; color: #0f172a; line-height: 1.5; margin: 0; letter-spacing: -0.2px; }
+    .focal-impact-box { display: flex; flex-direction: column; width: 100%; position: relative; margin-bottom: 12px; }
+    .focal-heavy-body-text { font-size: 10.5pt; font-weight: 800; color: #0f172a; line-height: 1.4; margin: 0; letter-spacing: -0.2px; }
     .focal-blueprint-grid-canvas { 
-        width: 100%; border-radius: 8px; padding: 16px; position: relative; border-left: 2px solid #4338ca;
+        width: 100%; border-radius: 6px; padding: 12px; position: relative; border-left: 2px solid #4338ca;
         background-color: #fafafa; background-image: linear-gradient(#e0f2fe 1px, transparent 1px), linear-gradient(90deg, #e0f2fe 1px, transparent 1px); background-size: 14px 14px;
     }
-    .prescription-title-prompt { font-size: 9.5pt; font-weight: 800; color: #4338ca; margin-bottom: 6px; display: inline-block; }
+    .prescription-title-prompt { font-size: 9pt; font-weight: 800; color: #4338ca; margin-bottom: 4px; display: inline-block; }
 </style>
 </head>
 <body>
@@ -247,7 +251,7 @@
     </div>
 
     <div class="rollover-alert-bar" id="rollover-bar">
-        <span id="rollover-text">🎒 检测到历史时空中存在未打勾的未完事项，是否一键增量顺延载入到今日待办？</span>
+        <span id="rollover-text">🎒 发现当前月份之前存在遗留的未完事项，是否一键顺延载入到今日待办？</span>
         <div class="rollover-btn-group">
             <button class="btn-roll-confirm" onclick="executeRolloverTasks()">确认滚动</button>
             <button class="btn-roll-cancel" onclick="dismissRolloverBar()">暂不处理</button>
@@ -276,7 +280,7 @@
         <div class="card-grid">
             <div class="content-panel" id="panel-day-list-outer">
                 <div class="panel-header header-day" id="panel-day-header">
-                    <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
                         <span>📌 今日 List</span>
                         <span class="rate-header-badge" id="live-rate-day-badge">完成率 0%</span>
                     </div>
@@ -286,13 +290,15 @@
                     <button class="add-task-btn" onclick="addNewTask('day')">+ 新增今日待办</button>
                     <ul class="task-group" id="day-task-list"></ul>
                     
-                    <div style="margin-top: auto; border-top: 1px dashed #e2e8f0; padding-top: 16px;">
-                        <div style="font-size: 8.5pt; font-weight: 800; color: #059669; margin-bottom: 6px; letter-spacing: 1px;">🔄 闭环：昨日药方执行验证</div>
+                    <div style="margin-top: auto; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
+                        <div style="font-size: 8pt; font-weight: 800; color: #059669; margin-bottom: 4px; letter-spacing: 1px;">🔄 闭环：昨日药方执行验证</div>
                         <div class="task-row row-green" id="closure-day-row" style="background-color: #ecfdf5; border-color: #a7f3d0; margin-bottom: 0;">
                             <div class="task-main-line">
                                 <div class="todo-checkbox" onclick="toggleClosure('day')"></div>
-                                <div class="todo-text" contenteditable="true" id="closure-day-text" onblur="saveClosure('day', this)" style="color: #065f46; font-weight: 600;"></div>
-                                <span style="cursor:pointer; color:#94a3b8; font-weight:bold; margin-left:8px; font-size:12pt;" onclick="clearClosure('day')">×</span>
+                                <div class="todo-text" contenteditable="true" id="closure-day-text" onblur="saveClosure('day', this)" style="font-weight: 600;"></div>
+                                <div class="controls-wrapper">
+                                    <span class="main-task-del-x" onclick="clearClosure('day')">×</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -305,30 +311,30 @@
                     <table class="matrix-table">
                         <tr class="matrix-row">
                             <td class="matrix-label">
-                                <div style="margin-bottom: 6px;">⚠️ 核心卡点是什么</div>
+                                <div style="margin-bottom: 4px;">⚠️ 核心卡点是什么</div>
                                 <div class="tag-slots-container" id="slots-day-what" data-type="what"></div>
                             </td>
                             <td class="matrix-value">
-                                <div class="handwritten-text-area" contenteditable="true" id="input-day-what" style="min-height: 40px;"></div>
+                                <div class="handwritten-text-area" contenteditable="true" id="input-day-what" style="min-height: 24px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
                             <td class="matrix-label">
-                                <div style="margin-bottom: 6px;">🔍 为什么会发生</div>
+                                <div style="margin-bottom: 4px;">🔍 为什么会发生</div>
                                 <div class="tag-slots-container" id="slots-day-why" data-type="why"></div>
                             </td>
                             <td class="matrix-value">
-                                <div class="handwritten-text-area" contenteditable="true" id="input-day-why" style="min-height: 40px;"></div>
+                                <div class="handwritten-text-area" contenteditable="true" id="input-day-why" style="min-height: 24px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
                             <td class="matrix-label">
-                                <div style="margin-bottom: 6px;">💡 明日怎么解决</div>
+                                <div style="margin-bottom: 4px;">💡 明日怎么解决</div>
                                 <div class="tag-slots-container" id="slots-day-how" data-type="how"></div>
                             </td>
                             <td class="matrix-value">
                                 <ul class="task-group" id="day-how-list"></ul>
-                                <button class="add-task-btn" onclick="addHowDetail()" style="margin-bottom: 0; margin-top: 4px; padding: 4px; font-size: 8.5pt;">+ 新增解决条目</button>
+                                <button class="add-task-btn" onclick="addHowDetail()" style="margin-bottom: 0; margin-top: 4px; padding: 2px; font-size: 8pt;">+ 新增解决条目</button>
                             </td>
                         </tr>
                     </table>
@@ -339,30 +345,30 @@
                 <div class="panel-header header-day" id="panel-day-time-header">
                     <span>⏱️ 时间与原因</span>
                 </div>
-                <div class="panel-body" style="padding-top: 20px;">
+                <div class="panel-body" style="padding-top: 16px;">
                     <table class="matrix-table">
                         <tr class="matrix-row">
                             <td class="matrix-label">
-                                <div style="margin-bottom: 8px;">✨ 最专注的时间</div>
-                                <div class="time-capsule-tag tag-high-time" contenteditable="true" id="input-day-high-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 4px;"></div>
+                                <div style="margin-bottom: 6px;">✨ 最专注的时间</div>
+                                <div class="time-capsule-tag tag-high-time" contenteditable="true" id="input-day-high-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 2px;"></div>
                             </td>
                             <td class="matrix-value">
-                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-high-event" style="width: 100%; min-height: 40px;"></div>
+                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-high-event" style="width: 100%; min-height: 24px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
                             <td class="matrix-label">
-                                <div style="margin-bottom: 8px;">🔋 最废的时间</div>
-                                <div class="time-capsule-tag tag-low-time" contenteditable="true" id="input-day-low-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 4px;"></div>
+                                <div style="margin-bottom: 6px;">🔋 最废的时间</div>
+                                <div class="time-capsule-tag tag-low-time" contenteditable="true" id="input-day-low-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 2px;"></div>
                             </td>
                             <td class="matrix-value">
-                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-low-event" style="width: 100%; min-height: 40px;"></div>
+                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-low-event" style="width: 100%; min-height: 24px;"></div>
                             </td>
                         </tr>
                         <tr class="matrix-row">
                             <td class="matrix-label">🔍 原因</td>
                             <td class="matrix-value">
-                                <div class="handwritten-text-area" contenteditable="true" id="input-day-time-reason" style="min-height: 60px; border: 1px solid #edf2f7; background: #fafbfc; border-radius: 6px; padding: 8px;"></div>
+                                <div class="handwritten-text-area" contenteditable="true" id="input-day-time-reason" style="min-height: 40px; border: 1px solid #edf2f7; background: #fafbfc; border-radius: 4px; padding: 6px;"></div>
                             </td>
                         </tr>
                     </table>
@@ -379,7 +385,7 @@
         <div class="card-grid">
             <div class="content-panel" id="panel-week-list-outer">
                 <div class="panel-header header-week" id="panel-week-header">
-                    <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
                         <span>📋 本周 List</span>
                         <span class="rate-header-badge" id="live-rate-week-badge">完成率 0%</span>
                     </div>
@@ -389,13 +395,15 @@
                     <button class="add-task-btn" onclick="addNewTask('week')">+ 新增本周待办</button>
                     <ul class="task-group" id="week-task-list"></ul>
                     
-                    <div style="margin-top: auto; border-top: 1px dashed #e2e8f0; padding-top: 16px;">
-                        <div style="font-size: 8.5pt; font-weight: 800; color: #059669; margin-bottom: 6px; letter-spacing: 1px;">🔄 闭环：上周调整执行验证</div>
+                    <div style="margin-top: auto; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
+                        <div style="font-size: 8pt; font-weight: 800; color: #059669; margin-bottom: 4px; letter-spacing: 1px;">🔄 闭环：上周调整执行验证</div>
                         <div class="task-row row-green" id="closure-week-row" style="background-color: #ecfdf5; border-color: #a7f3d0; margin-bottom: 0;">
                             <div class="task-main-line">
                                 <div class="todo-checkbox" onclick="toggleClosure('week')"></div>
-                                <div class="todo-text" contenteditable="true" id="closure-week-text" onblur="saveClosure('week', this)" style="color: #065f46; font-weight: 600;"></div>
-                                <span style="cursor:pointer; color:#94a3b8; font-weight:bold; margin-left:8px; font-size:12pt;" onclick="clearClosure('week')">×</span>
+                                <div class="todo-text" contenteditable="true" id="closure-week-text" onblur="saveClosure('week', this)" style="font-weight: 600;"></div>
+                                <div class="controls-wrapper">
+                                    <span class="main-task-del-x" onclick="clearClosure('week')">×</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -415,7 +423,7 @@
         <div class="card-grid">
             <div class="content-panel" id="panel-month-list-outer">
                 <div class="panel-header header-month" id="panel-month-header">
-                    <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
                         <span>🎯 本月 List</span>
                         <span class="rate-header-badge" id="live-rate-month-badge">完成率 0%</span>
                     </div>
@@ -425,13 +433,15 @@
                     <button class="add-task-btn" onclick="addNewTask('month')">+ 新增本月大目标</button>
                     <ul class="task-group" id="month-task-list"></ul>
                     
-                    <div style="margin-top: auto; border-top: 1px dashed #e2e8f0; padding-top: 16px;">
-                        <div style="font-size: 8.5pt; font-weight: 800; color: #1d4ed8; margin-bottom: 6px; letter-spacing: 1px;">🔄 闭环：上月复盘执行验证</div>
+                    <div style="margin-top: auto; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
+                        <div style="font-size: 8pt; font-weight: 800; color: #1d4ed8; margin-bottom: 4px; letter-spacing: 1px;">🔄 闭环：上月复盘执行验证</div>
                         <div class="task-row row-blue" id="closure-month-row" style="background-color: #eff6ff; border-color: #bfdbfe; margin-bottom: 0;">
                             <div class="task-main-line">
                                 <div class="todo-checkbox" onclick="toggleClosure('month')"></div>
-                                <div class="todo-text" contenteditable="true" id="closure-month-text" onblur="saveClosure('month', this)" style="color: #1d4ed8; font-weight: 600;"></div>
-                                <span style="cursor:pointer; color:#94a3b8; font-weight:bold; margin-left:8px; font-size:12pt;" onclick="clearClosure('month')">×</span>
+                                <div class="todo-text" contenteditable="true" id="closure-month-text" onblur="saveClosure('month', this)" style="font-weight: 600;"></div>
+                                <div class="controls-wrapper">
+                                    <span class="main-task-del-x" onclick="clearClosure('month')">×</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -479,7 +489,7 @@
     let masterDB = {
         yearPlans: ["横向航线一：考过科目三并斩获驾照", "横向航线二：深入攻坚全栈智能系统开发"],
         apiKey: "", lastExportWatermark: 0, virtualCabinetLogs: [], 
-        selectedMonth: "5", currentWeek: "第四周", currentDay: "周四", realTodayStr: "周四", realWeekStr: "第四周",
+        selectedMonth: "5", currentWeek: "第四周", currentDay: "周四", realTodayStr: "周四", realWeekStr: "第四周", realMonthStr: "5",
         tagLibrary: {
             what: ["#进度延误", "#突发加塞", "#外界事情干扰", "#专注度缺失"],
             why: ["#他人打断", "#精力崩溃", "#环境嘈杂"],
@@ -488,8 +498,8 @@
         months: {}
     };
 
-    // 🌟 全局气泡开启状态记录
     window._openBubbleState = null;
+    window._openTagSlot = null;
 
     if (localStorage.getItem("fupan2026_ultimate_stable_md")) { masterDB = JSON.parse(localStorage.getItem("fupan2026_ultimate_stable_md")); }
     function commit() { localStorage.setItem("fupan2026_ultimate_stable_md", JSON.stringify(masterDB)); }
@@ -623,7 +633,7 @@
         const mData = getMonthScope(); let task = (level === 'month') ? mData.monthTasks[mainIdx] : mData.weeks[masterDB.currentWeek].tasks[mainIdx];
         if (!task.dispatches) task.dispatches = {};
         
-        panelEl.innerHTML = `<div style="font-size: 9.5pt; font-weight: 800; color: #334155; margin-bottom: 4px;">🪄 任务拆解与派发</div>`;
+        panelEl.innerHTML = `<div style="font-size: 9pt; font-weight: 800; color: #334155; margin-bottom: 2px;">🪄 任务拆解与派发</div>`;
         
         task.subtasks.forEach((subText, subIdx) => {
             const div = document.createElement("div"); div.className = "subtask-item-row";
@@ -646,8 +656,8 @@
             }
 
             div.innerHTML = `
-                <div style="display: flex; width: 100%; align-items: center; gap: 6px;">
-                    <span style="color: #cbd5e1; font-size:14pt; line-height:1;">•</span>
+                <div style="display: flex; width: 100%; align-items: center; gap: 4px;">
+                    <span style="color: #cbd5e1; font-size:12pt; line-height:1;">•</span>
                     <div class="subtask-text-edit" contenteditable="true" onblur="saveSubtaskTxt('${level}', ${mainIdx}, ${subIdx}, this)">${subText}</div>
                     <select class="subtask-dropdown-select" onchange="toggleDispatchFromSelect(this, '${level}', ${mainIdx}, ${subIdx})">
                         ${optionsHtml}
@@ -659,7 +669,7 @@
         });
         
         const appendBtn = document.createElement("div");
-        appendBtn.style = "font-size:8.5pt; color:#4f46e5; cursor:pointer; margin-top:8px; font-weight:700; text-align: center; background: #e0e7ff; padding: 6px; border-radius: 6px; transition: background 0.2s;";
+        appendBtn.style = "font-size:8pt; color:#4f46e5; cursor:pointer; margin-top:6px; font-weight:700; text-align: center; background: #e0e7ff; padding: 4px; border-radius: 4px; transition: background 0.2s;";
         appendBtn.innerText = "+ 添加新拆解子项";
         appendBtn.onmouseover = () => appendBtn.style.background = "#c7d2fe";
         appendBtn.onmouseout = () => appendBtn.style.background = "#e0e7ff";
@@ -693,6 +703,7 @@
             mData.weeks[targetWeekStr].tasks.push({ id: newId, text: txt, completed: false, hasSplit: false, subtasks: [], isSynced: true });
             task.dispatches[sIdx][targetWeekStr] = newId;
         }
+        if(window._openBubbleState) { window._openBubbleState.shouldStay = true; }
         commit(); renderAllPage();
     }
     
@@ -712,6 +723,7 @@
             mData.weeks[masterDB.currentWeek].days[targetDayName].tasks.push({ id: newId, text: txt, completed: false, isSynced: true });
             task.dispatches[subIdx][targetDayName] = newId;
         }
+        if(window._openBubbleState) { window._openBubbleState.shouldStay = true; }
         commit(); renderAllPage();
     }
     
@@ -727,6 +739,7 @@
             }
             t.dispatches = newDisp;
         }
+        if(window._openBubbleState) { window._openBubbleState.shouldStay = true; }
         commit(); refreshSubtaskUI(el.closest('.subtask-panel-bubble'), l, m); 
     }
 
@@ -847,11 +860,20 @@
         if (activeArr.filter(t => t!=="").length < 3) {
             const ddWrapper = document.createElement("div"); ddWrapper.className = "custom-dropdown-wrapper";
             const ddBtn = document.createElement("button"); ddBtn.className = "inline-select-adder"; ddBtn.innerText = "+ 标签";
+            
             ddBtn.onclick = (e) => {
                 e.stopPropagation();
-                document.querySelectorAll(".custom-dropdown-menu").forEach(m => { if(m !== ddMenu) m.style.display = 'none'; });
-                ddMenu.style.display = ddMenu.style.display === "block" ? "none" : "block";
+                let isOpening = ddMenu.style.display !== "block";
+                document.querySelectorAll(".custom-dropdown-menu").forEach(m => { m.style.display = 'none'; });
+                if (isOpening) {
+                    ddMenu.style.display = "block";
+                    window._openTagSlot = slotId;
+                } else {
+                    ddMenu.style.display = "none";
+                    window._openTagSlot = null;
+                }
             };
+            
             const ddMenu = document.createElement("div"); ddMenu.className = "custom-dropdown-menu";
             masterDB.tagLibrary[typeKey].forEach(t => { 
                 if(!activeArr.includes(t)) {
@@ -867,15 +889,44 @@
                     item.appendChild(textSpan); item.appendChild(delSpan); ddMenu.appendChild(item);
                 }
             });
-            const newTagItem = document.createElement("div"); newTagItem.className = "custom-dropdown-item new-tag-item"; newTagItem.innerText = "➕ 手写新标签...";
-            newTagItem.onclick = () => {
-                let c = prompt("手写新标签：");
-                if (c) { if(!c.startsWith('#')) c = '#'+c; if(!masterDB.tagLibrary[typeKey].includes(c)) masterDB.tagLibrary[typeKey].push(c); activeArr.push(c); commit(); renderAllPage(); }
+
+            const newTagItem = document.createElement("div"); 
+            newTagItem.className = "custom-dropdown-item new-tag-item"; 
+            newTagItem.style.padding = "4px 8px";
+            
+            const tagInput = document.createElement("input");
+            tagInput.type = "text";
+            tagInput.placeholder = "手写新标签 + 回车";
+            tagInput.style.cssText = "width: 100%; font-size: 8pt; padding: 2px 4px; border: 1px dashed #cbd5e1; border-radius: 4px; outline: none;";
+            tagInput.onclick = (e) => e.stopPropagation();
+            tagInput.onkeydown = (e) => {
+                if(e.key === 'Enter') {
+                    e.preventDefault();
+                    let c = tagInput.value.trim();
+                    if (c) { 
+                        if(!c.startsWith('#')) c = '#'+c; 
+                        if(!masterDB.tagLibrary[typeKey].includes(c)) masterDB.tagLibrary[typeKey].push(c); 
+                        activeArr.push(c); if(window._openTagSlot) { window._openTagSlot = slotId; } commit(); renderAllPage(); 
+                    }
+                }
             };
-            ddMenu.appendChild(newTagItem); ddWrapper.appendChild(ddBtn); ddWrapper.appendChild(ddMenu); container.appendChild(ddWrapper);
+            newTagItem.appendChild(tagInput);
+            ddMenu.appendChild(newTagItem);
+            
+            ddWrapper.appendChild(ddBtn); ddWrapper.appendChild(ddMenu); container.appendChild(ddWrapper);
+            
+            if (window._openTagSlot === slotId) {
+                ddMenu.style.display = "block";
+            }
         }
     }
-    function killSingleTag(slotId, typeKey, idx) { getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay][typeKey+'_tags'].splice(idx, 1); commit(); renderXTags(slotId, typeKey); }
+
+    function killSingleTag(slotId, typeKey, idx) { 
+        getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay][typeKey+'_tags'].splice(idx, 1); 
+        if(window._openTagSlot) { window._openTagSlot = slotId; } 
+        commit(); 
+        renderAllPage(); 
+    }
 
     function renderAnnualGrid() {
         const wr = document.getElementById("annual-cards-wrapper"); wr.innerHTML = "";
@@ -1053,27 +1104,69 @@
 
         masterDB.realTodayStr = masterDB.currentDay;
         masterDB.realWeekStr = masterDB.currentWeek;
+        masterDB.realMonthStr = masterDB.selectedMonth;
         commit(); renderAllPage();
     }
 
     function switchMonthData(mVal) { masterDB.selectedMonth = mVal; commit(); renderAllPage(); }
-    function dismissRolloverBar() { document.getElementById("rollover-bar").style.display = "none"; }
+    
+    function getUnfinishedPastTasks() {
+        const mData = getMonthScope();
+        const wNames = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"];
+        const daysArr = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+        let currentWIdx = wNames.indexOf(masterDB.realWeekStr);
+        let currentDIdx = daysArr.indexOf(masterDB.realTodayStr);
+        let leakedTasks = [];
 
-    function executeRolloverTasks() {
-        const mData = getMonthScope(); let cnt = 0;
-        const currentWeekDays = mData.weeks[masterDB.currentWeek].days;
-        for(let k in currentWeekDays) {
-            if(k !== masterDB.currentDay) {
-                let list = currentWeekDays[k].tasks;
-                for(let i=list.length-1; i>=0; i--) {
-                    if(!list[i].completed) {
-                        currentWeekDays[masterDB.currentDay].tasks.push({ id: "roll_"+Date.now()+"_"+Math.random(), text: `🎒 [历史未完] ${list[i].text}`, completed: false, isSynced: true });
-                        list.splice(i, 1); cnt++;
-                    }
+        for (let w = 0; w <= currentWIdx; w++) {
+            let wkName = wNames[w];
+            if (!mData.weeks[wkName]) continue;
+            let daysInWk = mData.weeks[wkName].days;
+            for (let d = 0; d < 7; d++) {
+                if (w === currentWIdx && d >= currentDIdx) break; 
+                let dName = daysArr[d];
+                if (daysInWk[dName] && daysInWk[dName].tasks) {
+                    daysInWk[dName].tasks.forEach(t => {
+                        if (!t.completed && !t.isRolloverIgnored && !t.isSynced) {
+                            leakedTasks.push({ week: wkName, day: dName, task: t });
+                        }
+                    });
                 }
             }
         }
-        commit(); renderAllPage(); dismissRolloverBar(); alert(`已顺延增量滚动载入 ${cnt} 项子待办！`);
+        return leakedTasks;
+    }
+
+    function dismissRolloverBar() { 
+        document.getElementById("rollover-bar").style.display = "none"; 
+        const leaks = getUnfinishedPastTasks();
+        const mData = getMonthScope();
+        leaks.forEach(leak => {
+            let task = mData.weeks[leak.week].days[leak.day].tasks.find(t => t.id === leak.task.id);
+            if(task) task.isRolloverIgnored = true;
+        });
+        commit();
+    }
+
+    function executeRolloverTasks() {
+        const leaks = getUnfinishedPastTasks();
+        const mData = getMonthScope();
+        let cnt = 0;
+        leaks.forEach(leak => {
+            let pastList = mData.weeks[leak.week].days[leak.day].tasks;
+            let idx = pastList.findIndex(t => t.id === leak.task.id);
+            if(idx !== -1) {
+                pastList.splice(idx, 1);
+                mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.push({ 
+                    id: "roll_"+Date.now()+"_"+Math.random(), 
+                    text: leak.task.text, 
+                    completed: false, 
+                    isSynced: true 
+                });
+                cnt++;
+            }
+        });
+        commit(); renderAllPage(); dismissRolloverBar(); alert(`已顺延载入 ${cnt} 项历史未完待办！`);
     }
 
     async function runCustomScopeAIAnalysis() {
@@ -1284,14 +1377,14 @@
         });
     }
 
-    function getYesterdaysHow() {
+    function getYesterdaysHow(weekStr = masterDB.currentWeek, dayStr = masterDB.currentDay) {
         const mData = getMonthScope(); const daysArr = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
         const totalWeeks = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth) - 1);
         const wNames = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"].slice(0, totalWeeks);
-        let dIdx = daysArr.indexOf(masterDB.currentDay); let wIdx = wNames.indexOf(masterDB.currentWeek);
+        let dIdx = daysArr.indexOf(dayStr); let wIdx = wNames.indexOf(weekStr);
         
         let prevDayData = null;
-        if (dIdx > 0) prevDayData = mData.weeks[masterDB.currentWeek].days[daysArr[dIdx - 1]];
+        if (dIdx > 0) prevDayData = mData.weeks[weekStr].days[daysArr[dIdx - 1]];
         else if (wIdx > 0) prevDayData = mData.weeks[wNames[wIdx - 1]].days["周日"];
         
         if (prevDayData) {
@@ -1302,9 +1395,10 @@
         }
         return "";
     }
-    function getPreviousWeeksPrescription() {
+    
+    function getPreviousWeeksPrescription(weekStr = masterDB.currentWeek) {
         const mData = getMonthScope(); const wNames = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"];
-        let wIdx = wNames.indexOf(masterDB.currentWeek);
+        let wIdx = wNames.indexOf(weekStr);
         if (wIdx > 0) return mData.weeks[wNames[wIdx - 1]].prescription;
         let prevMonthNum = parseInt(masterDB.selectedMonth) - 1;
         if (prevMonthNum >= 1 && masterDB.months[String(prevMonthNum)]) {
@@ -1313,27 +1407,41 @@
         }
         return "";
     }
+    
     function getPreviousMonthsReview() {
         let prevMonthNum = parseInt(masterDB.selectedMonth) - 1;
         if (prevMonthNum >= 1 && masterDB.months[String(prevMonthNum)]) return masterDB.months[String(prevMonthNum)].monthPrescription || "";
         return "";
     }
 
+    // 🌟 核心更新：修复跨天自动保存导致的数据串台污染，以及过滤非法默认字符
     function saveClosure(level, el) {
-        const text = el.innerText;
+        let text = el.innerText.trim();
+        let dynamicText = "";
+        
+        if (level === 'day') dynamicText = getYesterdaysHow().trim();
+        else if (level === 'week') dynamicText = getPreviousWeeksPrescription().trim();
+        else if (level === 'month') dynamicText = getPreviousMonthsReview().trim();
+
+        if (text === "" || text === "昨日无新调整方案" || text === "上周无新调整方案" || text === "上月无新调整方案" || text === dynamicText) {
+            text = null; 
+        }
+
         const mData = getMonthScope();
         if(level === 'day') mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_text = text;
         else if(level === 'week') mData.weeks[masterDB.currentWeek].closure_text = text;
         else if(level === 'month') mData.closure_text = text;
+        
         commit(); 
     }
 
     function clearClosure(level) {
         const mData = getMonthScope();
-        if(level === 'day') mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_text = "";
-        else if(level === 'week') mData.weeks[masterDB.currentWeek].closure_text = "";
-        else if(level === 'month') mData.closure_text = "";
-        commit(); renderAllPage();
+        if(level === 'day') mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_text = null;
+        else if(level === 'week') mData.weeks[masterDB.currentWeek].closure_text = null;
+        else if(level === 'month') mData.closure_text = null;
+        commit(); 
+        renderAllPage();
     }
 
     function toggleClosure(level) {
@@ -1350,14 +1458,14 @@
         details.forEach((item, index) => {
             const li = document.createElement("li");
             li.className = `task-row row-orange`;
-            li.style.marginBottom = "6px";
-            li.style.padding = "4px 0";
             li.draggable = true;
             li.innerHTML = `
-                <div class="task-main-line" style="padding: 2px 12px;">
+                <div class="task-main-line">
                     <span class="task-drag-handle" title="按住拖拽排序">⋮⋮</span>
-                    <div class="todo-text" contenteditable="true" onblur="updateHowDetail(${index}, this)" style="min-height: 20px; padding-right: 30px;">${item.text}</div>
-                    <span style="position:absolute; right: 10px; cursor:pointer; color:#cbd5e1; font-weight:bold; font-size:14pt; user-select:none; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#cbd5e1'" onclick="deleteHowDetail(${index})">×</span>
+                    <div class="todo-text" contenteditable="true" onblur="updateHowDetail(${index}, this)">${item.text}</div>
+                    <div class="controls-wrapper">
+                        <span class="main-task-del-x" onclick="deleteHowDetail(${index})">×</span>
+                    </div>
                 </div>
             `;
             
@@ -1368,32 +1476,26 @@
                 setTimeout(() => li.classList.add('dragging'), 0);
             });
             li.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.stopPropagation(); 
+                e.preventDefault(); e.stopPropagation(); 
                 if (!window._draggedTask || window._draggedTask.listId !== "day-how-list") return;
                 const bounding = li.getBoundingClientRect();
                 const offset = e.clientY - bounding.top;
                 if (offset > bounding.height / 2) {
-                    li.classList.remove('drag-over-top');
-                    li.classList.add('drag-over-bottom');
+                    li.classList.remove('drag-over-top'); li.classList.add('drag-over-bottom');
                 } else {
-                    li.classList.remove('drag-over-bottom');
-                    li.classList.add('drag-over-top');
+                    li.classList.remove('drag-over-bottom'); li.classList.add('drag-over-top');
                 }
             });
             li.addEventListener('dragleave', (e) => { 
-                e.stopPropagation();
-                li.classList.remove('drag-over-top', 'drag-over-bottom'); 
+                e.stopPropagation(); li.classList.remove('drag-over-top', 'drag-over-bottom'); 
             });
             li.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.stopPropagation(); 
+                e.preventDefault(); e.stopPropagation(); 
                 li.classList.remove('drag-over-top', 'drag-over-bottom');
                 const dragged = window._draggedTask;
                 if (!dragged || dragged.listId !== "day-how-list") return;
 
-                const fromIndex = dragged.index;
-                let toIndex = index;
+                const fromIndex = dragged.index; let toIndex = index;
                 const bounding = li.getBoundingClientRect();
                 if (e.clientY - bounding.top > bounding.height / 2) toIndex++;
                 if (fromIndex < toIndex) toIndex--;
@@ -1407,12 +1509,10 @@
                 }
             });
             li.addEventListener('dragend', (e) => {
-                e.stopPropagation(); 
-                li.classList.remove('dragging');
+                e.stopPropagation(); li.classList.remove('dragging');
                 document.querySelectorAll('.task-row').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bottom'));
                 window._draggedTask = null;
             });
-
             ul.appendChild(li);
         });
     }
@@ -1471,23 +1571,35 @@
         injectFocalWidgetDashboard("panel-week-review-body", "week");
         injectFocalWidgetDashboard("panel-month-review-body", "month");
 
-        const yDayRow = document.getElementById("closure-day-row"); const dispDay = document.getElementById("closure-day-text");
-        let dText = dayData.closure_text !== null ? dayData.closure_text : getYesterdaysHow();
-        if(dispDay) dispDay.innerText = dText ? dText : "无昨日记录...";
-        if(yDayRow) { if (dayData.closure_completed) yDayRow.classList.add("completed"); else yDayRow.classList.remove("completed"); }
+        // 🌟 完美渲染日度闭环，解决空白覆盖 Bug
+        const yDayRow = document.getElementById("closure-day-row"); 
+        const dispDay = document.getElementById("closure-day-text");
+        let dText = dayData.closure_text;
+        if (!dText) dText = getYesterdaysHow(masterDB.currentWeek, masterDB.currentDay);
+        
+        dispDay.innerText = dText ? dText : ""; // 真正为空时利用 CSS placeholder 显示
+        if (yDayRow) { if (dayData.closure_completed) yDayRow.classList.add("completed"); else yDayRow.classList.remove("completed"); }
 
+        // 🌟 周度闭环渲染
         const wkData = mData.weeks[masterDB.currentWeek];
-        const yWeekRow = document.getElementById("closure-week-row"); const dispWeek = document.getElementById("closure-week-text");
-        let wText = wkData.closure_text !== null ? wkData.closure_text : getPreviousWeeksPrescription();
-        if(dispWeek) dispWeek.innerText = wText ? wText : "无上周记录...";
-        if(yWeekRow) { if (wkData.closure_completed) yWeekRow.classList.add("completed"); else yWeekRow.classList.remove("completed"); }
+        const yWeekRow = document.getElementById("closure-week-row"); 
+        const dispWeek = document.getElementById("closure-week-text");
+        let wText = wkData.closure_text;
+        if (!wText) wText = getPreviousWeeksPrescription(masterDB.currentWeek);
+        
+        dispWeek.innerText = wText ? wText : ""; 
+        if (yWeekRow) { if (wkData.closure_completed) yWeekRow.classList.add("completed"); else yWeekRow.classList.remove("completed"); }
 
-        const yMonthRow = document.getElementById("closure-month-row"); const dispMonth = document.getElementById("closure-month-text");
-        let mText = mData.closure_text !== null ? mData.closure_text : getPreviousMonthsReview();
-        if(dispMonth) dispMonth.innerText = mText ? mText : "无上月记录...";
-        if(yMonthRow) { if (mData.closure_completed) yMonthRow.classList.add("completed"); else yMonthRow.classList.remove("completed"); }
+        // 🌟 月度闭环渲染
+        const yMonthRow = document.getElementById("closure-month-row"); 
+        const dispMonth = document.getElementById("closure-month-text");
+        let mText = mData.closure_text;
+        if (!mText) mText = getPreviousMonthsReview();
+        
+        dispMonth.innerText = mText ? mText : ""; 
+        if (yMonthRow) { if (mData.closure_completed) yMonthRow.classList.add("completed"); else yMonthRow.classList.remove("completed"); }
 
-        document.querySelectorAll('.content-panel, .tab-navigator, .inline-select-adder, .todo-text, .handwritten-text-area, .annual-plan-card, .drawer-content, .subtask-panel-bubble').forEach(el => {
+        document.querySelectorAll('.content-panel, .tab-navigator, .inline-select-adder, .todo-text, .handwritten-text-area, .annual-plan-card, .drawer-content').forEach(el => {
             el.onmousedown = () => { 
                 const s = el.closest('.drag-section'); if(s) s.draggable = false; 
                 const t = el.closest('.task-row'); if(t) t.draggable = false; 
@@ -1498,24 +1610,26 @@
             };
         });
         
-        let hasLeak = false; const currentWeekDays = mData.weeks[masterDB.currentWeek].days;
-        for (let k in currentWeekDays) { if(k !== masterDB.currentDay) { currentWeekDays[k].tasks.forEach(t => { if(!t.completed) hasLeak = true; }); } }
+        // 🌟 滚屏检查：仅限查看真实日历今天时触发，扫描整个自然月之前日期的遗留任务
+        let hasLeak = false;
+        const now = new Date();
+        const realMonth = String(now.getMonth() + 1);
+        let isViewingToday = (masterDB.selectedMonth === realMonth && masterDB.currentWeek === masterDB.realWeekStr && masterDB.currentDay === masterDB.realTodayStr);
+        
+        if (isViewingToday) {
+            const leaks = getUnfinishedPastTasks();
+            if (leaks.length > 0) hasLeak = true;
+        }
         document.getElementById("rollover-bar").style.display = hasLeak ? "flex" : "none";
 
-        // 🌟 重新打开记忆中的气泡
         if (window._openBubbleState) {
             const { level, index } = window._openBubbleState;
             const listId = level === 'month' ? 'month-task-list' : 'week-task-list';
             const ul = document.getElementById(listId);
             if (ul && ul.children[index]) {
                 const bubble = ul.children[index].querySelector('.subtask-panel-bubble');
-                if (bubble) {
-                    bubble.style.display = 'flex';
-                    refreshSubtaskUI(bubble, level, index);
-                }
-            } else {
-                window._openBubbleState = null;
-            }
+                if (bubble) { bubble.style.display = 'flex'; refreshSubtaskUI(bubble, level, index); }
+            } else { window._openBubbleState = null; }
         }
     }
 
@@ -1523,7 +1637,6 @@
         const ul = document.getElementById(elementId); if(!ul) return;
         ul.innerHTML = "";
         
-        // 🌟 生成主任务的一键派发下拉菜单选项
         let dispatchOptionsHtml = '';
         if (elementId === 'month-task-list') {
             const totalW = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth)-1);
@@ -1542,7 +1655,6 @@
             const isMainPool = !elementId.startsWith('day');
             li.draggable = true;
             
-            // 🌟 动态生成主任务的一键派发下拉菜单选项（带打勾状态记忆）
             let quickDispatchHtml = '';
             if (isMainPool) {
                 let mainDisp = task.mainDispatches || {};
@@ -1566,7 +1678,6 @@
                 }
             }
             
-            // 🌟 核心修复：把删除符号放入 controls-wrapper 弹性盒子中，完美防遮挡
             let extraControls = isMainPool ? `
                 ${quickDispatchHtml}
                 <div class="magic-wand-wrapper">
@@ -1597,39 +1708,32 @@
                 setTimeout(() => li.classList.add('dragging'), 0);
             });
             li.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.stopPropagation(); 
+                e.preventDefault(); e.stopPropagation(); 
                 if (!window._draggedTask || window._draggedTask.listId !== elementId) return;
                 const bounding = li.getBoundingClientRect();
                 const offset = e.clientY - bounding.top;
                 if (offset > bounding.height / 2) {
-                    li.classList.remove('drag-over-top');
-                    li.classList.add('drag-over-bottom');
+                    li.classList.remove('drag-over-top'); li.classList.add('drag-over-bottom');
                 } else {
-                    li.classList.remove('drag-over-bottom');
-                    li.classList.add('drag-over-top');
+                    li.classList.remove('drag-over-bottom'); li.classList.add('drag-over-top');
                 }
             });
             li.addEventListener('dragleave', (e) => { 
-                e.stopPropagation();
-                li.classList.remove('drag-over-top', 'drag-over-bottom'); 
+                e.stopPropagation(); li.classList.remove('drag-over-top', 'drag-over-bottom'); 
             });
             li.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.stopPropagation(); 
+                e.preventDefault(); e.stopPropagation(); 
                 li.classList.remove('drag-over-top', 'drag-over-bottom');
                 const dragged = window._draggedTask;
                 if (!dragged || dragged.listId !== elementId) return;
 
-                const fromIndex = dragged.index;
-                let toIndex = index;
+                const fromIndex = dragged.index; let toIndex = index;
                 const bounding = li.getBoundingClientRect();
                 if (e.clientY - bounding.top > bounding.height / 2) toIndex++;
                 if (fromIndex < toIndex) toIndex--;
 
                 if (fromIndex !== toIndex) {
-                    const mData = getMonthScope();
-                    let arr;
+                    const mData = getMonthScope(); let arr;
                     if (elementId === "month-task-list") arr = mData.monthTasks;
                     else if (elementId === "week-task-list") arr = mData.weeks[masterDB.currentWeek].tasks;
                     else if (elementId === "day-task-list") arr = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks;
@@ -1642,8 +1746,7 @@
                 }
             });
             li.addEventListener('dragend', (e) => {
-                e.stopPropagation(); 
-                li.classList.remove('dragging');
+                e.stopPropagation(); li.classList.remove('dragging');
                 document.querySelectorAll('.task-row').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bottom'));
                 window._draggedTask = null;
             });
@@ -1694,12 +1797,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // 🌟 点击空白处关闭气泡（已修复：增加 DOM 脱离校验，防止分发后闪退）
         document.addEventListener('click', (e) => {
             if (!document.body.contains(e.target)) return;
+
             if (!e.target.closest('.magic-wand-wrapper')) {
-                document.querySelectorAll('.subtask-panel-bubble').forEach(b => b.style.display = 'none');
-                window._openBubbleState = null;
+                if (window._openBubbleState && window._openBubbleState.shouldStay) {
+                    window._openBubbleState.shouldStay = false;
+                } else {
+                    document.querySelectorAll('.subtask-panel-bubble').forEach(b => b.style.display = 'none');
+                    window._openBubbleState = null;
+                }
+            }
+
+            if (!e.target.closest('.custom-dropdown-wrapper')) {
+                document.querySelectorAll(".custom-dropdown-menu").forEach(m => m.style.display = 'none');
+                window._openTagSlot = null;
             }
         });
 
