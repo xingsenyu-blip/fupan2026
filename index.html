@@ -100,9 +100,9 @@
     .task-row.row-blue .todo-text:empty::before { content: "设定本月核心航线或计划..."; }
     .task-row.row-green .todo-text:empty::before { content: "设定本周攻坚大纲或安排..."; }
 
-    #closure-day-text:empty::before { content: "昨日无新调整方案"; color: #94a3b8; font-weight: normal; font-size: 9pt; }
-    #closure-week-text:empty::before { content: "上周无新调整方案"; color: #94a3b8; font-weight: normal; font-size: 9pt; }
-    #closure-month-text:empty::before { content: "上月无新调整方案"; color: #94a3b8; font-weight: normal; font-size: 9pt; }
+    #closure-day-text:empty::before { content: "点击手写验证闭环..."; color: #94a3b8; font-weight: normal; font-size: 9pt; }
+    #closure-week-text:empty::before { content: "点击手写验证闭环..."; color: #94a3b8; font-weight: normal; font-size: 9pt; }
+    #closure-month-text:empty::before { content: "点击手写验证闭环..."; color: #94a3b8; font-weight: normal; font-size: 9pt; }
 
     .controls-wrapper { display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 6px; }
 
@@ -251,7 +251,7 @@
     </div>
 
     <div class="rollover-alert-bar" id="rollover-bar">
-        <span id="rollover-text">🎒 发现当前月份之前存在遗留的未完事项，是否一键顺延载入到今日待办？</span>
+        <span id="rollover-text">🎒 发现当前或之前月份存在遗留的未完事项，是否一键顺延载入到今日待办？</span>
         <div class="rollover-btn-group">
             <button class="btn-roll-confirm" onclick="executeRolloverTasks()">确认滚动</button>
             <button class="btn-roll-cancel" onclick="dismissRolloverBar()">暂不处理</button>
@@ -295,7 +295,7 @@
                         <div class="task-row row-green" id="closure-day-row" style="background-color: #ecfdf5; border-color: #a7f3d0; margin-bottom: 0;">
                             <div class="task-main-line">
                                 <div class="todo-checkbox" onclick="toggleClosure('day')"></div>
-                                <div class="todo-text" contenteditable="true" id="closure-day-text" onblur="saveClosure('day', this)" style="font-weight: 600;"></div>
+                                <div class="todo-text" contenteditable="true" id="closure-day-text" onblur="saveClosure('day', this)" style="font-weight: 600; color: #065f46;"></div>
                                 <div class="controls-wrapper">
                                     <span class="main-task-del-x" onclick="clearClosure('day')">×</span>
                                 </div>
@@ -400,7 +400,7 @@
                         <div class="task-row row-green" id="closure-week-row" style="background-color: #ecfdf5; border-color: #a7f3d0; margin-bottom: 0;">
                             <div class="task-main-line">
                                 <div class="todo-checkbox" onclick="toggleClosure('week')"></div>
-                                <div class="todo-text" contenteditable="true" id="closure-week-text" onblur="saveClosure('week', this)" style="font-weight: 600;"></div>
+                                <div class="todo-text" contenteditable="true" id="closure-week-text" onblur="saveClosure('week', this)" style="font-weight: 600; color: #065f46;"></div>
                                 <div class="controls-wrapper">
                                     <span class="main-task-del-x" onclick="clearClosure('week')">×</span>
                                 </div>
@@ -438,7 +438,7 @@
                         <div class="task-row row-blue" id="closure-month-row" style="background-color: #eff6ff; border-color: #bfdbfe; margin-bottom: 0;">
                             <div class="task-main-line">
                                 <div class="todo-checkbox" onclick="toggleClosure('month')"></div>
-                                <div class="todo-text" contenteditable="true" id="closure-month-text" onblur="saveClosure('month', this)" style="font-weight: 600;"></div>
+                                <div class="todo-text" contenteditable="true" id="closure-month-text" onblur="saveClosure('month', this)" style="font-weight: 600; color: #1d4ed8;"></div>
                                 <div class="controls-wrapper">
                                     <span class="main-task-del-x" onclick="clearClosure('month')">×</span>
                                 </div>
@@ -501,7 +501,10 @@
     window._openBubbleState = null;
     window._openTagSlot = null;
 
-    if (localStorage.getItem("fupan2026_ultimate_stable_md")) { masterDB = JSON.parse(localStorage.getItem("fupan2026_ultimate_stable_md")); }
+    if (localStorage.getItem("fupan2026_ultimate_stable_md")) { 
+        let parsed = JSON.parse(localStorage.getItem("fupan2026_ultimate_stable_md"));
+        masterDB = { ...masterDB, ...parsed };
+    }
     function commit() { localStorage.setItem("fupan2026_ultimate_stable_md", JSON.stringify(masterDB)); }
     
     function createEmptyDays() {
@@ -1030,44 +1033,115 @@
     }
 
     function exportIncrementalSnapshotFile() {
-        const nowStamp = Date.now();
-        let pack = { snapshotTimestamp: nowStamp, plansScope: masterDB.yearPlans, libraryScope: masterDB.tagLibrary, apiKey: masterDB.apiKey, monthsDelta: {} };
-        pack.monthsDelta[masterDB.selectedMonth] = masterDB.months[masterDB.selectedMonth];
-        
-        let mdText = generateStandardMarkdownSnapshot(pack);
-        mdText += `\n\n`;
+        try {
+            const nowStamp = Date.now();
+            let pack = { snapshotTimestamp: nowStamp, plansScope: masterDB.yearPlans, libraryScope: masterDB.tagLibrary, apiKey: masterDB.apiKey, monthsDelta: {} };
 
-        const blob = new Blob([mdText], { type: "text/markdown;charset=utf-8" });
-        const anchor = document.createElement('a'); anchor.href = URL.createObjectURL(blob);
-        anchor.download = `复盘数据快照/2026_${masterDB.selectedMonth}月全盘审计印记_${nowStamp}.md`; anchor.click();
+            // 💡 智能获取高级面板里的跨时空时间选择器值
+            const startVal = document.getElementById("range-date-start").value;
+            const endVal = document.getElementById("range-date-end").value;
+            
+            let startM = parseInt(startVal.split("-")[1]) || parseInt(masterDB.selectedMonth);
+            let endM = parseInt(endVal.split("-")[1]) || parseInt(masterDB.selectedMonth);
+            
+            // 自动校准：防止用户把时间顺序选反
+            if (startM > endM) {
+                let temp = startM; startM = endM; endM = temp;
+            }
 
-        masterDB.virtualCabinetLogs.push({ label: `MD快照: ${masterDB.selectedMonth}月期 (${new Date().toLocaleTimeString()})`, timestamp: nowStamp, payload: JSON.parse(JSON.stringify(masterDB)) });
-        masterDB.lastExportWatermark = nowStamp; commit(); refreshCabinetRackUI();
+            // 🟢 【真正跨时间打包】根据名字的跨度，增量把这几个月的数据全部打包，防止跨月数据丢失
+            for (let m = startM; m <= endM; m++) {
+                if (masterDB.months[String(m)]) {
+                    pack.monthsDelta[String(m)] = masterDB.months[String(m)];
+                }
+            }
+            
+            // 兜底：如果这几个月都是空的，至少把当前视窗的月份数据塞进去
+            if (Object.keys(pack.monthsDelta).length === 0) {
+                pack.monthsDelta[masterDB.selectedMonth] = masterDB.months[masterDB.selectedMonth];
+            }
+
+            let mdText = generateStandardMarkdownSnapshot(pack);
+
+            // 【明文安全舱】将 JSON 纯文本写在文件最底下
+            let rawJsonStr = JSON.stringify(pack);
+            const startToken = "___FUPAN_DATA_START___";
+            const endToken = "___FUPAN_DATA_END___";
+            
+            mdText += `\n\n---\n### ⚙️ 系统恢复数据舱（请勿修改以下内容）\n${startToken}\n${rawJsonStr}\n${endToken}\n`;
+
+            const blob = new Blob([mdText], { type: "text/markdown;charset=utf-8" });
+            const anchor = document.createElement('a'); 
+            anchor.href = URL.createObjectURL(blob);
+            
+            // 🎯 【格式完美修改】根据你要求的规范，动态判断并命名文件
+            let fileName = "";
+            if (startM === endM) {
+                fileName = `复盘2026.${startM}.md`;
+            } else {
+                fileName = `复盘2026.${startM}-2026.${endM}.md`;
+            }
+            
+            anchor.download = fileName; 
+            anchor.click();
+
+            masterDB.virtualCabinetLogs.push({ label: `MD快照: ${fileName.replace('.md', '')} (${new Date().toLocaleTimeString()})`, timestamp: nowStamp, payload: JSON.parse(JSON.stringify(masterDB)) });
+            masterDB.lastExportWatermark = nowStamp; 
+            commit(); 
+            refreshCabinetRackUI();
+            
+            alert(`✅ 导出成功！\n\n文件已命名为：\n【 ${fileName} 】\n\n已为你完美打包该时间段内的所有数据！`);
+            
+        } catch (error) {
+            console.error(error);
+            alert("❌ 导出遇到异常：\n" + error.message);
+        }
     }
 
     function loadSnapshotFromFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+        
         const reader = new FileReader(); 
         reader.onload = function() {
             try {
                 const txt = reader.result;
-                const startToken = "";
+                const startToken = "___FUPAN_DATA_START___";
+                const endToken = "___FUPAN_DATA_END___";
                 const startIdx = txt.indexOf(startToken); 
                 const endIdx = txt.indexOf(endToken);
                 
                 if (startIdx !== -1 && endIdx !== -1) {
-                    const jsonStr = txt.substring(startIdx + startToken.length, endIdx).trim(); 
-                    const parsed = JSON.parse(jsonStr);
+                    let extractedJson = txt.substring(startIdx + startToken.length, endIdx).trim(); 
+                    
+                    if (!extractedJson) {
+                        alert("❌ 导入失败：找到了数据舱标记，但里面是空的！");
+                        return;
+                    }
+                    
+                    const parsed = JSON.parse(extractedJson);
+                    
                     if (parsed.monthsDelta) {
+                        // 🔓 完美的跨月合并逻辑，有多少个月就会同时恢复多少个月
                         Object.assign(masterDB.months, parsed.monthsDelta);
                         if(parsed.plansScope) masterDB.yearPlans = parsed.plansScope;
                         if(parsed.libraryScope) masterDB.tagLibrary = parsed.libraryScope;
                         if(parsed.apiKey) masterDB.apiKey = parsed.apiKey;
-                        commit(); renderAllPage(); alert("📤 Markdown 隐藏大盘数据逆向加载成功！"); toggleToolsDrawer(false);
+                        commit(); renderAllPage(); 
+                        alert("📤 数据恢复成功！页面大盘已完美重置。"); 
+                        toggleToolsDrawer(false);
                     }
-                } else { alert("❌ 未在该 Markdown 文件底部检测到合法的 AI 数据暗舱模块，无法导入。"); }
-            } catch(e) { alert("❌ Markdown 暗舱数据解析失败，请检查文件完整性。"); }
+                } else { 
+                    alert("❌ 导入失败！该文件内没有检测到有效的【系统恢复数据舱】。"); 
+                }
+            } catch(e) { 
+                console.error(e);
+                alert("❌ 数据解析失败 (" + e.name + ") \n原因: " + e.message); 
+            } finally {
+                input.value = '';
+            }
         }; 
-        reader.readAsText(input.files[0]);
+        reader.readAsText(file, 'UTF-8'); 
     }
 
     function refreshCabinetRackUI() {
@@ -1111,26 +1185,39 @@
     function switchMonthData(mVal) { masterDB.selectedMonth = mVal; commit(); renderAllPage(); }
     
     function getUnfinishedPastTasks() {
-        const mData = getMonthScope();
+        let leakedTasks = [];
         const wNames = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"];
         const daysArr = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-        let currentWIdx = wNames.indexOf(masterDB.realWeekStr);
-        let currentDIdx = daysArr.indexOf(masterDB.realTodayStr);
-        let leakedTasks = [];
-
-        for (let w = 0; w <= currentWIdx; w++) {
-            let wkName = wNames[w];
-            if (!mData.weeks[wkName]) continue;
-            let daysInWk = mData.weeks[wkName].days;
-            for (let d = 0; d < 7; d++) {
-                if (w === currentWIdx && d >= currentDIdx) break; 
-                let dName = daysArr[d];
-                if (daysInWk[dName] && daysInWk[dName].tasks) {
-                    daysInWk[dName].tasks.forEach(t => {
-                        if (!t.completed && !t.isRolloverIgnored && !t.isSynced) {
-                            leakedTasks.push({ week: wkName, day: dName, task: t });
-                        }
-                    });
+        
+        for (let mKey in masterDB.months) {
+            let mData = masterDB.months[mKey];
+            let isPastMonth = parseInt(mKey) < parseInt(masterDB.realMonthStr);
+            let isCurrentMonth = mKey === masterDB.realMonthStr;
+            
+            if (!isPastMonth && !isCurrentMonth) continue; 
+            
+            let limitWIdx = isCurrentMonth ? wNames.indexOf(masterDB.realWeekStr) : 5;
+            if (limitWIdx === -1) limitWIdx = 5;
+            
+            for (let w = 0; w <= limitWIdx; w++) {
+                let wkName = wNames[w];
+                if (!mData.weeks[wkName]) continue;
+                let daysInWk = mData.weeks[wkName].days;
+                
+                let limitDIdx = (isCurrentMonth && w === limitWIdx) ? daysArr.indexOf(masterDB.realTodayStr) : 6;
+                if (limitDIdx === -1) limitDIdx = 6;
+                
+                for (let d = 0; d <= limitDIdx; d++) {
+                    if (isCurrentMonth && w === limitWIdx && d >= limitDIdx) break;
+                    
+                    let dName = daysArr[d];
+                    if (daysInWk[dName] && daysInWk[dName].tasks) {
+                        daysInWk[dName].tasks.forEach(t => {
+                            if (!t.completed && t.isRolloverIgnored !== true) {
+                                leakedTasks.push({ month: mKey, week: wkName, day: dName, task: t });
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -1140,9 +1227,8 @@
     function dismissRolloverBar() { 
         document.getElementById("rollover-bar").style.display = "none"; 
         const leaks = getUnfinishedPastTasks();
-        const mData = getMonthScope();
         leaks.forEach(leak => {
-            let task = mData.weeks[leak.week].days[leak.day].tasks.find(t => t.id === leak.task.id);
+            let task = masterDB.months[leak.month].weeks[leak.week].days[leak.day].tasks.find(t => t.id === leak.task.id);
             if(task) task.isRolloverIgnored = true;
         });
         commit();
@@ -1150,14 +1236,14 @@
 
     function executeRolloverTasks() {
         const leaks = getUnfinishedPastTasks();
-        const mData = getMonthScope();
+        const targetData = getMonthScope(); 
         let cnt = 0;
         leaks.forEach(leak => {
-            let pastList = mData.weeks[leak.week].days[leak.day].tasks;
+            let pastList = masterDB.months[leak.month].weeks[leak.week].days[leak.day].tasks;
             let idx = pastList.findIndex(t => t.id === leak.task.id);
             if(idx !== -1) {
                 pastList.splice(idx, 1);
-                mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.push({ 
+                targetData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.push({ 
                     id: "roll_"+Date.now()+"_"+Math.random(), 
                     text: leak.task.text, 
                     completed: false, 
@@ -1414,16 +1500,10 @@
         return "";
     }
 
-    // 🌟 核心更新：修复跨天自动保存导致的数据串台污染，以及过滤非法默认字符
     function saveClosure(level, el) {
         let text = el.innerText.trim();
-        let dynamicText = "";
         
-        if (level === 'day') dynamicText = getYesterdaysHow().trim();
-        else if (level === 'week') dynamicText = getPreviousWeeksPrescription().trim();
-        else if (level === 'month') dynamicText = getPreviousMonthsReview().trim();
-
-        if (text === "" || text === "昨日无新调整方案" || text === "上周无新调整方案" || text === "上月无新调整方案" || text === dynamicText) {
+        if (text === "") {
             text = null; 
         }
 
@@ -1462,7 +1542,7 @@
             li.innerHTML = `
                 <div class="task-main-line">
                     <span class="task-drag-handle" title="按住拖拽排序">⋮⋮</span>
-                    <div class="todo-text" contenteditable="true" onblur="updateHowDetail(${index}, this)">${item.text}</div>
+                    <div class="todo-text" contenteditable="true" onblur="updateHowDetail(${index}, this)" style="min-height: 20px;">${item.text}</div>
                     <div class="controls-wrapper">
                         <span class="main-task-del-x" onclick="deleteHowDetail(${index})">×</span>
                     </div>
@@ -1571,30 +1651,28 @@
         injectFocalWidgetDashboard("panel-week-review-body", "week");
         injectFocalWidgetDashboard("panel-month-review-body", "month");
 
-        // 🌟 完美渲染日度闭环，解决空白覆盖 Bug
+        // 🌟 闭环渲染：已修复的无干扰同步逻辑，使用 == null 来兼顾 null 和 undefined
         const yDayRow = document.getElementById("closure-day-row"); 
         const dispDay = document.getElementById("closure-day-text");
         let dText = dayData.closure_text;
-        if (!dText) dText = getYesterdaysHow(masterDB.currentWeek, masterDB.currentDay);
+        if (dText == null) dText = getYesterdaysHow(masterDB.currentWeek, masterDB.currentDay);
         
-        dispDay.innerText = dText ? dText : ""; // 真正为空时利用 CSS placeholder 显示
+        dispDay.innerText = dText ? dText : ""; 
         if (yDayRow) { if (dayData.closure_completed) yDayRow.classList.add("completed"); else yDayRow.classList.remove("completed"); }
 
-        // 🌟 周度闭环渲染
         const wkData = mData.weeks[masterDB.currentWeek];
         const yWeekRow = document.getElementById("closure-week-row"); 
         const dispWeek = document.getElementById("closure-week-text");
         let wText = wkData.closure_text;
-        if (!wText) wText = getPreviousWeeksPrescription(masterDB.currentWeek);
+        if (wText == null) wText = getPreviousWeeksPrescription(masterDB.currentWeek);
         
         dispWeek.innerText = wText ? wText : ""; 
         if (yWeekRow) { if (wkData.closure_completed) yWeekRow.classList.add("completed"); else yWeekRow.classList.remove("completed"); }
 
-        // 🌟 月度闭环渲染
         const yMonthRow = document.getElementById("closure-month-row"); 
         const dispMonth = document.getElementById("closure-month-text");
         let mText = mData.closure_text;
-        if (!mText) mText = getPreviousMonthsReview();
+        if (mText == null) mText = getPreviousMonthsReview();
         
         dispMonth.innerText = mText ? mText : ""; 
         if (yMonthRow) { if (mData.closure_completed) yMonthRow.classList.add("completed"); else yMonthRow.classList.remove("completed"); }
@@ -1610,7 +1688,6 @@
             };
         });
         
-        // 🌟 滚屏检查：仅限查看真实日历今天时触发，扫描整个自然月之前日期的遗留任务
         let hasLeak = false;
         const now = new Date();
         const realMonth = String(now.getMonth() + 1);
@@ -1719,7 +1796,8 @@
                 }
             });
             li.addEventListener('dragleave', (e) => { 
-                e.stopPropagation(); li.classList.remove('drag-over-top', 'drag-over-bottom'); 
+                e.stopPropagation();
+                li.classList.remove('drag-over-top', 'drag-over-bottom'); 
             });
             li.addEventListener('drop', (e) => {
                 e.preventDefault(); e.stopPropagation(); 
