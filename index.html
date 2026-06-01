@@ -139,7 +139,7 @@
     .main-task-del-x { cursor: pointer; color: #cbd5e1; font-weight: bold; font-size: 13pt; user-select: none; transition: color 0.2s; padding: 0 4px; flex-shrink: 0; margin-left: 4px; line-height: 1;}
     .main-task-del-x:hover { color: #ef4444; }
 
-    .matrix-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .matrix-table { width: 100%; height: 100%; border-collapse: collapse; table-layout: fixed; }
     .matrix-row { border-bottom: 1px dashed #e2e8f0; }
     .matrix-row:last-child { border-bottom: none; }
     .matrix-label { font-size: 9pt; font-weight: 700; color: #64748b; padding: 8px 0; width: 100px; vertical-align: top; }
@@ -456,7 +456,7 @@
 
 </div>
 
-<div class="drawer-overlay" id="tools-drawer">
+<div class="drawer-overlay" id="tools-drawer" onclick="if(event.target === this) toggleToolsDrawer(false)">
     <div class="drawer-content">
         <span class="drawer-close-x" onclick="toggleToolsDrawer(false)">×</span>
         <div class="drawer-title">⚙️ 高级控制中心</div>
@@ -658,10 +658,14 @@
                 });
             }
 
+            // 🌟 修复核心：在 input 上增加了 onmousedown 和 onmouseup，点击瞬间立刻解除拖拽霸权，还光标自由！
             div.innerHTML = `
                 <div style="display: flex; width: 100%; align-items: center; gap: 4px;">
                     <span style="color: #cbd5e1; font-size:12pt; line-height:1;">•</span>
-                    <div class="subtask-text-edit" contenteditable="true" onblur="saveSubtaskTxt('${level}', ${mainIdx}, ${subIdx}, this)">${subText}</div>
+                    <div class="subtask-text-edit" contenteditable="true" 
+                         onmousedown="let s = this.closest('.drag-section'); if(s) s.draggable = false; let t = this.closest('.task-row'); if(t) t.draggable = false;" 
+                         onmouseup="let s = this.closest('.drag-section'); if(s) s.draggable = true; let t = this.closest('.task-row'); if(t) t.draggable = true;" 
+                         onblur="saveSubtaskTxt('${level}', ${mainIdx}, ${subIdx}, this)">${subText}</div>
                     <select class="subtask-dropdown-select" onchange="toggleDispatchFromSelect(this, '${level}', ${mainIdx}, ${subIdx})">
                         ${optionsHtml}
                     </select>
@@ -1157,6 +1161,53 @@
     }
     function killCabinetLog(idx, e) { e.stopPropagation(); masterDB.virtualCabinetLogs.splice(idx, 1); commit(); refreshCabinetRackUI(); }
 
+// 🌟 新增：每月1号自动备份拦截器
+    function checkAndRunAutoBackup() {
+        const now = new Date();
+        // 检查：今天是不是该月的 1 号？
+        if (now.getDate() === 1) { 
+            // 自动推算上个月是哪一年、哪一月
+            let prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            let prevYear = prevMonthDate.getFullYear();
+            let prevMonth = prevMonthDate.getMonth() + 1; // 1-12
+            let backupKey = `${prevYear}-${prevMonth}`; // 生成印记，例如 "2026-5"
+
+            // 检查底层印记：如果今天还没自动备份过，才执行
+            if (masterDB.autoBackedUp !== backupKey) {
+                
+                // 确认你的系统里确实存了上个月的数据，才进行打包
+                if (masterDB.months[String(prevMonth)]) {
+                    let pack = { snapshotTimestamp: Date.now(), plansScope: masterDB.yearPlans, libraryScope: masterDB.tagLibrary, apiKey: masterDB.apiKey, monthsDelta: {} };
+                    pack.monthsDelta[String(prevMonth)] = masterDB.months[String(prevMonth)];
+
+                    let mdText = generateStandardMarkdownSnapshot(pack);
+                    let rawJsonStr = JSON.stringify(pack);
+                    const startToken = "___FUPAN_DATA_START___";
+                    const endToken = "___FUPAN_DATA_END___";
+                    mdText += `\n\n---\n### ⚙️ 系统恢复数据舱（请勿修改以下内容）\n${startToken}\n${rawJsonStr}\n${endToken}\n`;
+
+                    const blob = new Blob([mdText], { type: "text/markdown;charset=utf-8" });
+                    const anchor = document.createElement('a');
+                    anchor.href = URL.createObjectURL(blob);
+                    
+                    // 极简命名格式：复盘2026.5.md
+                    let fileName = `复盘${prevYear}.${prevMonth}.md`;
+                    anchor.download = fileName;
+                    anchor.click(); // 自动静默触发下载
+                    
+                    // 稍微延迟半秒弹窗，确保文件先开始下载
+                    setTimeout(() => {
+                        alert(`🔔 检测到今天是月初 1 号！\n系统已为您自动备份上个月 (${prevMonth}月) 的复盘数据。\n\n文件名为：【 ${fileName} 】\n\n请留意浏览器的下载提示并妥善保管。`);
+                    }, 500);
+                }
+                
+                // 🚨 核心防线：打上死印记！今天你无论怎么刷新、重启，都不可能再触发第二次下载了。
+                masterDB.autoBackedUp = backupKey;
+                commit();
+            }
+        }
+    }
+
     function snapBackToRealTime() {
         const now = new Date(); masterDB.selectedMonth = String(now.getMonth() + 1);
         if(document.getElementById("global-month-selector")) document.getElementById("global-month-selector").value = masterDB.selectedMonth;
@@ -1179,7 +1230,11 @@
         masterDB.realTodayStr = masterDB.currentDay;
         masterDB.realWeekStr = masterDB.currentWeek;
         masterDB.realMonthStr = masterDB.selectedMonth;
-        commit(); renderAllPage();
+        commit(); 
+        renderAllPage();
+        
+        // 🌟 触发月初自动备份嗅探器
+        checkAndRunAutoBackup();
     }
 
     function switchMonthData(mVal) { masterDB.selectedMonth = mVal; commit(); renderAllPage(); }
@@ -1236,13 +1291,23 @@
 
     function executeRolloverTasks() {
         const leaks = getUnfinishedPastTasks();
+        if (leaks.length === 0) return;
+        
+        // 🌟 强制让系统跳转回“现实今日”，确保今日的数据结构被安全激活
+        snapBackToRealTime(); 
+        
         const targetData = getMonthScope(); 
         let cnt = 0;
+        
         leaks.forEach(leak => {
             let pastList = masterDB.months[leak.month].weeks[leak.week].days[leak.day].tasks;
             let idx = pastList.findIndex(t => t.id === leak.task.id);
             if(idx !== -1) {
-                pastList.splice(idx, 1);
+                // 🌟【核心修正】：绝不使用 splice 删掉过去！
+                // 而是给它打上隐身符（isRolloverIgnored），让它留在原地，且以后不会重复触发滚动
+                pastList[idx].isRolloverIgnored = true; 
+                
+                // 在今天精准复制一份一模一样的任务
                 targetData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.push({ 
                     id: "roll_"+Date.now()+"_"+Math.random(), 
                     text: leak.task.text, 
@@ -1252,7 +1317,11 @@
                 cnt++;
             }
         });
-        commit(); renderAllPage(); dismissRolloverBar(); alert(`已顺延载入 ${cnt} 项历史未完待办！`);
+        
+        commit(); 
+        renderAllPage(); 
+        dismissRolloverBar(); 
+        alert(`✅ 滚动成功！已将 ${cnt} 项任务保留在历史原位，并复制了一份降落到今日列表！`);
     }
 
     async function runCustomScopeAIAnalysis() {
@@ -1689,14 +1758,8 @@
         });
         
         let hasLeak = false;
-        const now = new Date();
-        const realMonth = String(now.getMonth() + 1);
-        let isViewingToday = (masterDB.selectedMonth === realMonth && masterDB.currentWeek === masterDB.realWeekStr && masterDB.currentDay === masterDB.realTodayStr);
-        
-        if (isViewingToday) {
-            const leaks = getUnfinishedPastTasks();
-            if (leaks.length > 0) hasLeak = true;
-        }
+        const leaks = getUnfinishedPastTasks();
+        if (leaks.length > 0) hasLeak = true;
         document.getElementById("rollover-bar").style.display = hasLeak ? "flex" : "none";
 
         if (window._openBubbleState) {
@@ -1858,13 +1921,14 @@
     }
 
     function deleteTask(listId, index) {
-        if(confirm("确定要删除这条任务吗？")) {
-            const mData = getMonthScope();
-            if (listId === "month-task-list") mData.monthTasks.splice(index, 1);
-            else if (listId === "week-task-list") mData.weeks[masterDB.currentWeek].tasks.splice(index, 1);
-            else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.splice(index, 1);
-            commit(); calculateLiveCompletionRate(); renderAllPage();
-        }
+        // 🚀 去掉了所有烦人的 confirm 弹窗确认，直接执行删除动作！
+        const mData = getMonthScope();
+        if (listId === "month-task-list") mData.monthTasks.splice(index, 1);
+        else if (listId === "week-task-list") mData.weeks[masterDB.currentWeek].tasks.splice(index, 1);
+        else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.splice(index, 1);
+        commit(); 
+        calculateLiveCompletionRate(); 
+        renderAllPage();
     }
 
     function bindInput(id, field) {
