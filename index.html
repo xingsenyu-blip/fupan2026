@@ -288,19 +288,19 @@
             
             <div class="content-panel">
                 <div class="panel-header header-day">❌ 出现的卡点</div>
-                <div class="panel-body" style="gap: 8px;">
-                    <div style="display:flex; flex-direction:column; gap:4px;">
-                        <div style="font-size:9pt; font-weight:700; color:#9a3412;">⚠️ 核心卡点是什么</div>
-                        <div class="handwritten-text-area" contenteditable="true" id="input-day-what" style="min-height:40px; padding:4px 6px; background:#fafbfc; border-radius:4px;"></div>
+                <div class="panel-body" style="gap: 6px;">
+                    <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                        <div style="font-size:9pt; font-weight:700; color:#9a3412; flex-shrink:0;">⚠️ 核心卡点是什么</div>
+                        <div class="handwritten-text-area" contenteditable="true" id="input-day-what" style="flex:1; min-height:32px; padding:3px 6px; background:#fafbfc; border-radius:4px; word-break:break-word;"></div>
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:4px;">
-                        <div style="font-size:9pt; font-weight:700; color:#6b21a8;">🔍 为什么会发生</div>
-                        <div class="handwritten-text-area" contenteditable="true" id="input-day-why" style="min-height:40px; padding:4px 6px; background:#fafbfc; border-radius:4px;"></div>
+                    <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                        <div style="font-size:9pt; font-weight:700; color:#6b21a8; flex-shrink:0;">🔍 为什么会发生</div>
+                        <div class="handwritten-text-area" contenteditable="true" id="input-day-why" style="flex:1; min-height:32px; padding:3px 6px; background:#fafbfc; border-radius:4px; word-break:break-word;"></div>
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:4px;">
-                        <div style="font-size:9pt; font-weight:700; color:#065f46;">💡 明日怎么解决</div>
-                        <ul class="task-group" id="day-how-list" style="margin-top:2px;"></ul>
-                        <button class="add-task-btn" onclick="addHowDetail()" style="margin-bottom:0; padding:2px; font-size:8pt;">+ 新增解决条目</button>
+                    <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                        <div style="font-size:9pt; font-weight:700; color:#065f46; flex-shrink:0;">💡 明日怎么解决</div>
+                        <ul class="task-group" id="day-how-list" style="margin-top:2px; flex:1; min-height:20px;"></ul>
+                        <button class="add-task-btn" onclick="addHowDetail()" style="margin-bottom:0; padding:1px; font-size:8pt; flex-shrink:0;">+ 新增解决条目</button>
                     </div>
                 </div>
             </div>
@@ -309,41 +309,41 @@
                 <div class="panel-header header-day" id="panel-day-time-header">
                     <span>⏱️ 时间与原因</span>
                 </div>
-                <div class="panel-body" style="padding-top: 12px; gap: 10px;">
+                <div class="panel-body" style="padding-top: 10px; gap: 8px;">
                     <!-- 专注 -->
-                    <div style="flex:1; display:flex; flex-direction:column; gap:4px; min-height:0;">
-                        <div style="display:flex; align-items:center; gap:6px;">
+                    <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
                             <span style="font-size:9pt; font-weight:700; color:#065f46; white-space:nowrap;">✨ 专注时段</span>
-                            <div class="handwritten-text-area" contenteditable="true" id="input-day-high-event" onblur="saveSlotEvent('high',0,this)" style="min-height:20px; font-size:9pt; padding:1px 6px; flex:1; border-bottom:1px dashed #d1fae5;" placeholder="做了什么..."></div>
+                            <div class="handwritten-text-area" contenteditable="true" id="input-day-high-event" onblur="saveSlotEvent('high',0,this)" style="font-size:9pt; padding:1px 6px; flex:1; min-height:18px; border-bottom:1px dashed #d1fae5; word-break:break-word;" placeholder="做了什么..."></div>
                         </div>
-                        <div class="tl-slider" id="tl-high-0" data-prefix="high" data-idx="0" style="flex:1; position:relative; min-height:45px; cursor:pointer; user-select:none; -webkit-user-select:none; width:100%; padding:0 12px; box-sizing:border-box;">
-                            <div class="tl-track" style="position:absolute; top:18px; left:0; right:0; height:6px; background:#e2e8f0; border-radius:3px;"></div>
-                            <div class="tl-fill" style="position:absolute; top:18px; height:6px; background:#10b981; border-radius:3px; left:0; width:0;"></div>
-                            <div class="tl-handle tl-start" style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #10b981; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
-                            <div class="tl-handle tl-end"   style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #10b981; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
-                            <div class="tl-label tl-label-start" style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#065f46; white-space:nowrap;"></div>
-                            <div class="tl-label tl-label-end"   style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#065f46; white-space:nowrap;"></div>
+                        <div class="tl-slider" id="tl-high-0" data-prefix="high" data-idx="0" style="flex:1; position:relative; min-height:30px; cursor:pointer; user-select:none; -webkit-user-select:none; width:100%; padding:0 12px; box-sizing:border-box;">
+                            <div class="tl-track" style="position:absolute; top:12px; left:0; right:0; height:6px; background:#e2e8f0; border-radius:3px;"></div>
+                            <div class="tl-fill" style="position:absolute; top:12px; height:6px; background:#10b981; border-radius:3px; left:0; width:0;"></div>
+                            <div class="tl-handle tl-start" style="position:absolute; top:4px; width:22px; height:22px; background:#fff; border:3px solid #10b981; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-handle tl-end"   style="position:absolute; top:4px; width:22px; height:22px; background:#fff; border:3px solid #10b981; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-label tl-label-start" style="position:absolute; top:-2px; font-size:8pt; font-weight:700; color:#065f46; white-space:nowrap;"></div>
+                            <div class="tl-label tl-label-end"   style="position:absolute; top:-2px; font-size:8pt; font-weight:700; color:#065f46; white-space:nowrap;"></div>
                         </div>
                     </div>
                     <!-- 摸鱼 -->
-                    <div style="flex:1; display:flex; flex-direction:column; gap:4px; min-height:0;">
-                        <div style="display:flex; align-items:center; gap:6px;">
+                    <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
                             <span style="font-size:9pt; font-weight:700; color:#b91c1c; white-space:nowrap;">🔋 摸鱼时段</span>
-                            <div class="handwritten-text-area" contenteditable="true" id="input-day-low-event" onblur="saveSlotEvent('low',0,this)" style="min-height:20px; font-size:9pt; padding:1px 6px; flex:1; border-bottom:1px dashed #fecaca;" placeholder="在做什么..."></div>
+                            <div class="handwritten-text-area" contenteditable="true" id="input-day-low-event" onblur="saveSlotEvent('low',0,this)" style="font-size:9pt; padding:1px 6px; flex:1; min-height:18px; border-bottom:1px dashed #fecaca; word-break:break-word;" placeholder="在做什么..."></div>
                         </div>
-                        <div class="tl-slider" id="tl-low-0" data-prefix="low" data-idx="0" style="flex:1; position:relative; min-height:45px; cursor:pointer; user-select:none; -webkit-user-select:none; width:100%; padding:0 12px; box-sizing:border-box;">
-                            <div class="tl-track" style="position:absolute; top:18px; left:0; right:0; height:6px; background:#e2e8f0; border-radius:3px;"></div>
-                            <div class="tl-fill" style="position:absolute; top:18px; height:6px; background:#ef4444; border-radius:3px; left:0; width:0;"></div>
-                            <div class="tl-handle tl-start" style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #ef4444; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
-                            <div class="tl-handle tl-end"   style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #ef4444; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
-                            <div class="tl-label tl-label-start" style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#b91c1c; white-space:nowrap;"></div>
-                            <div class="tl-label tl-label-end"   style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#b91c1c; white-space:nowrap;"></div>
+                        <div class="tl-slider" id="tl-low-0" data-prefix="low" data-idx="0" style="flex:1; position:relative; min-height:30px; cursor:pointer; user-select:none; -webkit-user-select:none; width:100%; padding:0 12px; box-sizing:border-box;">
+                            <div class="tl-track" style="position:absolute; top:12px; left:0; right:0; height:6px; background:#e2e8f0; border-radius:3px;"></div>
+                            <div class="tl-fill" style="position:absolute; top:12px; height:6px; background:#ef4444; border-radius:3px; left:0; width:0;"></div>
+                            <div class="tl-handle tl-start" style="position:absolute; top:4px; width:22px; height:22px; background:#fff; border:3px solid #ef4444; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-handle tl-end"   style="position:absolute; top:4px; width:22px; height:22px; background:#fff; border:3px solid #ef4444; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-label tl-label-start" style="position:absolute; top:-2px; font-size:8pt; font-weight:700; color:#b91c1c; white-space:nowrap;"></div>
+                            <div class="tl-label tl-label-end"   style="position:absolute; top:-2px; font-size:8pt; font-weight:700; color:#b91c1c; white-space:nowrap;"></div>
                         </div>
                     </div>
                     <!-- 原因 -->
-                    <div style="flex:1; display:flex; flex-direction:column; gap:4px; min-height:0;">
-                        <div style="font-size:9pt; font-weight:700; color:#475569;">🔍 原因</div>
-                        <div class="handwritten-text-area" contenteditable="true" id="input-day-time-reason" style="flex:1; min-height:36px; padding:6px; background:#fafbfc; border-radius:4px; border:1px solid #edf2f7;"></div>
+                    <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                        <div style="font-size:9pt; font-weight:700; color:#475569; flex-shrink:0;">🔍 原因</div>
+                        <div class="handwritten-text-area" contenteditable="true" id="input-day-time-reason" style="flex:1; min-height:28px; padding:4px 6px; background:#fafbfc; border-radius:4px; border:1px solid #edf2f7; word-break:break-word;"></div>
                     </div>
                 </div>
             </div>
