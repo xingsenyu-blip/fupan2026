@@ -52,7 +52,8 @@
     .drag-handle { font-size: 9pt; color: #94a3b8; cursor: grab; padding: 2px 8px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; margin-left: 10px; user-select: none; }
 
     .card-grid { display: flex; gap: 12px; width: 100%; align-items: stretch; }
-    .content-panel { flex: 1; background-color: #ffffff; border-radius: 8px; padding: 0; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05); overflow: visible; position: relative; display: flex; flex-direction: column; }
+    .content-panel { flex: 1 1 0; min-width: 0; background-color: #ffffff; border-radius: 8px; padding: 0; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05); overflow: visible; position: relative; display: flex; flex-direction: column; }
+    .flex-double { flex: 2; }
     .flex-double { flex: 2; }
     
     .panel-header { padding: 8px 12px; font-size: 10.5pt; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); border-radius: 8px 8px 0 0; }
@@ -100,6 +101,11 @@
     .task-row.row-blue .todo-text:empty::before { content: "设定本月核心航线或计划..."; }
     .task-row.row-green .todo-text:empty::before { content: "设定本周攻坚大纲或安排..."; }
 
+    /* 🌟 新增：常驻小圆环的样式 */
+    .sticky-knob { width: 14px; height: 14px; border: 2px solid #cbd5e1; border-radius: 50%; cursor: pointer; transition: all 0.2s; margin-right: 6px; display: inline-block; background: #ffffff; }
+    .sticky-knob:hover { border-color: #94a3b8; }
+    .sticky-knob.active { border-color: #10b981; background: #10b981; box-shadow: inset 0 0 0 2px #ffffff; }
+
     #closure-day-text:empty::before { content: "点击手写验证闭环..."; color: #94a3b8; font-weight: normal; font-size: 9pt; }
     #closure-week-text:empty::before { content: "点击手写验证闭环..."; color: #94a3b8; font-weight: normal; font-size: 9pt; }
     #closure-month-text:empty::before { content: "点击手写验证闭环..."; color: #94a3b8; font-weight: normal; font-size: 9pt; }
@@ -145,26 +151,6 @@
     .matrix-label { font-size: 9pt; font-weight: 700; color: #64748b; padding: 8px 0; width: 100px; vertical-align: top; }
     .matrix-value { padding: 8px 0 8px 8px; vertical-align: top; }
     
-    .tag-slots-container { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-    .rendered-tag-badge { display: inline-flex; align-items: center; font-size: 8pt; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
-    .badge-what  { background-color: #ffedd5; color: #9a3412; border-color: #fed7aa; border: 1px solid transparent; }
-    .badge-why   { background-color: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; border: 1px solid transparent; }
-    .badge-how   { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; border: 1px solid transparent; }
-    .tag-delete-x { margin-left: 4px; cursor: pointer; color: #94a3b8; font-weight: bold; font-size: 9pt; }
-    .tag-delete-x:hover { color: #ef4444; }
-    
-    .inline-select-adder { font-size: 8pt; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px dashed #cbd5e1; background: #ffffff; color: #64748b; outline: none; cursor: pointer; transition: all 0.2s; }
-    .inline-select-adder:hover { background: #f1f5f9; border-color: #94a3b8; }
-    .custom-dropdown-wrapper { position: relative; display: inline-block; vertical-align: middle; }
-    .custom-dropdown-menu { display: none; position: absolute; top: 100%; left: 0; min-width: 160px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); z-index: 1000; margin-top: 4px; overflow: hidden; padding: 4px 0; }
-    .custom-dropdown-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; font-size: 8pt; font-weight: 600; color: #334155; cursor: pointer; transition: background 0.15s; }
-    .custom-dropdown-item:hover { background: #f8fafc; color: #0f172a; }
-    .custom-dropdown-text { flex-grow: 1; }
-    .custom-dropdown-del { font-size: 8pt; color: #94a3b8; padding: 1px 4px; border-radius: 4px; margin-left: 8px; transition: all 0.15s; }
-    .custom-dropdown-del:hover { color: #ef4444; background: #fee2e2; }
-    .new-tag-item { color: #2563eb; font-weight: 700; justify-content: center; border-top: 1px solid #f1f5f9; margin-top: 2px; }
-    .new-tag-item:hover { background: #eff6ff; }
-    
     .annual-flex-row { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; align-items: stretch; }
     .annual-plan-card { 
         flex: 1; min-width: 220px; 
@@ -186,13 +172,8 @@
     .handwritten-text-area { font-size: 10pt; color: #1e293b; outline: none; border: 1px solid transparent; padding: 1px 4px; border-radius: 4px; min-height: 20px; font-weight: 500; display: inline-block; width: 100%; line-height: 1.4;}
     .handwritten-text-area:focus { background: #fafbfc; border-color: #e2e8f0; }
     
-    .time-capsule-tag { display: inline-block; padding: 1px 8px; font-size: 8pt; font-weight: 800; border-radius: 8px; outline: none; min-width: 40px; text-align: center; border: 1px solid transparent; cursor: text; }
-    .time-capsule-tag:focus { border-color: #cbd5e1; background: #ffffff; }
-    .tag-high-time { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; }
-    .tag-high-time:empty::before { content: "如 6-7"; color: #a7f3d0; font-weight: normal; }
-    .tag-low-time { background-color: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
-    .tag-low-time:empty::before { content: "如 14-16"; color: #fca5a5; font-weight: normal; }
-    
+    .tl-slider .tl-handle:hover { transform: scale(1.1); }
+    .tl-slider .tl-handle:active { transform: scale(1.2); }
     .focal-event-box-input { flex: 1; min-width: 150px; border-bottom: 1px dashed #e2e8f0 !important; border-radius: 0 !important; }
     #input-day-high-event:empty::before { content: "手写交代完成了什么专注事实..."; color: #94a3b8; font-weight: normal; }
     #input-day-low-event:empty::before { content: "手写交代具体摸鱼或消耗事件..."; color: #94a3b8; font-weight: normal; }
@@ -306,72 +287,64 @@
             </div>
             
             <div class="content-panel">
-                <div class="panel-header header-day">❌ 出现的卡点 (What-Why-How)</div>
-                <div class="panel-body">
-                    <table class="matrix-table">
-                        <tr class="matrix-row">
-                            <td class="matrix-label">
-                                <div style="margin-bottom: 4px;">⚠️ 核心卡点是什么</div>
-                                <div class="tag-slots-container" id="slots-day-what" data-type="what"></div>
-                            </td>
-                            <td class="matrix-value">
-                                <div class="handwritten-text-area" contenteditable="true" id="input-day-what" style="min-height: 24px;"></div>
-                            </td>
-                        </tr>
-                        <tr class="matrix-row">
-                            <td class="matrix-label">
-                                <div style="margin-bottom: 4px;">🔍 为什么会发生</div>
-                                <div class="tag-slots-container" id="slots-day-why" data-type="why"></div>
-                            </td>
-                            <td class="matrix-value">
-                                <div class="handwritten-text-area" contenteditable="true" id="input-day-why" style="min-height: 24px;"></div>
-                            </td>
-                        </tr>
-                        <tr class="matrix-row">
-                            <td class="matrix-label">
-                                <div style="margin-bottom: 4px;">💡 明日怎么解决</div>
-                                <div class="tag-slots-container" id="slots-day-how" data-type="how"></div>
-                            </td>
-                            <td class="matrix-value">
-                                <ul class="task-group" id="day-how-list"></ul>
-                                <button class="add-task-btn" onclick="addHowDetail()" style="margin-bottom: 0; margin-top: 4px; padding: 2px; font-size: 8pt;">+ 新增解决条目</button>
-                            </td>
-                        </tr>
-                    </table>
+                <div class="panel-header header-day">❌ 出现的卡点</div>
+                <div class="panel-body" style="gap: 8px;">
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="font-size:9pt; font-weight:700; color:#9a3412;">⚠️ 核心卡点是什么</div>
+                        <div class="handwritten-text-area" contenteditable="true" id="input-day-what" style="min-height:40px; padding:4px 6px; background:#fafbfc; border-radius:4px;"></div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="font-size:9pt; font-weight:700; color:#6b21a8;">🔍 为什么会发生</div>
+                        <div class="handwritten-text-area" contenteditable="true" id="input-day-why" style="min-height:40px; padding:4px 6px; background:#fafbfc; border-radius:4px;"></div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="font-size:9pt; font-weight:700; color:#065f46;">💡 明日怎么解决</div>
+                        <ul class="task-group" id="day-how-list" style="margin-top:2px;"></ul>
+                        <button class="add-task-btn" onclick="addHowDetail()" style="margin-bottom:0; padding:2px; font-size:8pt;">+ 新增解决条目</button>
+                    </div>
                 </div>
             </div>
-            
+
             <div class="content-panel" id="panel-day-time-outer">
                 <div class="panel-header header-day" id="panel-day-time-header">
                     <span>⏱️ 时间与原因</span>
                 </div>
-                <div class="panel-body" style="padding-top: 16px;">
-                    <table class="matrix-table">
-                        <tr class="matrix-row">
-                            <td class="matrix-label">
-                                <div style="margin-bottom: 6px;">✨ 最专注的时间</div>
-                                <div class="time-capsule-tag tag-high-time" contenteditable="true" id="input-day-high-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 2px;"></div>
-                            </td>
-                            <td class="matrix-value">
-                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-high-event" style="width: 100%; min-height: 24px;"></div>
-                            </td>
-                        </tr>
-                        <tr class="matrix-row">
-                            <td class="matrix-label">
-                                <div style="margin-bottom: 6px;">🔋 最废的时间</div>
-                                <div class="time-capsule-tag tag-low-time" contenteditable="true" id="input-day-low-time" style="display: block; width: 100%; box-sizing: border-box; margin-top: 2px;"></div>
-                            </td>
-                            <td class="matrix-value">
-                                <div class="handwritten-text-area focal-event-box-input" contenteditable="true" id="input-day-low-event" style="width: 100%; min-height: 24px;"></div>
-                            </td>
-                        </tr>
-                        <tr class="matrix-row">
-                            <td class="matrix-label">🔍 原因</td>
-                            <td class="matrix-value">
-                                <div class="handwritten-text-area" contenteditable="true" id="input-day-time-reason" style="min-height: 40px; border: 1px solid #edf2f7; background: #fafbfc; border-radius: 4px; padding: 6px;"></div>
-                            </td>
-                        </tr>
-                    </table>
+                <div class="panel-body" style="padding-top: 12px; gap: 10px;">
+                    <!-- 专注 -->
+                    <div style="flex:1; display:flex; flex-direction:column; gap:4px; min-height:0;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:9pt; font-weight:700; color:#065f46; white-space:nowrap;">✨ 专注时段</span>
+                            <div class="handwritten-text-area" contenteditable="true" id="input-day-high-event" onblur="saveSlotEvent('high',0,this)" style="min-height:20px; font-size:9pt; padding:1px 6px; flex:1; border-bottom:1px dashed #d1fae5;" placeholder="做了什么..."></div>
+                        </div>
+                        <div class="tl-slider" id="tl-high-0" data-prefix="high" data-idx="0" style="flex:1; position:relative; min-height:45px; cursor:pointer; user-select:none; -webkit-user-select:none; width:100%; padding:0 12px; box-sizing:border-box;">
+                            <div class="tl-track" style="position:absolute; top:18px; left:0; right:0; height:6px; background:#e2e8f0; border-radius:3px;"></div>
+                            <div class="tl-fill" style="position:absolute; top:18px; height:6px; background:#10b981; border-radius:3px; left:0; width:0;"></div>
+                            <div class="tl-handle tl-start" style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #10b981; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-handle tl-end"   style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #10b981; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-label tl-label-start" style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#065f46; white-space:nowrap;"></div>
+                            <div class="tl-label tl-label-end"   style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#065f46; white-space:nowrap;"></div>
+                        </div>
+                    </div>
+                    <!-- 摸鱼 -->
+                    <div style="flex:1; display:flex; flex-direction:column; gap:4px; min-height:0;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:9pt; font-weight:700; color:#b91c1c; white-space:nowrap;">🔋 摸鱼时段</span>
+                            <div class="handwritten-text-area" contenteditable="true" id="input-day-low-event" onblur="saveSlotEvent('low',0,this)" style="min-height:20px; font-size:9pt; padding:1px 6px; flex:1; border-bottom:1px dashed #fecaca;" placeholder="在做什么..."></div>
+                        </div>
+                        <div class="tl-slider" id="tl-low-0" data-prefix="low" data-idx="0" style="flex:1; position:relative; min-height:45px; cursor:pointer; user-select:none; -webkit-user-select:none; width:100%; padding:0 12px; box-sizing:border-box;">
+                            <div class="tl-track" style="position:absolute; top:18px; left:0; right:0; height:6px; background:#e2e8f0; border-radius:3px;"></div>
+                            <div class="tl-fill" style="position:absolute; top:18px; height:6px; background:#ef4444; border-radius:3px; left:0; width:0;"></div>
+                            <div class="tl-handle tl-start" style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #ef4444; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-handle tl-end"   style="position:absolute; top:10px; width:22px; height:22px; background:#fff; border:3px solid #ef4444; border-radius:50%; left:0; margin-left:-11px; z-index:2;"></div>
+                            <div class="tl-label tl-label-start" style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#b91c1c; white-space:nowrap;"></div>
+                            <div class="tl-label tl-label-end"   style="position:absolute; top:-2px; font-size:8.5pt; font-weight:700; color:#b91c1c; white-space:nowrap;"></div>
+                        </div>
+                    </div>
+                    <!-- 原因 -->
+                    <div style="flex:1; display:flex; flex-direction:column; gap:4px; min-height:0;">
+                        <div style="font-size:9pt; font-weight:700; color:#475569;">🔍 原因</div>
+                        <div class="handwritten-text-area" contenteditable="true" id="input-day-time-reason" style="flex:1; min-height:36px; padding:6px; background:#fafbfc; border-radius:4px; border:1px solid #edf2f7;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -466,8 +439,7 @@
                 <input type="date" class="date-field" id="range-date-start" value="2026-05-01" style="margin-bottom:0;">
                 <input type="date" class="date-field" id="range-date-end" value="2026-05-19" style="margin-bottom:0;">
             </div>
-            <button class="trigger-range-ai-btn" onclick="runCustomScopeAIAnalysis()">🤖 跨周期 AI 智能结构化聚合</button>
-            <div id="drawer-ai-output" style="margin-top:10px;"></div>
+            <div style="font-size:8pt; color:#94a3b8; text-align:center; padding:8px 0;">导出 Markdown 后可喂给任意 AI 分析</div>
         </div>
         <div>
             <div class="drawer-section-title">🏛️ 内置历史记忆档案架</div>
@@ -480,39 +452,67 @@
             <input type="file" id="file-uploader-portal" style="display:none" onchange="loadSnapshotFromFile(this)" accept=".md">
         </div>
         <div>
-            <div class="drawer-section-title">🔒 私人 AI 密钥通道 (BYOK安全防线)</div>
-            <input type="password" class="api-input-box" id="user-api-input" placeholder="输入大模型私有 API Key..." onblur="saveUserApiKey(this.value)">
+            <div class="drawer-section-title">📂 副盘导出路径</div>
+            <div id="storage-reminder" style="font-size:7.5pt; color:#b45309; background:#fffbeb; padding:4px 8px; border-radius:4px; margin-bottom:6px; display:none;">
+                ⚠️ 未设置储存位置，导出会走浏览器下载。建议点击右侧「选择文件夹」建立你的副盘。
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+                <span id="export-dir-label" style="font-size:8pt; color:#64748b; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">未设置</span>
+                <button class="trigger-range-ai-btn" style="width:auto; padding:4px 10px; font-size:8pt; margin-bottom:0;" onclick="pickExportFolder()">选择文件夹</button>
+            </div>
         </div>
     </div>
 </div>
 <script>
     let masterDB = {
         yearPlans: ["横向航线一：考过科目三并斩获驾照", "横向航线二：深入攻坚全栈智能系统开发"],
-        apiKey: "", lastExportWatermark: 0, virtualCabinetLogs: [], 
-        selectedMonth: "5", currentWeek: "第四周", currentDay: "周四", realTodayStr: "周四", realWeekStr: "第四周", realMonthStr: "5",
-        tagLibrary: {
-            what: ["#进度延误", "#突发加塞", "#外界事情干扰", "#专注度缺失"],
-            why: ["#他人打断", "#精力崩溃", "#环境嘈杂"],
-            how: ["#碎片利用", "#物理隔离"]
-        },
+        lastExportWatermark: 0, virtualCabinetLogs: [],
+        selectedMonth: "5", currentWeek: "第一周", currentDay: "周一", realTodayStr: "周一", realWeekStr: "第一周", realMonthStr: "5",
+        exportDirHandle: null,
         months: {}
     };
 
     window._openBubbleState = null;
-    window._openTagSlot = null;
 
-    if (localStorage.getItem("fupan2026_ultimate_stable_md")) { 
+    if (localStorage.getItem("fupan2026_ultimate_stable_md")) {
         let parsed = JSON.parse(localStorage.getItem("fupan2026_ultimate_stable_md"));
         masterDB = { ...masterDB, ...parsed };
+        // 迁移旧单段时间格式 → 多段槽位数组
+        let migrated = false;
+        for (let mk in masterDB.months) {
+            for (let wk in masterDB.months[mk].weeks) {
+                for (let dk in masterDB.months[mk].weeks[wk].days) {
+                    const day = masterDB.months[mk].weeks[wk].days[dk];
+                    if (day.high_time_start !== undefined && !day.high_slots) {
+                        day.high_slots = [];
+                        if (day.high_time_start || day.high_time_end || day.high_event) {
+                            day.high_slots.push({ start: day.high_time_start || '', end: day.high_time_end || '', event: day.high_event || '' });
+                        }
+                        delete day.high_time_start; delete day.high_time_end; delete day.high_event;
+                        migrated = true;
+                    }
+                    if (day.low_time_start !== undefined && !day.low_slots) {
+                        day.low_slots = [];
+                        if (day.low_time_start || day.low_time_end || day.low_event) {
+                            day.low_slots.push({ start: day.low_time_start || '', end: day.low_time_end || '', event: day.low_event || '' });
+                        }
+                        delete day.low_time_start; delete day.low_time_end; delete day.low_event;
+                        migrated = true;
+                    }
+                }
+            }
+        }
+        if (migrated) localStorage.setItem("fupan2026_ultimate_stable_md", JSON.stringify(masterDB));
     }
     function commit() { localStorage.setItem("fupan2026_ultimate_stable_md", JSON.stringify(masterDB)); }
     
+    // 🌟 核心防幽灵机制：拉取黑名单 pulled_stickies
     function createEmptyDays() {
-        const baseDay = { tasks: [], isRestDay: false, what_tags: [], what_text: "", why_tags: [], why_text: "", how_tags: [], how_text: "", how_details: [], rate: "", summary: "", high_time: "", high_event: "", low_time: "", low_event: "", time_reason: "", closure_text: null, closure_completed: false };
+        const baseDay = { tasks: [], pulled_stickies: [], isRestDay: false, what_text: "", why_text: "", how_text: "", how_details: [], rate: "", summary: "", high_slots: [], low_slots: [], time_reason: "", closure_text: null, closure_completed: false };
         return {
-            "周一": JSON.parse(JSON.stringify(baseDay)), "周二": JSON.parse(JSON.stringify(baseDay)), 
-            "周三": JSON.parse(JSON.stringify(baseDay)), "周四": JSON.parse(JSON.stringify(baseDay)), 
-            "周五": JSON.parse(JSON.stringify(baseDay)), "周六": JSON.parse(JSON.stringify(baseDay)), 
+            "周一": JSON.parse(JSON.stringify(baseDay)), "周二": JSON.parse(JSON.stringify(baseDay)),
+            "周三": JSON.parse(JSON.stringify(baseDay)), "周四": JSON.parse(JSON.stringify(baseDay)),
+            "周五": JSON.parse(JSON.stringify(baseDay)), "周六": JSON.parse(JSON.stringify(baseDay)),
             "周日": JSON.parse(JSON.stringify(baseDay))
         };
     }
@@ -530,7 +530,7 @@
 
     function getMonthScope() {
         if (!masterDB.months[masterDB.selectedMonth]) {
-            masterDB.months[masterDB.selectedMonth] = { monthTasks: [], monthPrescription: "", monthReview: "", isRestMonth: false, weeks: {}, closure_text: null, closure_completed: false };
+            masterDB.months[masterDB.selectedMonth] = { monthTasks: [], pulled_stickies: [], monthPrescription: "", monthReview: "", isRestMonth: false, weeks: {}, closure_text: null, closure_completed: false };
         }
         let mData = masterDB.months[masterDB.selectedMonth];
         const totalWeeks = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth) - 1);
@@ -538,10 +538,12 @@
         
         if (mData.closure_text === undefined) mData.closure_text = null;
         if (mData.closure_completed === undefined) mData.closure_completed = false;
+        if (!mData.pulled_stickies) mData.pulled_stickies = [];
 
         for (let i = 0; i < totalWeeks; i++) {
             const wk = wNames[i];
-            if (!mData.weeks[wk]) mData.weeks[wk] = { tasks: [], review: "", isRestWeek: false, prescription: "", days: {}, closure_text: null, closure_completed: false };
+            if (!mData.weeks[wk]) mData.weeks[wk] = { tasks: [], pulled_stickies: [], review: "", isRestWeek: false, prescription: "", days: {}, closure_text: null, closure_completed: false };
+            if (!mData.weeks[wk].pulled_stickies) mData.weeks[wk].pulled_stickies = [];
             if (!mData.weeks[wk].days || Object.keys(mData.weeks[wk].days).length === 0) mData.weeks[wk].days = createEmptyDays();
             if (mData.weeks[wk].closure_text === undefined) mData.weeks[wk].closure_text = null;
             if (mData.weeks[wk].closure_completed === undefined) mData.weeks[wk].closure_completed = false;
@@ -658,7 +660,6 @@
                 });
             }
 
-            // 🌟 修复核心：在 input 上增加了 onmousedown 和 onmouseup，点击瞬间立刻解除拖拽霸权，还光标自由！
             div.innerHTML = `
                 <div style="display: flex; width: 100%; align-items: center; gap: 4px;">
                     <span style="color: #cbd5e1; font-size:12pt; line-height:1;">•</span>
@@ -790,7 +791,7 @@
         
         let dayBadge = document.getElementById("live-rate-day-badge"); let dayRate = 0;
         if (curDayData.isRestDay || curWkData.isRestWeek || mData.isRestMonth) {
-            if(dayBadge) { dayBadge.innerText = "卧倒豁免"; dayBadge.className = "rate-header-badge completed-green"; } dayRate = 100;
+            if(dayBadge) { dayBadge.innerText = "休息"; dayBadge.className = "rate-header-badge completed-green"; } dayRate = 100;
         } else {
             let total = curDayData.tasks.length; let checked = curDayData.tasks.filter(t => t.completed).length;
             dayRate = total === 0 ? 0 : Math.round((checked / total) * 100);
@@ -799,7 +800,7 @@
 
         let weekBadge = document.getElementById("live-rate-week-badge"); let weekRate = 0;
         if (curWkData.isRestWeek || mData.isRestMonth) {
-            if(weekBadge) { weekBadge.innerText = "卧倒豁免"; weekBadge.className = "rate-header-badge completed-green"; } weekRate = 100;
+            if(weekBadge) { weekBadge.innerText = "休息"; weekBadge.className = "rate-header-badge completed-green"; } weekRate = 100;
         } else {
             let wTotal = curWkData.tasks.length; let wChecked = curWkData.tasks.filter(t => t.completed).length;
             for(let d in curWkData.days) { if(!curWkData.days[d].isRestDay) { wTotal += curWkData.days[d].tasks.length; wChecked += curWkData.days[d].tasks.filter(t => t.completed).length; } }
@@ -809,7 +810,7 @@
 
         let monthBadge = document.getElementById("live-rate-month-badge"); let monthRate = 0;
         if (mData.isRestMonth) {
-            if(monthBadge) { monthBadge.innerText = "卧倒豁免"; monthBadge.className = "rate-header-badge completed-green"; } monthRate = 100;
+            if(monthBadge) { monthBadge.innerText = "休息"; monthBadge.className = "rate-header-badge completed-green"; } monthRate = 100;
         } else {
             let mTotal = mData.monthTasks.length; let mChecked = mData.monthTasks.filter(t => t.completed).length;
             for(let w in mData.weeks) {
@@ -851,90 +852,6 @@
         else { btnD.classList.remove("active"); btnD.innerText = "🛌 今天休息"; panelD.classList.remove("rest-mode-active"); headerD.classList.remove("rest-mode-header"); }
     }
 
-    function renderXTags(slotId, typeKey) {
-        const container = document.getElementById(slotId); if(!container) return; 
-        const dayData = getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay]; const attr = typeKey + '_tags';
-        if (!dayData[attr]) dayData[attr] = [];
-        let activeArr = dayData[attr]; container.innerHTML = "";
-
-        activeArr.forEach((val, idx) => {
-            if(val === "") return;
-            const badge = document.createElement("span"); badge.className = `rendered-tag-badge badge-${typeKey}`;
-            badge.innerHTML = `${val} <span class="tag-delete-x" onclick="killSingleTag('${slotId}', '${typeKey}', ${idx})">×</span>`;
-            container.appendChild(badge);
-        });
-
-        if (activeArr.filter(t => t!=="").length < 3) {
-            const ddWrapper = document.createElement("div"); ddWrapper.className = "custom-dropdown-wrapper";
-            const ddBtn = document.createElement("button"); ddBtn.className = "inline-select-adder"; ddBtn.innerText = "+ 标签";
-            
-            ddBtn.onclick = (e) => {
-                e.stopPropagation();
-                let isOpening = ddMenu.style.display !== "block";
-                document.querySelectorAll(".custom-dropdown-menu").forEach(m => { m.style.display = 'none'; });
-                if (isOpening) {
-                    ddMenu.style.display = "block";
-                    window._openTagSlot = slotId;
-                } else {
-                    ddMenu.style.display = "none";
-                    window._openTagSlot = null;
-                }
-            };
-            
-            const ddMenu = document.createElement("div"); ddMenu.className = "custom-dropdown-menu";
-            masterDB.tagLibrary[typeKey].forEach(t => { 
-                if(!activeArr.includes(t)) {
-                    const item = document.createElement("div"); item.className = "custom-dropdown-item";
-                    const textSpan = document.createElement("span"); textSpan.className = "custom-dropdown-text"; textSpan.innerText = t;
-                    textSpan.onclick = () => { activeArr.push(t); commit(); renderAllPage(); };
-                    const delSpan = document.createElement("span"); delSpan.className = "custom-dropdown-del"; delSpan.innerText = "🗑️";
-                    delSpan.onclick = (e) => {
-                        e.stopPropagation();
-                        let idx = masterDB.tagLibrary[typeKey].indexOf(t);
-                        if (idx !== -1) masterDB.tagLibrary[typeKey].splice(idx, 1); commit(); renderAllPage();
-                    };
-                    item.appendChild(textSpan); item.appendChild(delSpan); ddMenu.appendChild(item);
-                }
-            });
-
-            const newTagItem = document.createElement("div"); 
-            newTagItem.className = "custom-dropdown-item new-tag-item"; 
-            newTagItem.style.padding = "4px 8px";
-            
-            const tagInput = document.createElement("input");
-            tagInput.type = "text";
-            tagInput.placeholder = "手写新标签 + 回车";
-            tagInput.style.cssText = "width: 100%; font-size: 8pt; padding: 2px 4px; border: 1px dashed #cbd5e1; border-radius: 4px; outline: none;";
-            tagInput.onclick = (e) => e.stopPropagation();
-            tagInput.onkeydown = (e) => {
-                if(e.key === 'Enter') {
-                    e.preventDefault();
-                    let c = tagInput.value.trim();
-                    if (c) { 
-                        if(!c.startsWith('#')) c = '#'+c; 
-                        if(!masterDB.tagLibrary[typeKey].includes(c)) masterDB.tagLibrary[typeKey].push(c); 
-                        activeArr.push(c); if(window._openTagSlot) { window._openTagSlot = slotId; } commit(); renderAllPage(); 
-                    }
-                }
-            };
-            newTagItem.appendChild(tagInput);
-            ddMenu.appendChild(newTagItem);
-            
-            ddWrapper.appendChild(ddBtn); ddWrapper.appendChild(ddMenu); container.appendChild(ddWrapper);
-            
-            if (window._openTagSlot === slotId) {
-                ddMenu.style.display = "block";
-            }
-        }
-    }
-
-    function killSingleTag(slotId, typeKey, idx) { 
-        getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay][typeKey+'_tags'].splice(idx, 1); 
-        if(window._openTagSlot) { window._openTagSlot = slotId; } 
-        commit(); 
-        renderAllPage(); 
-    }
-
     function renderAnnualGrid() {
         const wr = document.getElementById("annual-cards-wrapper"); wr.innerHTML = "";
         masterDB.yearPlans.forEach((txt, idx) => {
@@ -948,8 +865,63 @@
     function killAnnual(i) { masterDB.yearPlans.splice(i, 1); commit(); renderAnnualGrid(); }
     function saveAnnual(i, el) { masterDB.yearPlans[i] = el.innerText; commit(); }
 
-    function toggleToolsDrawer(show) { document.getElementById("tools-drawer").style.display = show ? "block" : "none"; }
-    function saveUserApiKey(v) { masterDB.apiKey = v; commit(); }
+    function toggleToolsDrawer(show) {
+        document.getElementById("tools-drawer").style.display = show ? "block" : "none";
+        if (show) refreshExportDirLabel();
+    }
+
+    async function pickExportFolder() {
+        if (!window.showDirectoryPicker) {
+            alert('当前浏览器不支持直接写入文件夹。\n\n📌 导出文件会通过浏览器下载，请手动保存到 D:\\复盘2026\\导出\\ 即可。\n\n💡 如果使用 Edge 或 Chrome 打开，可以使用一键直存功能。');
+            return;
+        }
+        try {
+            const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+            masterDB.exportDirHandle = handle;
+            commit();
+            refreshExportDirLabel();
+            const banner = document.getElementById('storage-banner');
+            if (banner) banner.remove();
+        } catch(e) {
+            if (e.name === 'AbortError') return;
+            if (e.name === 'SecurityError') {
+                alert('需要用户点击触发，且需要在安全上下文（HTTPS 或 localhost）下使用。\n\n📌 当前使用 file:// 协议，浏览器限制了此功能。导出文件会通过浏览器下载。');
+            } else {
+                alert('无法获取文件夹权限：' + e.message + '\n\n📌 导出文件会通过浏览器下载，不受影响。');
+            }
+        }
+    }
+
+    function refreshExportDirLabel() {
+        const label = document.getElementById('export-dir-label');
+        const reminder = document.getElementById('storage-reminder');
+        if (label) label.innerText = masterDB.exportDirHandle ? masterDB.exportDirHandle.name : '未设置';
+        if (reminder) reminder.style.display = masterDB.exportDirHandle ? 'none' : 'block';
+    }
+
+    async function writeFileToExportDir(fileName, content) {
+        if (!masterDB.exportDirHandle) {
+            alert('请先在 ⚙️ 高级控制中心 中选择导出文件夹');
+            return false;
+        }
+        try {
+            // 验证权限
+            await masterDB.exportDirHandle.queryPermission({ mode: 'readwrite' });
+        } catch(e) {
+            const granted = await masterDB.exportDirHandle.requestPermission({ mode: 'readwrite' });
+            if (!granted) { alert('导出文件夹权限已失效，请重新选择'); return false; }
+        }
+        try {
+            const fileHandle = await masterDB.exportDirHandle.getFileHandle(fileName, { create: true });
+            const writable = await fileHandle.createWritable();
+            await writable.write(content);
+            await writable.close();
+            return true;
+        } catch(e) {
+            alert('写入文件失败：' + e.message);
+            return false;
+        }
+    }
     
     function generateStandardMarkdownSnapshot(pack) {
         let md = `# 📅 2026年 个人全维数据管理总表\n\n`;
@@ -1013,22 +985,22 @@
                     if (day.tasks.length === 0) md += `*(本日无待办记录)*\n`;
                     else day.tasks.forEach(t => { md += `- [${t.completed ? 'x' : ' '}] ${t.text}\n`; });
                     
-                    md += `\n##### ⏱️ S 时间（专注与消耗流水账）\n`;
-                    md += `| 精力状态 | 时间段 | 具体在做什么事情 | 触发/产生的原因分析 |\n`;
-                    md += `| :--- | :--- | :--- | :--- |\n`;
-                    md += `| ✨ **最专注的时间** | ${day.high_time || '未记录'} | ${day.high_event || '无'} | - |\n`;
-                    md += `| 🔋 **最废的时间** | ${day.low_time || '未记录'} | ${day.low_event || '无'} | - |\n\n`;
-                    md += `##### ❌ 出现的卡点诊断 (What-Why-How)\n`;
-                    md += `* **⚠️ 核心卡点是什么：** ${day.what_tags?.join(' ') || '无'} \n  > ${day.what_text || '暂无。'}\n`;
-                    md += `* **🔍 为什么会发生：** ${day.why_tags?.join(' ') || '无'} \n  > ${day.why_text || '暂无。'}\n`;
-                    
-                    let howStr = "";
-                    if (day.how_details && day.how_details.length > 0) {
-                        howStr = day.how_details.map(d => d.text).filter(t => t.trim() !== "").join(' / ') || '暂无。';
-                    } else {
-                        howStr = day.how_text || '暂无。';
-                    }
-                    md += `* **💡 明日怎么解决：** ${day.how_tags?.join(' ') || '无'} \n  > ${howStr}\n\n`;
+                    md += '\n##### ⏱️ 时间记录\n';
+                    md += '| 状态 | 时段 | 做了什么 |\n| :--- | :--- | :--- |\n';
+                    (day.high_slots || []).forEach(s => {
+                        if (s.start || s.end || s.event) md += '| ✨ 专注 | ' + (s.start && s.end ? s.start + '-' + s.end : '-') + ' | ' + (s.event || '-') + ' |\n';
+                    });
+                    (day.low_slots || []).forEach(s => {
+                        if (s.start || s.end || s.event) md += '| 🔋 摸鱼 | ' + (s.start && s.end ? s.start + '-' + s.end : '-') + ' | ' + (s.event || '-') + ' |\n';
+                    });
+                    if ((!day.high_slots || !day.high_slots.length) && (!day.low_slots || !day.low_slots.length)) md += '| — | 未记录 | — |\n';
+                    md += '\n##### ❌ 卡点反思\n';
+                    md += '* **⚠️ 是什么：** ' + (day.what_text || '暂无。') + '\n';
+                    md += '* **🔍 为什么：** ' + (day.why_text || '暂无。') + '\n';
+                    let howStr = '';
+                    if (day.how_details && day.how_details.length > 0) howStr = day.how_details.map(d => d.text).filter(t => t.trim() !== '').join(' / ') || '暂无。';
+                    else howStr = day.how_text || '暂无。';
+                    md += '* **💡 怎么解决：** ' + howStr + '\n\n';
                 }
                 md += `---\n\n`;
             }
@@ -1036,69 +1008,57 @@
         return md;
     }
 
-    function exportIncrementalSnapshotFile() {
+    async function exportIncrementalSnapshotFile() {
         try {
             const nowStamp = Date.now();
-            let pack = { snapshotTimestamp: nowStamp, plansScope: masterDB.yearPlans, libraryScope: masterDB.tagLibrary, apiKey: masterDB.apiKey, monthsDelta: {} };
+            let pack = { snapshotTimestamp: nowStamp, plansScope: masterDB.yearPlans, monthsDelta: {} };
 
-            // 💡 智能获取高级面板里的跨时空时间选择器值
             const startVal = document.getElementById("range-date-start").value;
             const endVal = document.getElementById("range-date-end").value;
-            
+
             let startM = parseInt(startVal.split("-")[1]) || parseInt(masterDB.selectedMonth);
             let endM = parseInt(endVal.split("-")[1]) || parseInt(masterDB.selectedMonth);
-            
-            // 自动校准：防止用户把时间顺序选反
-            if (startM > endM) {
-                let temp = startM; startM = endM; endM = temp;
-            }
 
-            // 🟢 【真正跨时间打包】根据名字的跨度，增量把这几个月的数据全部打包，防止跨月数据丢失
+            if (startM > endM) { let t = startM; startM = endM; endM = t; }
+
             for (let m = startM; m <= endM; m++) {
-                if (masterDB.months[String(m)]) {
-                    pack.monthsDelta[String(m)] = masterDB.months[String(m)];
-                }
+                if (masterDB.months[String(m)]) pack.monthsDelta[String(m)] = masterDB.months[String(m)];
             }
-            
-            // 兜底：如果这几个月都是空的，至少把当前视窗的月份数据塞进去
             if (Object.keys(pack.monthsDelta).length === 0) {
                 pack.monthsDelta[masterDB.selectedMonth] = masterDB.months[masterDB.selectedMonth];
             }
 
             let mdText = generateStandardMarkdownSnapshot(pack);
-
-            // 【明文安全舱】将 JSON 纯文本写在文件最底下
             let rawJsonStr = JSON.stringify(pack);
             const startToken = "___FUPAN_DATA_START___";
             const endToken = "___FUPAN_DATA_END___";
-            
-            mdText += `\n\n---\n### ⚙️ 系统恢复数据舱（请勿修改以下内容）\n${startToken}\n${rawJsonStr}\n${endToken}\n`;
+            mdText += '\n\n---\n### ⚙️ 系统恢复数据舱（请勿修改以下内容）\n' + startToken + '\n' + rawJsonStr + '\n' + endToken + '\n';
 
-            const blob = new Blob([mdText], { type: "text/markdown;charset=utf-8" });
-            const anchor = document.createElement('a'); 
-            anchor.href = URL.createObjectURL(blob);
-            
-            // 🎯 【格式完美修改】根据你要求的规范，动态判断并命名文件
-            let fileName = "";
-            if (startM === endM) {
-                fileName = `复盘2026.${startM}.md`;
-            } else {
-                fileName = `复盘2026.${startM}-2026.${endM}.md`;
+            let fileName = startM === endM ? '复盘2026.' + startM + '.md' : '复盘2026.' + startM + '-2026.' + endM + '.md';
+
+            let saved = false;
+            if (masterDB.exportDirHandle) {
+                saved = await writeFileToExportDir(fileName, mdText);
             }
-            
-            anchor.download = fileName; 
-            anchor.click();
 
-            masterDB.virtualCabinetLogs.push({ label: `MD快照: ${fileName.replace('.md', '')} (${new Date().toLocaleTimeString()})`, timestamp: nowStamp, payload: JSON.parse(JSON.stringify(masterDB)) });
-            masterDB.lastExportWatermark = nowStamp; 
-            commit(); 
+            if (!saved) {
+                // 降级：浏览器下载
+                const blob = new Blob([mdText], { type: 'text/markdown;charset=utf-8' });
+                const anchor = document.createElement('a');
+                anchor.href = URL.createObjectURL(blob);
+                anchor.download = fileName;
+                anchor.click();
+            }
+
+            masterDB.virtualCabinetLogs.push({ label: 'MD快照: ' + fileName.replace('.md','') + ' (' + new Date().toLocaleTimeString() + ')', timestamp: nowStamp, payload: JSON.parse(JSON.stringify(masterDB)) });
+            masterDB.lastExportWatermark = nowStamp;
+            commit();
             refreshCabinetRackUI();
-            
-            alert(`✅ 导出成功！\n\n文件已命名为：\n【 ${fileName} 】\n\n已为你完美打包该时间段内的所有数据！`);
-            
+
+            alert('✅ 导出成功！\n\n' + (masterDB.exportDirHandle ? '已写入：' + masterDB.exportDirHandle.name + '/' + fileName : '已通过浏览器下载：' + fileName));
         } catch (error) {
             console.error(error);
-            alert("❌ 导出遇到异常：\n" + error.message);
+            alert('❌ 导出异常：\n' + error.message);
         }
     }
 
@@ -1126,13 +1086,10 @@
                     const parsed = JSON.parse(extractedJson);
                     
                     if (parsed.monthsDelta) {
-                        // 🔓 完美的跨月合并逻辑，有多少个月就会同时恢复多少个月
                         Object.assign(masterDB.months, parsed.monthsDelta);
                         if(parsed.plansScope) masterDB.yearPlans = parsed.plansScope;
-                        if(parsed.libraryScope) masterDB.tagLibrary = parsed.libraryScope;
-                        if(parsed.apiKey) masterDB.apiKey = parsed.apiKey;
-                        commit(); renderAllPage(); 
-                        alert("📤 数据恢复成功！页面大盘已完美重置。"); 
+                        commit(); renderAllPage();
+                        alert("📤 数据恢复成功！");
                         toggleToolsDrawer(false);
                     }
                 } else { 
@@ -1161,23 +1118,17 @@
     }
     function killCabinetLog(idx, e) { e.stopPropagation(); masterDB.virtualCabinetLogs.splice(idx, 1); commit(); refreshCabinetRackUI(); }
 
-// 🌟 新增：每月1号自动备份拦截器
     function checkAndRunAutoBackup() {
         const now = new Date();
-        // 检查：今天是不是该月的 1 号？
         if (now.getDate() === 1) { 
-            // 自动推算上个月是哪一年、哪一月
             let prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
             let prevYear = prevMonthDate.getFullYear();
-            let prevMonth = prevMonthDate.getMonth() + 1; // 1-12
-            let backupKey = `${prevYear}-${prevMonth}`; // 生成印记，例如 "2026-5"
+            let prevMonth = prevMonthDate.getMonth() + 1; 
+            let backupKey = `${prevYear}-${prevMonth}`; 
 
-            // 检查底层印记：如果今天还没自动备份过，才执行
             if (masterDB.autoBackedUp !== backupKey) {
-                
-                // 确认你的系统里确实存了上个月的数据，才进行打包
                 if (masterDB.months[String(prevMonth)]) {
-                    let pack = { snapshotTimestamp: Date.now(), plansScope: masterDB.yearPlans, libraryScope: masterDB.tagLibrary, apiKey: masterDB.apiKey, monthsDelta: {} };
+                    let pack = { snapshotTimestamp: Date.now(), plansScope: masterDB.yearPlans, monthsDelta: {} };
                     pack.monthsDelta[String(prevMonth)] = masterDB.months[String(prevMonth)];
 
                     let mdText = generateStandardMarkdownSnapshot(pack);
@@ -1190,18 +1141,15 @@
                     const anchor = document.createElement('a');
                     anchor.href = URL.createObjectURL(blob);
                     
-                    // 极简命名格式：复盘2026.5.md
                     let fileName = `复盘${prevYear}.${prevMonth}.md`;
                     anchor.download = fileName;
-                    anchor.click(); // 自动静默触发下载
+                    anchor.click(); 
                     
-                    // 稍微延迟半秒弹窗，确保文件先开始下载
                     setTimeout(() => {
                         alert(`🔔 检测到今天是月初 1 号！\n系统已为您自动备份上个月 (${prevMonth}月) 的复盘数据。\n\n文件名为：【 ${fileName} 】\n\n请留意浏览器的下载提示并妥善保管。`);
                     }, 500);
                 }
                 
-                // 🚨 核心防线：打上死印记！今天你无论怎么刷新、重启，都不可能再触发第二次下载了。
                 masterDB.autoBackedUp = backupKey;
                 commit();
             }
@@ -1230,11 +1178,22 @@
         masterDB.realTodayStr = masterDB.currentDay;
         masterDB.realWeekStr = masterDB.currentWeek;
         masterDB.realMonthStr = masterDB.selectedMonth;
-        commit(); 
+        commit();
         renderAllPage();
-        
-        // 🌟 触发月初自动备份嗅探器
         checkAndRunAutoBackup();
+        remindStorageIfMissing();
+    }
+
+    function remindStorageIfMissing() {
+        if (!masterDB.exportDirHandle && !document.getElementById('storage-banner')) {
+            const header = document.querySelector('.app-header');
+            if (!header) return;
+            const banner = document.createElement('div');
+            banner.id = 'storage-banner';
+            banner.style.cssText = 'width:100%; background:#fff7ed; border:1px solid #fed7aa; padding:6px 12px; border-radius:6px; font-size:8pt; font-weight:600; color:#c2410c; display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;';
+            banner.innerHTML = '<span>📂 未设置储存位置 — 导出和每月备份将走浏览器下载。点击 ⚙️ → 选择副盘文件夹</span><button onclick="document.getElementById(\'storage-banner\').remove();" style="background:none;border:none;color:#c2410c;cursor:pointer;font-size:12pt;">×</button>';
+            header.after(banner);
+        }
     }
 
     function switchMonthData(mVal) { masterDB.selectedMonth = mVal; commit(); renderAllPage(); }
@@ -1293,7 +1252,6 @@
         const leaks = getUnfinishedPastTasks();
         if (leaks.length === 0) return;
         
-        // 🌟 强制让系统跳转回“现实今日”，确保今日的数据结构被安全激活
         snapBackToRealTime(); 
         
         const targetData = getMonthScope(); 
@@ -1303,11 +1261,8 @@
             let pastList = masterDB.months[leak.month].weeks[leak.week].days[leak.day].tasks;
             let idx = pastList.findIndex(t => t.id === leak.task.id);
             if(idx !== -1) {
-                // 🌟【核心修正】：绝不使用 splice 删掉过去！
-                // 而是给它打上隐身符（isRolloverIgnored），让它留在原地，且以后不会重复触发滚动
                 pastList[idx].isRolloverIgnored = true; 
                 
-                // 在今天精准复制一份一模一样的任务
                 targetData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.push({ 
                     id: "roll_"+Date.now()+"_"+Math.random(), 
                     text: leak.task.text, 
@@ -1324,61 +1279,149 @@
         alert(`✅ 滚动成功！已将 ${cnt} 项任务保留在历史原位，并复制了一份降落到今日列表！`);
     }
 
-    async function runCustomScopeAIAnalysis() {
-        if (!masterDB.apiKey || masterDB.apiKey.trim() === "") { alert("🔒 请先贴入大模型 API Key。"); return; }
-        const s = document.getElementById("range-date-start").value; const e = document.getElementById("range-date-end").value;
-        const outDiv = document.getElementById("drawer-ai-output"); outDiv.innerHTML = `<div style="color:#2563eb; font-size:9pt; font-weight:bold;">⏳ 正在调遣大模型穿透历史账本...</div>`;
+    // ── 24h 拖动时间条 ──
+    function minToPct(m) { return (m / (24 * 60)) * 100; }
+    function pctToMin(p) { return Math.round((p / 100) * 24 * 60 / 5) * 5; } // snap to 5min
+    function minToStr(m) { const h = Math.floor(m / 60); const mm = m % 60; return h + ':' + String(mm).padStart(2, '0'); }
 
-        let rawLogs = [];
-        for (let wKey in masterDB.months[masterDB.selectedMonth]?.weeks) {
-            for (let dKey in masterDB.months[masterDB.selectedMonth].weeks[wKey].days) {
-                let day = masterDB.months[masterDB.selectedMonth].weeks[wKey].days[dKey];
-                let howContent = "";
-                if (day.how_details && day.how_details.length > 0) howContent = day.how_details.map(d => d.text).join(' / ');
-                else howContent = day.how_text || "";
-                if (day.time_reason || day.what_text || howContent) {
-                    rawLogs.push(`[${wKey} ${dKey}] 卡点:${day.what_tags.join(',')} 归因:${day.time_reason} 药方:${howContent}`);
-                }
-            }
-        }
-        const prompt = `你是一个冷酷精密的效率军师。分析 ${s} 到 ${e} 的账本数据。禁止废话。必须以严苛的Markdown输出：\n\n### 🏆 跨时空效率基本盘审计\n[一句话指出整体状态]\n\n### 🌋 隐性死穴怪圈抓包\n[一句话挖出死循环原因]\n\n### ⚔️ 破局反击阻断 SOP\n• [指令1]\n• [指令2]\n\n【用户数据】:\n` + rawLogs.join("\n");
-
-        try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${masterDB.apiKey}` },
-                body: JSON.stringify({ model: "gpt-4o-mini", temperature: 0, max_tokens: 500, messages: [{ role: "user", content: prompt }] })
-            });
-            const data = await response.json();
-            if (data.choices && data.choices[0]) {
-                const aiTextResult = data.choices[0].message.content;
-                outDiv.innerHTML = `
-                    <div style="border:1px solid #cbd5e1; border-radius:6px; padding:12px; background:#f8fafc; font-size:9.5pt; line-height:1.6; white-space:pre-line; margin-bottom:10px;">${aiTextResult}</div>
-                    <button class="trigger-range-ai-btn" style="background-color:#059669;" onclick="exportAIPeportToMarkdown(\`${aiTextResult.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`, '${s}', '${e}')">📥 导出此分析为 Markdown</button>
-                `;
-            }
-        } catch (error) { outDiv.innerHTML = `<div style="color:red; font-size:9pt;">❌ 接口请求失败。</div>`; }
+    // 槽位事件文本保存（单槽，索引固定为 0）
+    function saveSlotEvent(prefix, idx, el) {
+        const dayData = getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay];
+        if (!dayData[prefix + '_slots']) dayData[prefix + '_slots'] = [{ start: '', end: '', event: '' }];
+        if (!dayData[prefix + '_slots'][idx]) dayData[prefix + '_slots'][idx] = { start: '', end: '', event: '' };
+        dayData[prefix + '_slots'][idx].event = el.innerText;
+        commit();
     }
 
-    function exportAIPeportToMarkdown(textContent, start, end) {
-        let doc = `# 🤖 大模型跨周期效率结构化聚合审计报告\n\n> 📅 **审计周期范围**：${start} 至 ${end}\n\n---\n\n${textContent}\n\n--- \n*报告打印时间：${new Date().toLocaleString()}*`;
-        const blob = new Blob([doc], { type: "text/markdown;charset=utf-8" });
-        const anchor = document.createElement('a'); anchor.href = URL.createObjectURL(blob);
-        anchor.download = `AI分析报告/跨周期AI效率审计报告_${Date.now()}.md`; anchor.click();
+    let _dragState = null;
+
+    function initTimelineSliders() {
+        document.querySelectorAll('.tl-slider').forEach(slider => {
+            const prefix = slider.dataset.prefix;
+            const fill   = slider.querySelector('.tl-fill');
+            const handleA = slider.querySelector('.tl-start');  // 物理上两个手柄
+            const handleB = slider.querySelector('.tl-end');
+            const labelA  = slider.querySelector('.tl-label-start');
+            const labelB  = slider.querySelector('.tl-label-end');
+
+            function pctFromMin(m) { return minToPct(m) + '%'; }
+
+            // 两个手柄的位置，左边的是头右边的是尾
+            function syncUI() {
+                const aMin = pctToMin(parseFloat(handleA.style.left));
+                const bMin = pctToMin(parseFloat(handleB.style.left));
+                const sMin = Math.min(aMin, bMin);
+                const eMin = Math.max(aMin, bMin);
+                const leftH  = aMin <= bMin ? handleA : handleB;
+                const rightH = aMin <= bMin ? handleB : handleA;
+                const leftL  = aMin <= bMin ? labelA  : labelB;
+                const rightL = aMin <= bMin ? labelB  : labelA;
+                leftH.style.left  = pctFromMin(sMin);
+                rightH.style.left = pctFromMin(eMin);
+                fill.style.left = pctFromMin(sMin);
+                fill.style.width = (minToPct(eMin) - minToPct(sMin)) + '%';
+                leftL.style.left = pctFromMin(sMin);
+                leftL.style.transform = 'translateX(-100%)';
+                leftL.innerText = minToStr(sMin);
+                rightL.style.left = pctFromMin(eMin);
+                rightL.style.transform = 'translateX(0)';
+                rightL.innerText = minToStr(eMin);
+            }
+
+            function getClosestHandle(e) {
+                const rect = slider.getBoundingClientRect();
+                const m = pctToMin(((e.clientX - rect.left) / rect.width) * 100);
+                const dA = Math.abs(m - pctToMin(parseFloat(handleA.style.left)));
+                const dB = Math.abs(m - pctToMin(parseFloat(handleB.style.left)));
+                return dA <= dB ? handleA : handleB;
+            }
+
+            function onDown(e) {
+                if (e.button !== 0) return;
+                e.preventDefault();
+                const targetH = e.target.classList.contains('tl-handle') ? e.target : getClosestHandle(e);
+                _dragState = { slider, targetH, syncUI, prefix };
+            }
+
+            slider.addEventListener('mousedown', onDown);
+            slider.addEventListener('touchstart', e => {
+                const t = e.touches[0];
+                onDown({ button: 0, preventDefault: () => {}, target: document.elementFromPoint(t.clientX, t.clientY) || slider, clientX: t.clientX });
+            }, { passive: false });
+        });
+
+        document.addEventListener('mousemove', e => {
+            if (!_dragState) return;
+            const { slider, targetH, syncUI } = _dragState;
+            const rect = slider.getBoundingClientRect();
+            const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+            targetH.style.left = pct + '%';
+            syncUI();
+        });
+
+        function finishDrag() {
+            if (!_dragState) return;
+            const { slider, prefix } = _dragState;
+            const idx = parseInt(slider.dataset.idx);
+            const handleA = slider.querySelector('.tl-start');
+            const handleB = slider.querySelector('.tl-end');
+            const aMin = pctToMin(parseFloat(handleA.style.left));
+            const bMin = pctToMin(parseFloat(handleB.style.left));
+            const sMin = Math.min(aMin, bMin);
+            const eMin = Math.max(aMin, bMin);
+            const mData = getMonthScope();
+            const dayData = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay];
+            if (dayData[prefix + '_slots'] && dayData[prefix + '_slots'][idx]) {
+                dayData[prefix + '_slots'][idx].start = minToStr(sMin);
+                dayData[prefix + '_slots'][idx].end   = minToStr(eMin);
+                commit();
+            }
+            _dragState = null;
+        }
+
+        document.addEventListener('mouseup', finishDrag);
+        document.addEventListener('touchend', finishDrag);
     }
 
-    function parseDurationHours(timeStr) {
-        if (!timeStr) return 0;
-        let parts = timeStr.split('-');
-        if (parts.length === 2) {
-            let parseTime = (t) => {
-                t = t.trim();
-                if (t.includes(':')) { let [h, m] = t.split(':'); return parseFloat(h) + (parseFloat(m) || 0) / 60; }
-                return parseFloat(t);
-            };
-            let start = parseTime(parts[0]); let end = parseTime(parts[1]);
-            if (!isNaN(start) && !isNaN(end) && end > start) { return parseFloat((end - start).toFixed(1)); }
-        }
-        return 0;
+    function setTimelineFromData(prefix, idx, startStr, endStr) {
+        const slider = document.getElementById('tl-' + prefix + '-' + idx);
+        if (!slider) return;
+        const defS = 0, defE = 0;
+        let sMin = startStr ? (parseInt(startStr.split(':')[0]) * 60 + parseInt(startStr.split(':')[1] || '0')) : defS;
+        let eMin = endStr   ? (parseInt(endStr.split(':')[0])   * 60 + parseInt(endStr.split(':')[1]   || '0')) : defE;
+        sMin = Math.max(0, Math.min(sMin, 24 * 60));
+        eMin = Math.max(0, Math.min(eMin, 24 * 60));
+        const hA = slider.querySelector('.tl-start');
+        const hB = slider.querySelector('.tl-end');
+        hA.style.left = minToPct(sMin) + '%';
+        hB.style.left = minToPct(eMin) + '%';
+        const fill = slider.querySelector('.tl-fill');
+        fill.style.left = hA.style.left;
+        fill.style.width = (minToPct(eMin) - minToPct(sMin)) + '%';
+        slider.querySelector('.tl-label-start').innerText = startStr || minToStr(sMin);
+        slider.querySelector('.tl-label-end').innerText   = endStr   || minToStr(eMin);
+    }
+
+    function parseDurationHours(dayObj, prefix) {
+        if (!dayObj) return 0;
+        const slots = dayObj[prefix + '_slots'];
+        if (!slots || !slots.length) return 0;
+        let total = 0;
+        slots.forEach(s => {
+            if (!s.start || !s.end) return;
+            const [sh, sm] = s.start.split(':'); const [eh, em] = s.end.split(':');
+            const startH = parseFloat(sh) + (parseFloat(sm) || 0) / 60;
+            const endH   = parseFloat(eh) + (parseFloat(em) || 0) / 60;
+            if (!isNaN(startH) && !isNaN(endH) && endH > startH) total += endH - startH;
+        });
+        return parseFloat(total.toFixed(1));
+    }
+
+    function fmtTimeRange(dayObj, prefix) {
+        if (!dayObj) return '';
+        const slots = dayObj[prefix + '_slots'];
+        if (!slots || !slots.length) return '';
+        return slots.filter(s => s.start && s.end).map(s => s.start + '-' + s.end).join(', ');
     }
 
     function renderEChart(level) {
@@ -1390,85 +1433,93 @@
             myChart = echarts.init(chartDom);
 
             let mData = getMonthScope();
-            let xAxisData = []; let tagCountData = []; let focusTimeData = []; let wasteTimeData = [];
+            let xAxisData = []; let focusTimeData = []; let wasteTimeData = [];
             let tooltipMeta = [];
 
+            let completionData = [];
             if (level === 'week') {
                 const dKeys = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
                 dKeys.forEach(k => {
                     let day = mData.weeks[masterDB.currentWeek].days[k];
-                    xAxisData.push(k); tagCountData.push(day.what_tags ? day.what_tags.length : 0);
-                    focusTimeData.push(parseDurationHours(day.high_time)); wasteTimeData.push(parseDurationHours(day.low_time));
+                    let dTotal = day.tasks.length, dChecked = day.tasks.filter(t => t.completed).length;
+                    xAxisData.push(k);
+                    completionData.push(dTotal === 0 ? 0 : Math.round((dChecked / dTotal) * 100));
+                    focusTimeData.push(parseDurationHours(day, 'high'));
+                    wasteTimeData.push(parseDurationHours(day, 'low'));
                     tooltipMeta.push({ type: 'day', dayData: day, label: k });
                 });
             } else {
                 const totalWeeks = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth) - 1);
                 const wKeys = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"].slice(0, totalWeeks);
-                
                 wKeys.forEach(wk => {
                     xAxisData.push(wk);
-                    let weekTagsSum = 0; let weekFocusSum = 0; let weekWasteSum = 0;
-                    
+                    let weekFocusSum = 0; let weekWasteSum = 0;
                     let wTotal = mData.weeks[wk].tasks.length;
                     let wChecked = mData.weeks[wk].tasks.filter(t => t.completed).length;
-
                     ["周一", "周二", "周三", "周四", "周五", "周六", "周日"].forEach(k => {
                         let day = mData.weeks[wk].days[k];
                         if (day) {
-                            weekTagsSum += (day.what_tags ? day.what_tags.length : 0);
-                            weekFocusSum += parseDurationHours(day.high_time); weekWasteSum += parseDurationHours(day.low_time);
+                            weekFocusSum += parseDurationHours(day, 'high');
+                            weekWasteSum += parseDurationHours(day, 'low');
                             if(!day.isRestDay) {
                                 wTotal += day.tasks.length;
                                 wChecked += day.tasks.filter(t => t.completed).length;
                             }
                         }
                     });
-                    
                     let wkRate = wTotal === 0 ? 0 : Math.round((wChecked/wTotal)*100);
                     if(mData.weeks[wk].isRestWeek || mData.isRestMonth) wkRate = 100;
-
-                    tagCountData.push(weekTagsSum);
-                    focusTimeData.push(parseFloat(weekFocusSum.toFixed(1))); wasteTimeData.push(parseFloat(weekWasteSum.toFixed(1)));
-                    tooltipMeta.push({ type: 'week', wkName: wk, totalTags: weekTagsSum, sumFocus: weekFocusSum, sumWaste: weekWasteSum, rate: wkRate });
+                    completionData.push(wkRate);
+                    focusTimeData.push(parseFloat(weekFocusSum.toFixed(1)));
+                    wasteTimeData.push(parseFloat(weekWasteSum.toFixed(1)));
+                    tooltipMeta.push({ type: 'week', wkName: wk, sumFocus: weekFocusSum, sumWaste: weekWasteSum, rate: wkRate });
                 });
             }
 
-            let option = {
+           let option = {
                 tooltip: {
-                    trigger: 'axis', backgroundColor: 'rgba(255, 255, 255, 0.96)', borderColor: '#cbd5e1', textStyle: { color: '#0f172a', fontSize: 12 },
+                    trigger: 'axis', backgroundColor: 'rgba(255, 255, 255, 0.97)', borderColor: '#cbd5e1', textStyle: { color: '#0f172a', fontSize: 12 },
                     formatter: function (params) {
                         let idx = params[0].dataIndex; let meta = tooltipMeta[idx];
                         if (!meta) return '';
-                        let html = `<div style="max-width: 260px; white-space: normal; line-height: 1.6;">`;
+                        let html = '<div style="max-width: 280px; white-space: normal; line-height: 1.7;">';
                         if (meta.type === 'day') {
                             let day = meta.dayData;
-                            html += `<div style="font-weight:900; font-size: 13px; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px; color:#1e293b;">📅 ${meta.label} 详情档案</div>`;
-                            if(day.isRestDay) { html += `<div style="color:#6b21a8; font-weight:700;">🛌 本日已标记为卧倒休息</div>`; return html + '</div>'; }
-                            html += `<div style="margin-bottom:4px;"><b>⚠️ 卡点 (${day.what_tags.length}):</b> <span style="color:#b91c1c;">${day.what_tags.join(', ') || '无记录'}</span></div>`;
-                            html += `<div style="margin-bottom:4px;"><b>✨ 专注 (${day.high_time || '0'}h):</b> <span style="color:#047857;">${day.high_event || '无记录'}</span></div>`;
-                            html += `<div style="margin-bottom:4px;"><b>🔋 摸鱼 (${day.low_time || '0'}h):</b> <span style="color:#ea580c;">${day.low_event || '无记录'}</span></div>`;
-                            html += `<div style="margin-bottom:6px; color:#475569;"><b>🔍 归因:</b> ${day.time_reason || '无记录'}</div>`;
+                            html += '<div style="font-weight:900; font-size:13px; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px; color:#1e293b;">📅 ' + meta.label + '</div>';
+                            if(day.isRestDay) { html += '<div style="color:#6b21a8; font-weight:700;">🛌 全天休息</div>'; return html + '</div>'; }
+                            let fh = parseDurationHours(day, 'high'), wh = parseDurationHours(day, 'low');
+                            html += '<div style="margin-bottom:4px;"><b>✨ 专注 ' + fh.toFixed(1) + 'h:</b></div>';
+                            (day.high_slots || []).forEach(s => { if (s.start) html += '<div style="font-size:10px; color:#047857; margin-left:8px;">' + s.start + '-' + s.end + ' ' + (s.event || '') + '</div>'; });
+                            if (!day.high_slots || !day.high_slots.length) html += '<div style="font-size:10px; color:#94a3b8; margin-left:8px;">未记录</div>';
+                            html += '<div style="margin-bottom:4px; margin-top:4px;"><b>🔋 摸鱼 ' + wh.toFixed(1) + 'h:</b></div>';
+                            (day.low_slots || []).forEach(s => { if (s.start) html += '<div style="font-size:10px; color:#ea580c; margin-left:8px;">' + s.start + '-' + s.end + ' ' + (s.event || '') + '</div>'; });
+                            if (!day.low_slots || !day.low_slots.length) html += '<div style="font-size:10px; color:#94a3b8; margin-left:8px;">未记录</div>';
+                            if (day.what_text) html += '<div style="margin-bottom:4px; color:#b91c1c;"><b>⚠️ 卡点:</b> ' + day.what_text + '</div>';
+                            if (day.time_reason) html += '<div style="color:#475569;"><b>🔍 原因:</b> ' + day.time_reason + '</div>';
                         } else {
-                            html += `<div style="font-weight:900; font-size: 13px; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px; color:#4338ca;">📊 ${meta.wkName} 宏观报告</div>`;
-                            html += `<div style="margin-bottom:4px;"><b>✅ 该周通关率:</b> <span style="color:#2563eb; font-weight:700;">${meta.rate}%</span></div>`;
-                            html += `<div style="margin-bottom:4px;"><b>⚠️ 卡点累计:</b> <span style="color:#b91c1c; font-weight:700;">${meta.totalTags} 次</span></div>`;
-                            html += `<div style="margin-bottom:4px;"><b>✨ 专注总长:</b> <span style="color:#10b981; font-weight:700;">${meta.sumFocus} 小时</span></div>`;
-                            html += `<div style="margin-bottom:4px;"><b>🔋 摸鱼总计:</b> <span style="color:#ef4444; font-weight:700;">${meta.sumWaste} 小时</span></div>`;
+                            html += '<div style="font-weight:900; font-size:13px; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px; color:#4338ca;">📊 ' + meta.wkName + '</div>';
+                            html += '<div style="margin-bottom:4px;"><b>✅ 通关率:</b> <span style="color:#2563eb; font-weight:700;">' + meta.rate + '%</span></div>';
+                            html += '<div style="margin-bottom:4px;"><b>✨ 专注总计:</b> <span style="color:#10b981; font-weight:700;">' + meta.sumFocus.toFixed(1) + ' h</span></div>';
+                            html += '<div style="margin-bottom:4px;"><b>🔋 摸鱼总计:</b> <span style="color:#ef4444; font-weight:700;">' + meta.sumWaste.toFixed(1) + ' h</span></div>';
                         }
-                        return html + `</div>`;
+                        return html + '</div>';
                     }
                 },
-                legend: { data: [level === 'week' ? '卡点次数 (柱)' : '全周卡点总数', level === 'week' ? '专注时长(h)' : '专注总时(h)', level === 'week' ? '摸鱼时长(h)' : '摸鱼总时(h)'], top: 0, textStyle: { fontWeight: 600, color: '#475569' } },
-                grid: { left: '2%', right: '2%', bottom: '2%', top: '22%', containLabel: true },
-                xAxis: { type: 'category', data: xAxisData, axisLabel: { color: '#64748b', fontWeight: 700, fontSize: 11 }, axisLine: { lineStyle: { color: '#cbd5e1' } } },
+                legend: { show: false },
+                grid: { left: '1%', right: '1%', bottom: '8%', top: '10px', containLabel: true },
+                xAxis: { type: 'category', data: xAxisData, axisLabel: { color: '#64748b', fontWeight: 700, fontSize: 11, margin: 4 }, axisLine: { lineStyle: { color: '#cbd5e1' } }, axisTick: { show: false } },
                 yAxis: [
-                    { type: 'value', minInterval: 1, splitLine: { lineStyle: { type: 'dashed', color: '#f1f5f9' } }, axisLabel: { color: '#94a3b8' } },
-                    { type: 'value', position: 'right', splitLine: { show: false }, axisLabel: { color: '#94a3b8', formatter: '{value} h' } }
+                    { type: 'value', min: 0, max: 100, splitLine: { lineStyle: { type: 'dashed', color: '#f1f5f9' } }, axisLabel: { color: '#94a3b8', formatter: '{value}%' } },
+                    { type: 'value', min: 0, position: 'right', splitLine: { show: false }, axisLabel: { color: '#94a3b8', formatter: '{value} h' } }
                 ],
-                series: [
-                    { name: level === 'week' ? '卡点次数 (柱)' : '全周卡点总数', type: 'bar', data: tagCountData, barMaxWidth: 24, itemStyle: { color: level === 'week' ? '#fb923c' : '#6366f1', borderRadius: [4,4,0,0] } },
-                    { name: level === 'week' ? '专注时长(h)' : '专注总时(h)', type: 'line', yAxisIndex: 1, data: focusTimeData, symbolSize: 10, itemStyle: { color: '#10b981' }, lineStyle: { width: 3.5 }, smooth: true },
-                    { name: level === 'week' ? '摸鱼时长(h)' : '摸鱼总时(h)', type: 'line', yAxisIndex: 1, data: wasteTimeData, symbolSize: 10, itemStyle: { color: '#ef4444' }, lineStyle: { width: 3.5 }, smooth: true }
+                series: level === 'week' ? [
+                    { name: '完成率', type: 'bar', data: completionData, barMaxWidth: 28, itemStyle: { color: '#fb923c', borderRadius: [4,4,0,0] } },
+                    { name: '专注(h)', type: 'line', yAxisIndex: 1, data: focusTimeData, symbolSize: 8, itemStyle: { color: '#10b981' }, lineStyle: { width: 2.5 }, smooth: true },
+                    { name: '摸鱼(h)', type: 'line', yAxisIndex: 1, data: wasteTimeData, symbolSize: 8, itemStyle: { color: '#ef4444' }, lineStyle: { width: 2.5 }, smooth: true }
+                ] : [
+                    { name: '通关率', type: 'bar', data: completionData, barMaxWidth: 28, itemStyle: { color: '#7dd3fc', borderRadius: [4,4,0,0] } },
+                    { name: '专注(h)', type: 'line', yAxisIndex: 1, data: focusTimeData, symbolSize: 8, itemStyle: { color: '#10b981' }, lineStyle: { width: 2.5 }, smooth: true },
+                    { name: '摸鱼(h)', type: 'line', yAxisIndex: 1, data: wasteTimeData, symbolSize: 8, itemStyle: { color: '#ef4444' }, lineStyle: { width: 2.5 }, smooth: true }
                 ]
             };
             
@@ -1497,27 +1548,65 @@
     }
 
     function injectFocalWidgetDashboard(containerId, level) {
-        const mData = getMonthScope(); const container = document.getElementById(containerId); container.innerHTML = "";
+        const mData = getMonthScope(); const container = document.getElementById(containerId);
+        // 先销毁旧的 ECharts 实例，防止内存泄漏
+        const oldChartDom = container.querySelector('[id^="focal-chart-"]');
+        if (oldChartDom) {
+            const oldInstance = echarts.getInstanceByDom(oldChartDom);
+            if (oldInstance) oldInstance.dispose();
+        }
+        container.innerHTML = "";
         let rates = calculateLiveCompletionRate(); let rateNum = level === 'week' ? rates.weekRate : rates.monthRate;
         const activeReviewText = (level === 'week') ? (mData.weeks[masterDB.currentWeek].review || "") : (mData.monthReview || "");
         const activePrescriptionText = (level === 'week') ? (mData.weeks[masterDB.currentWeek].prescription || "") : (mData.monthPrescription || "");
         let labelPrompt = level === 'week' ? "📁 下周调整：" : "📁 下月调整：";
 
-        container.innerHTML = `
-            <div class="focal-timeline-axis-row">
+       container.innerHTML = `
+            <div class="focal-timeline-axis-row" style="margin-bottom: 6px; padding-bottom: 6px; flex-shrink: 0;">
                 <div class="focal-mini-rate-circle">${rateNum}%</div>
                 <div class="focal-axis-nodes-container" style="color:#64748b; font-size:9.5pt; font-weight:bold;">时间轴综合闭环通关率</div>
             </div>
-            <div class="focal-impact-box" style="margin-top: 5px; margin-bottom: 15px;">
-                <div id="focal-chart-${level}" style="width: 100%; height: 200px; margin-bottom: 15px;"></div>
-                <div class="handwritten-text-area focal-heavy-body-text" contenteditable="true" id="focal-review-${level}" style="min-height: 40px; outline: none; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px;">${activeReviewText}</div>
+            
+            <div class="focal-impact-box" style="margin-top: 4px; margin-bottom: 8px; display: flex; flex-direction: column; flex-grow: 1;">
+
+                <div style="display: flex; width: 100%; flex: 1; min-height: 120px; margin-bottom: 0;">
+                    <div id="focal-chart-${level}" style="height: 100%; width: 72%;"></div>
+                    
+                    <div style="width: 28%; min-width: 120px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed #e2e8f0; margin-left: 10px; padding: 2px 5px 4px 10px;">
+                        
+                        <div style="align-self: flex-end; display: flex; flex-direction: column; align-items: center; margin-right: 20px; margin-top: 2px;">
+                            <div style="color:#64748b; font-size:8pt; font-weight:800; margin-bottom:6px; letter-spacing:0.5px;">综合闭环率</div>
+                            
+                            <div style="width: 76px; height: 76px; border-radius: 50%; background: conic-gradient(#3b82f6 ${rateNum}%, #f1f5f9 0); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(0,0,0,0.08);">
+                                <div style="width: 58px; height: 58px; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);">
+                                    <span style="font-size: 12pt; font-weight: 900; color: #0f172a;">${rateNum}%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="align-self: flex-start; display: flex; flex-direction: column; gap: 7px; margin-left: 2px;">
+                            <div style="display: flex; align-items: center; gap: 5px; font-size: 7.5pt; font-weight: 700; color: #475569;">
+                                <span style="width: 10px; height: 8px; background: ` + (level === 'week' ? '#fb923c' : '#7dd3fc') + `; border-radius: 2px;"></span> 通关率
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px; font-size: 7.5pt; font-weight: 700; color: #475569;">
+                                <span style="width: 10px; height: 3px; background: #10b981; border-radius: 2px;"></span> 专注(h)
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px; font-size: 7.5pt; font-weight: 700; color: #475569;">
+                                <span style="width: 10px; height: 3px; background: #ef4444; border-radius: 2px;"></span> 摸鱼(h)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div class="handwritten-text-area focal-heavy-body-text" contenteditable="true" id="focal-review-${level}" style="min-height: 24px; margin-top: 8px; flex-shrink: 0; outline: none; border-bottom: 1px dashed #cbd5e1; padding-bottom: 6px; padding-top: 4px;">${activeReviewText}</div>
             </div>
-            <span class="prescription-title-prompt">${labelPrompt}</span>
-            <div class="focal-blueprint-grid-canvas">
-                <div class="handwritten-text-area" contenteditable="true" id="focal-input-${level}" style="min-height:40px; width:100%; padding:0; background:transparent; margin-top:0; white-space:pre-line;">${activePrescriptionText}</div>
+            
+            <span class="prescription-title-prompt" style="flex-shrink: 0;">${labelPrompt}</span>
+            <div class="focal-blueprint-grid-canvas" style="padding: 8px 12px; flex-shrink: 0;">
+                <div class="handwritten-text-area" contenteditable="true" id="focal-input-${level}" style="min-height:30px; width:100%; padding:0; background:transparent; margin-top:0; white-space:pre-line;">${activePrescriptionText}</div>
             </div>
         `;
-
         setTimeout(() => { renderEChart(level); }, 50);
 
         document.getElementById(`focal-review-${level}`).addEventListener("blur", (e) => {
@@ -1571,16 +1660,11 @@
 
     function saveClosure(level, el) {
         let text = el.innerText.trim();
-        
-        if (text === "") {
-            text = null; 
-        }
-
+        if (text === "") { text = null; }
         const mData = getMonthScope();
         if(level === 'day') mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].closure_text = text;
         else if(level === 'week') mData.weeks[masterDB.currentWeek].closure_text = text;
         else if(level === 'month') mData.closure_text = text;
-        
         commit(); 
     }
 
@@ -1686,7 +1770,77 @@
         commit(); renderAllPage();
     }
 
+    // 🌟 极简单向防幽灵接力算法
+    function pullStickyFromPrevious() {
+        const mData = getMonthScope();
+
+        function doPull(prevTasks, curObj, curTasks) {
+            if (!prevTasks || !curObj) return;
+            if (!curObj.pulled_stickies) curObj.pulled_stickies = [];
+
+            let changed = false;
+            prevTasks.forEach(pt => {
+                // 核心：如果昨天常驻点亮了，且“今天还没拉取或改名删除过”，才自动生成！
+                if (pt.sticky && !curObj.pulled_stickies.includes(pt.text)) {
+                    curObj.pulled_stickies.push(pt.text); // 加入防复活名单
+                    curTasks.push({
+                        id: "stk_" + Date.now() + "_" + Math.random(),
+                        text: pt.text,
+                        completed: false,
+                        hasSplit: pt.hasSplit || false,
+                        subtasks: pt.subtasks ? JSON.parse(JSON.stringify(pt.subtasks)) : [],
+                        sticky: true // 自动点亮今天的，方便继续传给明天
+                    });
+                    changed = true;
+                }
+            });
+            return changed;
+        }
+
+        let changedAny = false;
+
+        // 月级同步
+        let prevMonthNum = parseInt(masterDB.selectedMonth) - 1;
+        if (prevMonthNum >= 1 && masterDB.months[String(prevMonthNum)]) {
+            if(doPull(masterDB.months[String(prevMonthNum)].monthTasks, mData, mData.monthTasks)) changedAny = true;
+        }
+
+        // 周级同步
+        const totalWeeks = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth) - 1);
+        const wNames = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"].slice(0, totalWeeks);
+        let curWIdx = wNames.indexOf(masterDB.currentWeek);
+        let prevWkTasks = null;
+        if (curWIdx > 0) {
+            prevWkTasks = mData.weeks[wNames[curWIdx - 1]].tasks;
+        } else if (prevMonthNum >= 1 && masterDB.months[String(prevMonthNum)]) {
+            let pMTotalW = getTotalWeeksInMonth(2026, prevMonthNum - 1);
+            prevWkTasks = masterDB.months[String(prevMonthNum)].weeks[wNames[pMTotalW - 1]]?.tasks;
+        }
+        if(doPull(prevWkTasks, mData.weeks[masterDB.currentWeek], mData.weeks[masterDB.currentWeek].tasks)) changedAny = true;
+
+        // 日级同步
+        const dNames = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+        let curDIdx = dNames.indexOf(masterDB.currentDay);
+        let prevDayTasks = null;
+        if (curDIdx > 0) {
+            prevDayTasks = mData.weeks[masterDB.currentWeek].days[dNames[curDIdx - 1]].tasks;
+        } else {
+            if (curWIdx > 0) {
+                prevDayTasks = mData.weeks[wNames[curWIdx - 1]].days["周日"].tasks;
+            } else if (prevMonthNum >= 1 && masterDB.months[String(prevMonthNum)]) {
+                let pMTotalW = getTotalWeeksInMonth(2026, prevMonthNum - 1);
+                prevDayTasks = masterDB.months[String(prevMonthNum)].weeks[wNames[pMTotalW - 1]]?.days["周日"]?.tasks;
+            }
+        }
+        if(doPull(prevDayTasks, mData.weeks[masterDB.currentWeek].days[masterDB.currentDay], mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks)) changedAny = true;
+
+        if (changedAny) commit();
+    }
+
     function renderAllPage() {
+        // 🌟 初始化界面前，调用一次免疫复活的拉取算法
+        pullStickyFromPrevious();
+
         const mData = getMonthScope(); renderAnnualGrid(); updateDateLabels(); 
         
         document.getElementById("day-tabs").querySelectorAll(".tab-cell").forEach(c => {
@@ -1697,12 +1851,17 @@
 
         processRestSystemUIAndLogic();
         const dayData = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay];
-        
-        document.getElementById("input-day-high-time").innerText = dayData.high_time || "";
-        document.getElementById("input-day-high-event").innerText = dayData.high_event || "";
-        document.getElementById("input-day-low-time").innerText = dayData.low_time || "";
-        document.getElementById("input-day-low-event").innerText = dayData.low_event || "";
-        document.getElementById("input-day-time-reason").innerText = dayData.time_reason || "";
+
+        // 时间板块 —— 用 value 而非 innerText，避免覆盖用户正在编辑
+        // 确保槽位存在
+        if (!dayData.high_slots || !dayData.high_slots.length) dayData.high_slots = [{ start: '', end: '', event: '' }];
+        if (!dayData.low_slots  || !dayData.low_slots.length)  dayData.low_slots  = [{ start: '', end: '', event: '' }];
+        const hs = dayData.high_slots[0], ls = dayData.low_slots[0];
+        setTimelineFromData('high', 0, hs.start || '', hs.end || '');
+        setTimelineFromData('low',  0, ls.start || '', ls.end || '');
+        document.getElementById("input-day-high-event").innerText = hs.event || '';
+        document.getElementById("input-day-low-event").innerText  = ls.event || '';
+        document.getElementById("input-day-time-reason").innerText = dayData.time_reason || '';
         document.getElementById("input-day-what").innerText = dayData.what_text || "";
         document.getElementById("input-day-why").innerText = dayData.why_text || "";
 
@@ -1714,13 +1873,11 @@
         }
         renderHowList(dayData.how_details);
 
-        renderXTags("slots-day-what", "what"); renderXTags("slots-day-why", "why"); renderXTags("slots-day-how", "how");
         calculateLiveCompletionRate(); refreshCabinetRackUI();
 
         injectFocalWidgetDashboard("panel-week-review-body", "week");
         injectFocalWidgetDashboard("panel-month-review-body", "month");
 
-        // 🌟 闭环渲染：已修复的无干扰同步逻辑，使用 == null 来兼顾 null 和 undefined
         const yDayRow = document.getElementById("closure-day-row"); 
         const dispDay = document.getElementById("closure-day-text");
         let dText = dayData.closure_text;
@@ -1776,7 +1933,10 @@
     function renderTaskList(elementId, tasksArray) {
         const ul = document.getElementById(elementId); if(!ul) return;
         ul.innerHTML = "";
-        
+
+        // 已完成任务自动沉底，未完成保持在前
+        tasksArray.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1);
+
         let dispatchOptionsHtml = '';
         if (elementId === 'month-task-list') {
             const totalW = getTotalWeeksInMonth(2026, parseInt(masterDB.selectedMonth)-1);
@@ -1828,14 +1988,17 @@
                 </div>
             ` : '';
 
+            // 🌟 核心注入：常驻旋钮 UI
+            let stickyHtml = `<div class="sticky-knob ${task.sticky ? 'active' : ''}" onclick="toggleSticky('${elementId}', ${index}, event)" title="设为常驻，明日自动继承"></div>`;
+
             li.innerHTML = `
                 <div class="task-main-line">
                     <span class="task-drag-handle" title="按住拖拽排序">⋮⋮</span>
                     <div class="todo-checkbox" onclick="toggleTaskCheck('${elementId}', ${index})"></div>
                     <div class="todo-text" contenteditable="true" onblur="updateTaskText('${elementId}', ${index}, this)">${task.text}</div>
-                    
                     <div class="controls-wrapper">
                         ${extraControls}
+                        ${stickyHtml}
                         <span class="main-task-del-x" onclick="deleteTask('${elementId}', ${index})">×</span>
                     </div>
                 </div>
@@ -1896,6 +2059,20 @@
         });
     }
 
+    // 🌟 核心操作：控制旋钮亮起/熄灭
+    function toggleSticky(listId, index, e) {
+        if(e) e.stopPropagation();
+        const mData = getMonthScope();
+        let task;
+        if (listId === "month-task-list") task = mData.monthTasks[index];
+        else if (listId === "week-task-list") task = mData.weeks[masterDB.currentWeek].tasks[index];
+        else task = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks[index];
+        
+        task.sticky = !task.sticky;
+        commit();
+        renderAllPage();
+    }
+
     function toggleTaskCheck(listId, index) {
         const mData = getMonthScope();
         if (listId === "month-task-list") mData.monthTasks[index].completed = !mData.monthTasks[index].completed;
@@ -1906,14 +2083,27 @@
     
     function updateTaskText(listId, index, element) {
         const mData = getMonthScope();
-        if (listId === "month-task-list") mData.monthTasks[index].text = element.innerText;
-        else if (listId === "week-task-list") mData.weeks[masterDB.currentWeek].tasks[index].text = element.innerText;
-        else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks[index].text = element.innerText;
-        commit();
+        let targetList, container;
+
+        if (listId === "month-task-list") { container = mData; targetList = mData.monthTasks; }
+        else if (listId === "week-task-list") { container = mData.weeks[masterDB.currentWeek]; targetList = container.tasks; }
+        else { container = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay]; targetList = container.tasks; }
+
+        let oldText = targetList[index].text;
+        let newText = element.innerText.trim();
+
+        if (oldText !== newText) {
+            // 🔪 修改防复活：把旧名字塞进防复活名单，确保拉取时不再匹配
+            if (!container.pulled_stickies) container.pulled_stickies = [];
+            if (!container.pulled_stickies.includes(oldText)) container.pulled_stickies.push(oldText);
+            
+            targetList[index].text = newText;
+            commit();
+        }
     }
     
     function addNewTask(level) {
-        const mData = getMonthScope(); const newTask = { id: level + Date.now(), text: "", completed: false, hasSplit: false, subtasks: [] };
+        const mData = getMonthScope(); const newTask = { id: level + Date.now(), text: "", completed: false, hasSplit: false, subtasks: [], sticky: false };
         if (level === 'month') mData.monthTasks.push(newTask);
         else if (level === 'week') mData.weeks[masterDB.currentWeek].tasks.push(newTask);
         else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.push(newTask);
@@ -1921,11 +2111,19 @@
     }
 
     function deleteTask(listId, index) {
-        // 🚀 去掉了所有烦人的 confirm 弹窗确认，直接执行删除动作！
         const mData = getMonthScope();
-        if (listId === "month-task-list") mData.monthTasks.splice(index, 1);
-        else if (listId === "week-task-list") mData.weeks[masterDB.currentWeek].tasks.splice(index, 1);
-        else mData.weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks.splice(index, 1);
+        let targetList, container;
+
+        if (listId === "month-task-list") { container = mData; targetList = mData.monthTasks; }
+        else if (listId === "week-task-list") { container = mData.weeks[masterDB.currentWeek]; targetList = container.tasks; }
+        else { container = mData.weeks[masterDB.currentWeek].days[masterDB.currentDay]; targetList = container.tasks; }
+
+        let deletedTask = targetList.splice(index, 1)[0];
+        
+        // 🔪 删除防复活：删除掉的任务直接打入防复活名单！
+        if (!container.pulled_stickies) container.pulled_stickies = [];
+        if (!container.pulled_stickies.includes(deletedTask.text)) container.pulled_stickies.push(deletedTask.text);
+
         commit(); 
         calculateLiveCompletionRate(); 
         renderAllPage();
@@ -1946,43 +2144,34 @@
                 if (window._openBubbleState && window._openBubbleState.shouldStay) {
                     window._openBubbleState.shouldStay = false;
                 } else {
-                    document.querySelectorAll('.subtask-panel-bubble').forEach(b => b.style.display = 'none');
+                    document.querySelectorAll('.subtask-panel-bubble').forEach(b => {
+                        b.style.display = 'none';
+                    });
                     window._openBubbleState = null;
                 }
             }
 
-            if (!e.target.closest('.custom-dropdown-wrapper')) {
-                document.querySelectorAll(".custom-dropdown-menu").forEach(m => m.style.display = 'none');
-                window._openTagSlot = null;
-            }
         });
 
         document.addEventListener('focusin', (e) => {
-            if (e.target && e.target.isContentEditable) {
-                if (e.target.innerText.trim() !== "") {
-                    setTimeout(() => {
-                        const range = document.createRange();
-                        range.selectNodeContents(e.target);
-                        const sel = window.getSelection();
-                        sel.removeAllRanges();
-                        sel.addRange(range);
-                    }, 10);
-                }
+            if (e.target && e.target.isContentEditable && e.target.innerText.trim() !== '') {
+                setTimeout(() => {
+                    const range = document.createRange();
+                    range.selectNodeContents(e.target);
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }, 10);
             }
         });
 
         document.getElementById("day-tabs").querySelectorAll(".tab-cell").forEach(cell => {
             cell.addEventListener("click", () => { masterDB.currentDay = cell.getAttribute("data-day"); commit(); renderAllPage(); });
         });
-        document.getElementById("week-tabs").querySelectorAll(".tab-cell").forEach(cell => {
-            cell.addEventListener("click", () => { masterDB.currentWeek = cell.getAttribute("data-week"); commit(); renderAllPage(); });
-        });
-
+        initTimelineSliders();
         snapBackToRealTime();
 
-        bindInput("input-day-what", "what_text"); bindInput("input-day-why", "why_text"); bindInput("input-day-how", "how_text");
-        bindInput("input-day-high-time", "high_time"); bindInput("input-day-high-event", "high_event");
-        bindInput("input-day-low-time", "low_time"); bindInput("input-day-low-event", "low_event");
+        bindInput("input-day-what", "what_text"); bindInput("input-day-why", "why_text");
         bindInput("input-day-time-reason", "time_reason");
 
         const container = document.getElementById('draggable-dashboard'); const dragSections = document.querySelectorAll('.drag-section');
@@ -2010,6 +2199,20 @@
                 let cw = echarts.getInstanceByDom(document.getElementById('focal-chart-week')); if(cw) cw.resize();
                 let cm = echarts.getInstanceByDom(document.getElementById('focal-chart-month')); if(cm) cm.resize();
             } catch(e) {}
+        });
+
+        // 监听面板容器大小变化，图表自动跟随（如窗口拉伸、侧边栏展开等）
+        ['panel-week-review-body', 'panel-month-review-body'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                new ResizeObserver(() => {
+                    const chartDom = document.getElementById(id === 'panel-week-review-body' ? 'focal-chart-week' : 'focal-chart-month');
+                    if (chartDom) {
+                        const instance = echarts.getInstanceByDom(chartDom);
+                        if (instance) instance.resize();
+                    }
+                }).observe(el);
+            }
         });
     });
 </script>
