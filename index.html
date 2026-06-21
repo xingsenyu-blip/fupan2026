@@ -451,16 +451,6 @@
             <button class="trigger-range-ai-btn" style="background-color:#64748b;" onclick="document.getElementById('file-uploader-portal').click()">📤 上传恢复历史 Markdown 备份</button>
             <input type="file" id="file-uploader-portal" style="display:none" onchange="loadSnapshotFromFile(this)" accept=".md">
         </div>
-        <div>
-            <div class="drawer-section-title">📂 副盘导出路径</div>
-            <div id="storage-reminder" style="font-size:7.5pt; color:#b45309; background:#fffbeb; padding:4px 8px; border-radius:4px; margin-bottom:6px; display:none;">
-                ⚠️ 未设置储存位置，导出会走浏览器下载。建议点击右侧「选择文件夹」建立你的副盘。
-            </div>
-            <div style="display:flex; gap:6px; align-items:center;">
-                <span id="export-dir-label" style="font-size:8pt; color:#64748b; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">未设置</span>
-                <button class="trigger-range-ai-btn" style="width:auto; padding:4px 10px; font-size:8pt; margin-bottom:0;" onclick="pickExportFolder()">选择文件夹</button>
-            </div>
-        </div>
     </div>
 </div>
 <script>
@@ -468,7 +458,6 @@
         yearPlans: ["横向航线一：考过科目三并斩获驾照", "横向航线二：深入攻坚全栈智能系统开发"],
         lastExportWatermark: 0, virtualCabinetLogs: [],
         selectedMonth: "5", currentWeek: "第一周", currentDay: "周一", realTodayStr: "周一", realWeekStr: "第一周", realMonthStr: "5",
-        exportDirHandle: null,
         months: {}
     };
 
@@ -865,64 +854,7 @@
     function killAnnual(i) { masterDB.yearPlans.splice(i, 1); commit(); renderAnnualGrid(); }
     function saveAnnual(i, el) { masterDB.yearPlans[i] = el.innerText; commit(); }
 
-    function toggleToolsDrawer(show) {
-        document.getElementById("tools-drawer").style.display = show ? "block" : "none";
-        if (show) refreshExportDirLabel();
-    }
-
-    async function pickExportFolder() {
-        if (!window.showDirectoryPicker) {
-            alert('当前浏览器不支持直接写入文件夹。\n\n📌 导出文件会通过浏览器下载，请手动保存到 D:\\复盘2026\\导出\\ 即可。\n\n💡 如果使用 Edge 或 Chrome 打开，可以使用一键直存功能。');
-            return;
-        }
-        try {
-            const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
-            masterDB.exportDirHandle = handle;
-            commit();
-            refreshExportDirLabel();
-            const banner = document.getElementById('storage-banner');
-            if (banner) banner.remove();
-        } catch(e) {
-            if (e.name === 'AbortError') return;
-            if (e.name === 'SecurityError') {
-                alert('需要用户点击触发，且需要在安全上下文（HTTPS 或 localhost）下使用。\n\n📌 当前使用 file:// 协议，浏览器限制了此功能。导出文件会通过浏览器下载。');
-            } else {
-                alert('无法获取文件夹权限：' + e.message + '\n\n📌 导出文件会通过浏览器下载，不受影响。');
-            }
-        }
-    }
-
-    function refreshExportDirLabel() {
-        const label = document.getElementById('export-dir-label');
-        const reminder = document.getElementById('storage-reminder');
-        if (label) label.innerText = masterDB.exportDirHandle ? masterDB.exportDirHandle.name : '未设置';
-        if (reminder) reminder.style.display = masterDB.exportDirHandle ? 'none' : 'block';
-    }
-
-    async function writeFileToExportDir(fileName, content) {
-        if (!masterDB.exportDirHandle) {
-            alert('请先在 ⚙️ 高级控制中心 中选择导出文件夹');
-            return false;
-        }
-        try {
-            // 验证权限
-            await masterDB.exportDirHandle.queryPermission({ mode: 'readwrite' });
-        } catch(e) {
-            const granted = await masterDB.exportDirHandle.requestPermission({ mode: 'readwrite' });
-            if (!granted) { alert('导出文件夹权限已失效，请重新选择'); return false; }
-        }
-        try {
-            const fileHandle = await masterDB.exportDirHandle.getFileHandle(fileName, { create: true });
-            const writable = await fileHandle.createWritable();
-            await writable.write(content);
-            await writable.close();
-            return true;
-        } catch(e) {
-            alert('写入文件失败：' + e.message);
-            return false;
-        }
-    }
-    
+    function toggleToolsDrawer(show) { document.getElementById("tools-drawer").style.display = show ? "block" : "none"; }
     function generateStandardMarkdownSnapshot(pack) {
         let md = `# 📅 2026年 个人全维数据管理总表\n\n`;
         md += `# 🏢 2026年度 战略计划与宏观大盘\n`;
@@ -1008,7 +940,7 @@
         return md;
     }
 
-    async function exportIncrementalSnapshotFile() {
+    function exportIncrementalSnapshotFile() {
         try {
             const nowStamp = Date.now();
             let pack = { snapshotTimestamp: nowStamp, plansScope: masterDB.yearPlans, monthsDelta: {} };
@@ -1036,26 +968,18 @@
 
             let fileName = startM === endM ? '复盘2026.' + startM + '.md' : '复盘2026.' + startM + '-2026.' + endM + '.md';
 
-            let saved = false;
-            if (masterDB.exportDirHandle) {
-                saved = await writeFileToExportDir(fileName, mdText);
-            }
-
-            if (!saved) {
-                // 降级：浏览器下载
-                const blob = new Blob([mdText], { type: 'text/markdown;charset=utf-8' });
-                const anchor = document.createElement('a');
-                anchor.href = URL.createObjectURL(blob);
-                anchor.download = fileName;
-                anchor.click();
-            }
+            const blob = new Blob([mdText], { type: 'text/markdown;charset=utf-8' });
+            const anchor = document.createElement('a');
+            anchor.href = URL.createObjectURL(blob);
+            anchor.download = fileName;
+            anchor.click();
 
             masterDB.virtualCabinetLogs.push({ label: 'MD快照: ' + fileName.replace('.md','') + ' (' + new Date().toLocaleTimeString() + ')', timestamp: nowStamp, payload: JSON.parse(JSON.stringify(masterDB)) });
             masterDB.lastExportWatermark = nowStamp;
             commit();
             refreshCabinetRackUI();
 
-            alert('✅ 导出成功！\n\n' + (masterDB.exportDirHandle ? '已写入：' + masterDB.exportDirHandle.name + '/' + fileName : '已通过浏览器下载：' + fileName));
+            alert('✅ 导出成功！\n\n已通过浏览器下载：' + fileName);
         } catch (error) {
             console.error(error);
             alert('❌ 导出异常：\n' + error.message);
@@ -1181,19 +1105,6 @@
         commit();
         renderAllPage();
         checkAndRunAutoBackup();
-        remindStorageIfMissing();
-    }
-
-    function remindStorageIfMissing() {
-        if (!masterDB.exportDirHandle && !document.getElementById('storage-banner')) {
-            const header = document.querySelector('.app-header');
-            if (!header) return;
-            const banner = document.createElement('div');
-            banner.id = 'storage-banner';
-            banner.style.cssText = 'width:100%; background:#fff7ed; border:1px solid #fed7aa; padding:6px 12px; border-radius:6px; font-size:8pt; font-weight:600; color:#c2410c; display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;';
-            banner.innerHTML = '<span>📂 未设置储存位置 — 导出和每月备份将走浏览器下载。点击 ⚙️ → 选择副盘文件夹</span><button onclick="document.getElementById(\'storage-banner\').remove();" style="background:none;border:none;color:#c2410c;cursor:pointer;font-size:12pt;">×</button>';
-            header.after(banner);
-        }
     }
 
     function switchMonthData(mVal) { masterDB.selectedMonth = mVal; commit(); renderAllPage(); }
