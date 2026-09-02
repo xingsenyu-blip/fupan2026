@@ -681,7 +681,7 @@
         if(!val) return;
         if(level === 'month') dispatchTaskToWeek(mainIdx, subIdx, val);
         else dispatchSubtaskToDay(mainIdx, subIdx, val);
-        selectEl.value = ""; 
+        selectEl.value = "";
     }
 
     function dispatchTaskToWeek(mIdx, sIdx, targetWeekStr) {
@@ -703,7 +703,7 @@
         if(window._openBubbleState) { window._openBubbleState.shouldStay = true; }
         commit(); renderAllPage();
     }
-    
+
     function dispatchSubtaskToDay(mainIdx, subIdx, targetDayName) {
         const mData = getMonthScope(); let task = mData.weeks[masterDB.currentWeek].tasks[mainIdx]; const txt = task.subtasks[subIdx]; if(!txt.trim()) return;
         if (!task.dispatches) task.dispatches = {};
@@ -723,8 +723,8 @@
         if(window._openBubbleState) { window._openBubbleState.shouldStay = true; }
         commit(); renderAllPage();
     }
-    
-    function deleteSubtaskSlot(l, m, s, el) { 
+
+    function deleteSubtaskSlot(l, m, s, el) {
         const mData = getMonthScope(); let t = (l==='month') ? mData.monthTasks[m] : mData.weeks[masterDB.currentWeek].tasks[m]; 
         t.subtasks.splice(s, 1); 
         if(t.dispatches) {
@@ -737,7 +737,8 @@
             t.dispatches = newDisp;
         }
         if(window._openBubbleState) { window._openBubbleState.shouldStay = true; }
-        commit(); refreshSubtaskUI(el.closest('.subtask-panel-bubble'), l, m); 
+        commit(); renderAllPage();
+        refreshSubtaskUI(el.closest('.subtask-panel-bubble'), l, m);
     }
 
     function quickDispatchTaskFromSelect(selectEl, level, index) {
@@ -771,10 +772,8 @@
             targetList.push({ id: newId, text: task.text, completed: false, hasSplit: false, subtasks: [], isSynced: true });
             task.mainDispatches[target] = newId;
         }
-        
         commit(); renderAllPage();
     }
-
     function calculateLiveCompletionRate() {
         const mData = getMonthScope(); const curWkData = mData.weeks[masterDB.currentWeek]; const curDayData = curWkData.days[masterDB.currentDay];
         
@@ -2128,4 +2127,4 @@
     });
 </script>
 </body>
-</html>
+</h
