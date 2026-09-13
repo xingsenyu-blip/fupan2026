@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>复盘任务 · PWA版 V14</title>
+<title>复盘任务手机版 · PWA版 V16</title>
 <meta name="theme-color" content="#1769e8">
-<meta name="application-name" content="复盘任务">
+<meta name="application-name" content="复盘任务手机版">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="复盘任务">
+<meta name="apple-mobile-web-app-title" content="复盘任务手机版">
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png">
@@ -603,7 +603,7 @@
 
     @media (max-width: 640px) {
         html { height:100%; overflow:hidden; -webkit-text-size-adjust:100%; }
-        body { height:var(--app-height,100dvh); overflow:hidden; padding:env(safe-area-inset-top) 10px 0; }
+        body { height:100dvh; overflow:hidden; padding:env(safe-area-inset-top) 10px 0; }
         .dashboard-container { height:100%; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
         .app-header { position:relative; top:auto; z-index:800; flex:0 0 auto; margin:0 -10px 8px; padding:6px 10px 8px; }
         .rollover-alert-bar { flex:0 0 auto; max-height:116px; overflow:auto; }
@@ -645,8 +645,8 @@
         #day-task-list .task-main-line::before { display:none; }
         #day-task-list .task-drag-handle { margin:1px 0 0; padding:0; }
         #day-task-list .todo-checkbox { width:22px; height:22px; margin:0; }
-        #day-task-list .todo-text { min-width:0; width:100%; padding:0 2px; font-size:15px; line-height:1.38; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
-        #day-task-list .todo-text:focus { display:block; -webkit-line-clamp:unset; overflow:visible; }
+        #day-task-list .todo-text { grid-column:3 / 4; justify-self:stretch; min-width:0; max-width:none; width:auto; padding:0 2px; font-size:15px; line-height:1.38; display:block; max-height:2.76em; overflow:hidden; white-space:normal; overflow-wrap:anywhere; }
+        #day-task-list .todo-text:focus { max-height:none; overflow:visible; }
         #day-task-list .task-time-display, #day-task-list .controls-wrapper, #day-task-list .mobile-task-actions { display:none !important; }
         .mobile-task-footer { grid-column:1 / -1; width:100%; min-height:34px; padding:1px 7px 5px 48px; grid-template-columns:minmax(0,1fr) 40px 40px; align-items:center; gap:3px; }
         #day-task-list .mobile-task-footer { display:grid; }
@@ -682,7 +682,7 @@
         .plan-mini-btn { min-height:40px; }
         .plan-footer { position:sticky; bottom:0; padding:10px 12px calc(10px + env(safe-area-inset-bottom)); background:#fff; }
         .plan-footer-note { display:none; }
-        .review-drawer-overlay { height:var(--app-height,100dvh); overflow:hidden; }
+        .review-drawer-overlay { height:100dvh; overflow:hidden; }
         .review-drawer, .inbox-drawer, .drawer-content { width:100vw; max-width:none; height:100%; overflow:hidden; }
         .review-drawer-head { flex:0 0 auto; padding:12px 14px; }
         .review-drawer-body { flex:1 1 auto; min-height:0; padding:12px; overflow:auto; }
@@ -697,7 +697,8 @@
         .inbox-compose-actions .primary-btn, .inbox-compose-actions .secondary-btn { width:100%; }
         input, textarea, select, [contenteditable="true"] { font-size:16px; }
         button { touch-action:manipulation; }
-        .mobile-bottom-nav { position:fixed; z-index:1250; left:0; right:0; bottom:0; height:calc(64px + env(safe-area-inset-bottom)); padding:5px 6px env(safe-area-inset-bottom); display:grid; grid-template-columns:repeat(5,1fr); background:rgba(255,255,255,.97); border-top:1px solid #dfe6ef; box-shadow:0 -5px 20px rgba(15,23,42,.08); backdrop-filter:blur(14px); }
+        .mobile-bottom-nav { position:fixed; z-index:1250; left:0; right:0; bottom:0; height:calc(64px + env(safe-area-inset-bottom)); padding:5px 6px env(safe-area-inset-bottom); display:grid; grid-template-columns:repeat(5,1fr); background:rgba(255,255,255,.97); border-top:1px solid #dfe6ef; box-shadow:0 -5px 20px rgba(15,23,42,.08); backdrop-filter:blur(14px); transition:transform .18s ease,opacity .18s ease; }
+        body.keyboard-open .mobile-bottom-nav, body.keyboard-open .review-fab { transform:translateY(calc(100% + env(safe-area-inset-bottom))); opacity:0; pointer-events:none; }
         .mobile-bottom-btn { position:relative; min-width:0; border:0; background:transparent; color:#718096; font-size:8pt; font-weight:750; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; }
         .mobile-bottom-btn .mobile-nav-icon { font-size:16pt; line-height:1; }
         .mobile-bottom-btn.active { color:#1769e8; }
@@ -708,14 +709,16 @@
         .mobile-more-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:11pt; font-weight:850; }
         .mobile-more-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
         .mobile-more-grid button { min-height:58px; border:1px solid #dfe6ef; border-radius:10px; background:#f8fafc; color:#334155; font-size:9pt; font-weight:800; }
-        .mobile-time-overlay { position:fixed; z-index:1750; inset:0; height:var(--app-height,100dvh); background:rgba(15,23,42,.34); align-items:flex-end; }
+        .mobile-time-overlay { position:fixed; z-index:1750; inset:0; height:100dvh; background:rgba(15,23,42,.34); align-items:flex-end; overflow:hidden; }
         .mobile-time-overlay.open { display:flex; }
-        .mobile-time-sheet { width:100%; padding:14px 16px calc(16px + env(safe-area-inset-bottom)); border-radius:16px 16px 0 0; background:#fff; box-shadow:0 -14px 40px rgba(15,23,42,.18); }
+        .mobile-time-sheet { width:100%; max-height:100%; overflow:auto; padding:14px 16px calc(16px + env(safe-area-inset-bottom)); border-radius:16px 16px 0 0; background:#fff; box-shadow:0 -14px 40px rgba(15,23,42,.18); }
         .mobile-time-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
         .mobile-time-title { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:15px; font-weight:850; }
         .mobile-time-entry { display:grid; grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr); align-items:center; gap:7px; }
-        .mobile-time-entry input { width:100%; min-width:0; height:46px; padding:8px 10px; border:1px solid #cbd5e1; border-radius:9px; background:#f8fafc; color:#1e293b; text-align:center; font-size:18px; font-weight:750; font-variant-numeric:tabular-nums; outline:none; }
+        .mobile-time-pair { display:grid; grid-template-columns:minmax(0,1fr) 8px minmax(0,1fr); align-items:center; gap:3px; min-width:0; }
+        .mobile-time-entry input { width:100%; min-width:0; height:46px; padding:8px 3px; border:1px solid #cbd5e1; border-radius:9px; background:#f8fafc; color:#1e293b; text-align:center; font-size:18px; font-weight:750; font-variant-numeric:tabular-nums; outline:none; }
         .mobile-time-entry input.invalid { border-color:#ef4444; background:#fff1f2; color:#b91c1c; }
+        .mobile-time-colon { text-align:center; color:#64748b; font-size:17px; font-weight:800; }
         .mobile-time-dash { text-align:center; color:#64748b; font-size:18px; }
         .mobile-time-preview { min-height:24px; padding:8px 2px 2px; color:#2563eb; font-size:12px; font-weight:750; }
         .mobile-time-preview.error { color:#dc2626; }
@@ -1051,9 +1054,17 @@
             <button class="focus-close" type="button" onclick="closeMobileTimeEditor()" aria-label="关闭">×</button>
         </div>
         <div class="mobile-time-entry">
-            <input id="mobile-time-start" type="text" inputmode="decimal" autocomplete="off" placeholder="9.35" aria-label="开始时间" oninput="updateMobileTimePreview()" onblur="normalizeMobileTimeField(this)" onkeydown="if(event.key==='Enter') saveMobileTime()">
+            <div class="mobile-time-pair" aria-label="开始时间">
+                <input id="mobile-start-hour" type="text" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="09" aria-label="开始小时" onfocus="this.select()" oninput="updateMobileTimePreview()" onkeydown="if(event.key==='Enter') saveMobileTime()">
+                <span class="mobile-time-colon">:</span>
+                <input id="mobile-start-minute" type="text" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="30" aria-label="开始分钟" onfocus="this.select()" oninput="updateMobileTimePreview()" onkeydown="if(event.key==='Enter') saveMobileTime()">
+            </div>
             <span class="mobile-time-dash">—</span>
-            <input id="mobile-time-end" type="text" inputmode="decimal" autocomplete="off" placeholder="11.20" aria-label="结束时间" oninput="updateMobileTimePreview()" onblur="normalizeMobileTimeField(this)" onkeydown="if(event.key==='Enter') saveMobileTime()">
+            <div class="mobile-time-pair" aria-label="结束时间">
+                <input id="mobile-end-hour" type="text" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="11" aria-label="结束小时" onfocus="this.select()" oninput="updateMobileTimePreview()" onkeydown="if(event.key==='Enter') saveMobileTime()">
+                <span class="mobile-time-colon">:</span>
+                <input id="mobile-end-minute" type="text" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="30" aria-label="结束分钟" onfocus="this.select()" oninput="updateMobileTimePreview()" onkeydown="if(event.key==='Enter') saveMobileTime()">
+            </div>
         </div>
         <div class="mobile-time-preview" id="mobile-time-preview">可只填写开始时间，例如 9.35</div>
         <div class="mobile-time-actions">
@@ -1317,7 +1328,7 @@
     async function installPwa() {
         toggleMobileMore(false);
         if(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-            alert('复盘任务已经以主屏幕应用方式运行。');
+            alert('复盘任务手机版已经以主屏幕应用方式运行。');
             return;
         }
         if(deferredInstallPrompt) {
@@ -1341,28 +1352,24 @@
 
     let mobileTimeTaskIndex=null;
 
-    function canonicalToQuickTime(value) {
-        if(!value) return '';
-        const parts=String(value).split(':');
-        if(parts.length!==2) return String(value);
-        return `${Number(parts[0])}.${parts[1]}`;
+    function setMobileTimePair(prefix,value) {
+        const [hour='',minute='']=String(value||'').split(':');
+        document.getElementById(`mobile-${prefix}-hour`).value=hour;
+        document.getElementById(`mobile-${prefix}-minute`).value=minute;
     }
 
-    function parseQuickTime(rawValue) {
-        const raw=String(rawValue||'').trim().replace(/[。．：，,]/g,'.').replace(/\s+/g,'');
-        if(!raw) return {empty:true,value:'',minutes:null};
-        let hour,minute;
-        if(/^\d{1,2}$/.test(raw)) {
-            hour=Number(raw);minute=0;
-        } else {
-            const match=raw.match(/^(\d{1,2})\.(\d{2})$/);
-            if(!match) return {error:'请写成 9.35；分钟必须是两位数字'};
-            hour=Number(match[1]);minute=Number(match[2]);
-        }
-        if(hour<0||hour>23) return {error:'小时必须在 0—23 之间'};
-        if(minute<0||minute>59) return {error:'分钟必须在 00—59 之间'};
+    function readMobileTimePair(prefix,label) {
+        const hourInput=document.getElementById(`mobile-${prefix}-hour`),minuteInput=document.getElementById(`mobile-${prefix}-minute`);
+        const hourRaw=hourInput.value.replace(/\D/g,''),minuteRaw=minuteInput.value.replace(/\D/g,'');
+        hourInput.value=hourRaw;minuteInput.value=minuteRaw;
+        hourInput.classList.remove('invalid');minuteInput.classList.remove('invalid');
+        if(!hourRaw&&!minuteRaw) return {empty:true,value:'',minutes:null};
+        if(!hourRaw) {hourInput.classList.add('invalid');return {error:`请填写${label}小时`};}
+        const hour=Number(hourRaw),minute=minuteRaw?Number(minuteRaw):0;
+        if(hour>23) {hourInput.classList.add('invalid');return {error:`${label}小时必须在 0—23 之间`};}
+        if(minute>59) {minuteInput.classList.add('invalid');return {error:`${label}分钟必须在 00—59 之间`};}
         const value=`${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`;
-        return {value,minutes:hour*60+minute,empty:false};
+        return {empty:false,value,minutes:hour*60+minute};
     }
 
     function openMobileTimeEditor(event,index) {
@@ -1370,13 +1377,12 @@
         const tasks=getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks;
         const task=tasks[index];if(!task)return;
         mobileTimeTaskIndex=index;
-        const start=document.getElementById('mobile-time-start'),end=document.getElementById('mobile-time-end');
-        start.value=canonicalToQuickTime(task.startTime);end.value=canonicalToQuickTime(task.endTime);
-        start.classList.remove('invalid');end.classList.remove('invalid');
+        setMobileTimePair('start',task.startTime);setMobileTimePair('end',task.endTime);
+        document.querySelectorAll('#mobile-time-overlay input').forEach(input=>input.classList.remove('invalid'));
         document.getElementById('mobile-time-title').textContent=task.text||'设置任务时间';
         document.getElementById('mobile-time-overlay').classList.add('open');
         updateMobileTimePreview();
-        setTimeout(()=>start.focus(),80);
+        setTimeout(()=>document.getElementById('mobile-start-hour').focus(),80);
     }
 
     function closeMobileTimeEditor() {
@@ -1385,10 +1391,7 @@
     }
 
     function getMobileTimeEntry() {
-        const startInput=document.getElementById('mobile-time-start'),endInput=document.getElementById('mobile-time-end');
-        const start=parseQuickTime(startInput.value),end=parseQuickTime(endInput.value);
-        startInput.classList.toggle('invalid',Boolean(start.error));
-        endInput.classList.toggle('invalid',Boolean(end.error));
+        const start=readMobileTimePair('start','开始'),end=readMobileTimePair('end','结束');
         if(start.error) return {error:start.error,start,end};
         if(end.error) return {error:end.error,start,end};
         if(start.empty&&!end.empty) return {error:'请先填写开始时间',start,end};
@@ -1406,15 +1409,10 @@
         else preview.textContent=`将显示为 ${result.start.value}${result.end.empty?'':` — ${result.end.value}`}`;
     }
 
-    function normalizeMobileTimeField(input) {
-        const result=parseQuickTime(input.value);
-        if(!result.error&&!result.empty) input.value=result.value;
-        updateMobileTimePreview();
-    }
-
     function clearMobileTime() {
-        const start=document.getElementById('mobile-time-start'),end=document.getElementById('mobile-time-end');
-        start.value='';end.value='';start.classList.remove('invalid');end.classList.remove('invalid');updateMobileTimePreview();
+        setMobileTimePair('start','');setMobileTimePair('end','');
+        document.querySelectorAll('#mobile-time-overlay input').forEach(input=>input.classList.remove('invalid'));
+        updateMobileTimePreview();
     }
 
     function saveMobileTime() {
@@ -4184,13 +4182,19 @@
         });
     });
 
-    function syncMobileAppHeight() {
-        const height=window.visualViewport?.height||window.innerHeight;
-        document.documentElement.style.setProperty('--app-height',`${height}px`);
+    function isMobileTypingTarget(target) {
+        return target && (target.matches('input,textarea,select') || target.isContentEditable);
     }
-    syncMobileAppHeight();
-    window.addEventListener('resize',syncMobileAppHeight);
-    if(window.visualViewport) window.visualViewport.addEventListener('resize',syncMobileAppHeight);
+    document.addEventListener('focusin',event => {
+        if(window.innerWidth>640||!isMobileTypingTarget(event.target))return;
+        document.body.classList.add('keyboard-open');
+        setTimeout(()=>event.target.scrollIntoView({block:'center',inline:'nearest',behavior:'smooth'}),280);
+    });
+    document.addEventListener('focusout',() => {
+        setTimeout(()=>{
+            if(!isMobileTypingTarget(document.activeElement))document.body.classList.remove('keyboard-open');
+        },120);
+    });
 
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
