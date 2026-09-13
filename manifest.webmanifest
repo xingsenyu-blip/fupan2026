@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "复盘任务",
+  "short_name": "复盘任务",
+  "description": "本机任务安排、收集与复盘",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#1769e8",
+  "orientation": "any",
+  "icons": [
+    {"src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
