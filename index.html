@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>复盘任务手机版 · PWA版 V17</title>
+<title>复盘任务手机版 · PWA版 V18</title>
 <meta name="theme-color" content="#1769e8">
 <meta name="application-name" content="复盘任务手机版">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -545,12 +545,14 @@
     .day-more-toggle { width:100%; margin:8px 0 2px; border:0; background:transparent; color:#2563eb; font-size:8.5pt; font-weight:800; cursor:pointer; }
     .day-timeline { max-height:min(520px,52vh); overflow-y:auto; padding:2px 6px 8px 0; scrollbar-gutter:stable; }
     .day-timeline-slot { display:grid; grid-template-columns:44px 14px minmax(0,1fr); column-gap:7px; position:relative; align-items:start; }
-    .day-timeline-slot.gap-small { margin-top:8px; }
-    .day-timeline-slot.gap-medium { margin-top:22px; }
-    .day-timeline-slot.gap-large { margin-top:38px; }
+    .day-timeline-slot.gap-small { margin-top:5px; }
+    .day-timeline-slot.gap-medium { margin-top:12px; }
+    .day-timeline-slot.gap-large { margin-top:20px; }
     .day-timeline-time { width:44px; height:44px; padding:3px 4px; border:0; background:transparent; display:grid; place-items:center; cursor:pointer; }
     .day-time-mini-card { width:36px; height:38px; padding:2px 1px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #bfdbfe; border-radius:6px; background:#f8fbff; color:#2563eb; font-size:9px; font-weight:800; line-height:10px; white-space:nowrap; font-variant-numeric:tabular-nums; }
     .day-time-mini-card .time-wave { color:#93a4bd; font-size:7px; font-weight:700; line-height:7px; }
+    .day-time-mini-card.unscheduled { border-style:dashed; border-color:#cbd5e1; background:#fbfcfe; color:#7d8aa0; font-size:9px; line-height:12px; }
+    .day-time-mini-card .time-add-mark { font-size:12px; line-height:11px; color:#6b86ad; }
     .day-timeline-rail { position:relative; }
     .day-timeline-rail::before { content:""; position:absolute; top:0; bottom:-40px; left:6px; width:2px; background:#dbe7f7; }
     .day-timeline-rail::after { content:""; position:absolute; top:17px; left:2px; width:10px; height:10px; border:2px solid #fff; border-radius:50%; background:#3b82f6; box-shadow:0 0 0 1px #93c5fd; }
@@ -601,7 +603,11 @@
         .card-grid { flex-direction:column; }
         .annual-flex-row { grid-template-columns:1fr; }
         .year-dashboard-summary { grid-template-columns:1fr; }
-        .data-summary-row, .review-library-list { grid-template-columns:1fr; }
+        .data-summary-row { grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; }
+        .data-summary-card { min-width:0; padding:7px 4px; text-align:center; }
+        .data-summary-label { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:10px; }
+        .data-summary-value { margin-top:1px; font-size:14px; }
+        .review-library-list { grid-template-columns:1fr; }
         .controls-wrapper { opacity:1; }
     }
 
@@ -645,24 +651,23 @@
         .task-main-line::before { margin-right:7px; }
         .todo-checkbox { width:24px; height:24px; margin-right:7px; }
         .todo-text { min-width:calc(100% - 92px); flex:1; font-size:15px; line-height:1.4; overflow-wrap:anywhere; }
-        #day-task-list .task-row { overflow:hidden; }
-        #day-task-list .task-main-line { display:grid; grid-template-columns:18px 26px minmax(0,1fr); align-items:start; gap:7px; min-height:38px; padding:8px 8px 2px; }
+        #day-task-list .task-row { position:relative; min-height:44px; overflow:hidden; }
+        #day-task-list .task-main-line { display:grid; grid-template-columns:14px 21px minmax(0,1fr); align-items:center; gap:6px; min-height:42px; padding:5px 70px 5px 7px; }
         #day-task-list .task-main-line::before { display:none; }
         #day-task-list .task-drag-handle { margin:1px 0 0; padding:0; }
-        #day-task-list .todo-checkbox { width:22px; height:22px; margin:0; }
-        #day-task-list .todo-text { grid-column:3 / 4; justify-self:stretch; min-width:0; max-width:none; width:auto; padding:0 2px; font-size:15px; line-height:1.38; display:block; max-height:2.76em; overflow:hidden; white-space:normal; overflow-wrap:anywhere; }
+        #day-task-list .todo-checkbox { width:19px; height:19px; margin:0; }
+        #day-task-list .todo-text { grid-column:3 / 4; justify-self:stretch; min-width:0; max-width:none; width:auto; padding:0 1px; font-size:14px; line-height:1.3; display:block; max-height:2.6em; overflow:hidden; white-space:normal; overflow-wrap:anywhere; }
         #day-task-list .todo-text:focus { max-height:none; overflow:visible; }
         #day-task-list .task-time-display, #day-task-list .controls-wrapper, #day-task-list .mobile-task-actions { display:none !important; }
-        .mobile-task-footer { grid-column:1 / -1; width:100%; min-height:34px; padding:1px 7px 5px 48px; grid-template-columns:minmax(0,1fr) 40px 40px; align-items:center; gap:3px; }
-        .mobile-task-footer.scheduled { grid-template-columns:minmax(0,1fr) 40px 40px; }
+        .mobile-task-footer, .mobile-task-footer.scheduled { position:absolute; right:4px; top:50%; transform:translateY(-50%); width:64px; min-height:30px; padding:0; grid-template-columns:30px 30px; align-items:center; gap:2px; }
         #day-task-list .mobile-task-footer { display:grid; }
         .mobile-time-touch { justify-self:start; min-width:40px; min-height:36px; padding:6px 0; border:0; background:transparent; text-align:left; }
         .mobile-time-pill { display:inline-flex; align-items:center; min-height:22px; max-width:150px; padding:2px 7px; border:1px solid #bfdbfe; border-radius:999px; background:#eff6ff; color:#2563eb; font-size:11px; font-weight:800; line-height:1; white-space:nowrap; font-variant-numeric:tabular-nums; }
         .mobile-time-pill.unscheduled { border-style:dashed; border-color:#cbd5e1; background:#f8fafc; color:#8492a6; font-weight:700; }
-        .mobile-sticky-button, .mobile-delete-button { width:40px; height:36px; display:grid; place-items:center; border:0; border-radius:8px; background:transparent; }
+        .mobile-sticky-button, .mobile-delete-button { width:30px; height:30px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; }
         .mobile-sticky-button::before { content:""; width:13px; height:13px; border:2px solid #94a3b8; border-radius:50%; background:#fff; }
         .mobile-sticky-button.active::before { border-color:#10b981; background:#10b981; box-shadow:0 0 0 3px #d1fae5; }
-        .mobile-delete-button { color:#94a3b8; font-size:21px; font-weight:400; }
+        .mobile-delete-button { color:#94a3b8; font-size:19px; font-weight:400; }
         .mobile-task-actions { display:inline-flex; width:44px; height:44px; align-items:center; justify-content:center; flex:0 0 44px; border:0; border-radius:8px; background:#f1f5f9; color:#64748b; font-size:15pt; }
         .controls-wrapper { display:none; width:100%; flex-wrap:wrap; justify-content:flex-start; gap:8px; margin:8px 0 0 44px; padding-top:8px; border-top:1px dashed #e2e8f0; opacity:1; }
         .task-row.mobile-actions-open .controls-wrapper { display:flex; }
@@ -3816,14 +3821,9 @@
             dayFull.forEach(d => { dispatchOptionsHtml += `<option value="${d}">${d}</option>`; });
         }
 
-        let unscheduledGrid=null, unscheduledCount=0, timeline=null, lastTimelineMinutes=null;
-        const timelineGroups={};
+        let timeline=null, lastTimelineMinutes=null;
         tasksArray.forEach((task, index) => {
-            if(listIsDay&&!task.startTime&&!unscheduledGrid){
-                const section=document.createElement('li');section.innerHTML='<div class="day-task-section-label">未定时间</div><div class="day-unscheduled-grid"></div><button class="day-more-toggle" type="button" style="display:none"></button>';
-                ul.appendChild(section);unscheduledGrid=section.querySelector('.day-unscheduled-grid');
-            }
-            if(listIsDay&&task.startTime&&!timeline){
+            if(listIsDay&&!timeline){
                 const section=document.createElement('li');section.innerHTML='<div class="day-timeline"></div>';
                 ul.appendChild(section);timeline=section.querySelector('.day-timeline');
             }
@@ -3842,8 +3842,7 @@
             const sourceHtml = task.sourceReview ? '<span class="task-source-tag">昨晚承诺</span>' : '';
             const timeHtml = isDayList ? `<span class="task-time-fields"><input type="time" value="${escapeAttr(task.startTime || '')}" aria-label="开始时间" onchange="updateTaskTime(${index},'startTime',this.value)"><span class="task-time-separator">—</span><input type="time" value="${escapeAttr(task.endTime || '')}" aria-label="结束时间" onchange="updateTaskTime(${index},'endTime',this.value)"></span>` : '';
             const timeDisplayHtml = '';
-            const mobileFooterHtml = isDayList ? `<div class="mobile-task-footer ${task.startTime?'scheduled':''}">
-                ${task.startTime?'<span></span>':`<button class="mobile-time-touch" type="button" onclick="openMobileTimeEditor(event,${index})" aria-label="设置时间"><span class="mobile-time-pill unscheduled">＋ 时间</span></button>`}
+            const mobileFooterHtml = isDayList ? `<div class="mobile-task-footer scheduled">
                 <button class="mobile-sticky-button ${task.sticky?'active':''}" type="button" onclick="toggleSticky('${elementId}',${index},event)" aria-label="${task.sticky?'取消常驻':'设为常驻'}"></button>
                 <button class="mobile-delete-button" type="button" onclick="deleteTask('${elementId}',${index})" aria-label="删除任务">×</button>
             </div>` : '';
@@ -3922,22 +3921,18 @@
                 window._draggedTask = null;
             });
 
-            if(listIsDay&&!task.startTime){
-                unscheduledGrid.appendChild(li);unscheduledCount++;
-            } else if(listIsDay){
-                const parts=String(task.startTime||'00:00').split(':').map(Number), minutes=(parts[0]||0)*60+(parts[1]||0);
+            if(listIsDay){
+                const hasTime=Boolean(task.startTime);
+                const parts=String(task.startTime||'00:00').split(':').map(Number), minutes=hasTime?(parts[0]||0)*60+(parts[1]||0):null;
                 const slot=document.createElement('div');
-                const gap=lastTimelineMinutes==null?'':minutes-lastTimelineMinutes<=60?'gap-small':minutes-lastTimelineMinutes<=180?'gap-medium':'gap-large';
+                const gap=!hasTime||lastTimelineMinutes==null?'':minutes-lastTimelineMinutes<=60?'gap-small':minutes-lastTimelineMinutes<=180?'gap-medium':'gap-large';
                 slot.className=`day-timeline-slot ${gap}`;
-                slot.innerHTML=`<button class="day-timeline-time" type="button" onclick="openMobileTimeEditor(event,${index})" aria-label="修改时间 ${escapeAttr(task.startTime)} 至 ${escapeAttr(task.endTime||'未填写')}"><span class="day-time-mini-card"><span>${escapeHtml(task.startTime)}</span><span class="time-wave">~</span><span>${escapeHtml(task.endTime||'--:--')}</span></span></button><div class="day-timeline-rail"></div><div class="day-timeline-cards"></div>`;
-                timeline.appendChild(slot);const cards=slot.querySelector('.day-timeline-cards');lastTimelineMinutes=minutes;
+                const timeCard=hasTime?`<span class="day-time-mini-card"><span>${escapeHtml(task.startTime)}</span><span class="time-wave">~</span><span>${escapeHtml(task.endTime||'--:--')}</span></span>`:`<span class="day-time-mini-card unscheduled"><span class="time-add-mark">＋</span><span>时间</span></span>`;
+                slot.innerHTML=`<button class="day-timeline-time" type="button" onclick="openMobileTimeEditor(event,${index})" aria-label="${hasTime?`修改时间 ${escapeAttr(task.startTime)} 至 ${escapeAttr(task.endTime||'未填写')}`:'设置时间'}">${timeCard}</button><div class="day-timeline-rail"></div><div class="day-timeline-cards"></div>`;
+                timeline.appendChild(slot);const cards=slot.querySelector('.day-timeline-cards');if(hasTime)lastTimelineMinutes=minutes;
                 cards.appendChild(li);
             } else ul.appendChild(li);
         });
-        if(listIsDay&&unscheduledGrid){
-            const button=unscheduledGrid.parentElement.querySelector('.day-more-toggle');
-            if(unscheduledCount>3){button.style.display='block';button.textContent=`展开全部 ${unscheduledCount} 项`;button.onclick=()=>{const expanded=unscheduledGrid.classList.toggle('expanded');button.textContent=expanded?'收起未定时间任务':`展开全部 ${unscheduledCount} 项`;};}
-        }
     }
 
     function updateTaskTime(index, field, value) {
