@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>复盘任务手机版 · PWA版 V16</title>
+<title>复盘任务手机版 · PWA版 V17</title>
 <meta name="theme-color" content="#1769e8">
 <meta name="application-name" content="复盘任务手机版">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -544,11 +544,13 @@
     .day-unscheduled-grid:not(.expanded) .task-row:nth-child(n+7) { display:none; }
     .day-more-toggle { width:100%; margin:8px 0 2px; border:0; background:transparent; color:#2563eb; font-size:8.5pt; font-weight:800; cursor:pointer; }
     .day-timeline { max-height:min(520px,52vh); overflow-y:auto; padding:2px 6px 8px 0; scrollbar-gutter:stable; }
-    .day-timeline-slot { display:grid; grid-template-columns:58px 14px minmax(0,1fr); column-gap:8px; position:relative; }
+    .day-timeline-slot { display:grid; grid-template-columns:44px 14px minmax(0,1fr); column-gap:7px; position:relative; align-items:start; }
     .day-timeline-slot.gap-small { margin-top:8px; }
     .day-timeline-slot.gap-medium { margin-top:22px; }
     .day-timeline-slot.gap-large { margin-top:38px; }
-    .day-timeline-time { padding-top:12px; color:#52617d; font-size:8pt; font-weight:800; text-align:right; font-variant-numeric:tabular-nums; }
+    .day-timeline-time { width:44px; height:44px; padding:3px 4px; border:0; background:transparent; display:grid; place-items:center; cursor:pointer; }
+    .day-time-mini-card { width:36px; height:38px; padding:2px 1px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #bfdbfe; border-radius:6px; background:#f8fbff; color:#2563eb; font-size:9px; font-weight:800; line-height:10px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+    .day-time-mini-card .time-wave { color:#93a4bd; font-size:7px; font-weight:700; line-height:7px; }
     .day-timeline-rail { position:relative; }
     .day-timeline-rail::before { content:""; position:absolute; top:0; bottom:-40px; left:6px; width:2px; background:#dbe7f7; }
     .day-timeline-rail::after { content:""; position:absolute; top:17px; left:2px; width:10px; height:10px; border:2px solid #fff; border-radius:50%; background:#3b82f6; box-shadow:0 0 0 1px #93c5fd; }
@@ -559,6 +561,8 @@
     .task-row.day-unscheduled-row { border-left:3px solid #d9e1ec !important; }
     .task-time-display { flex:0 0 88px; color:#2563eb; font-size:8.5pt; font-weight:800; font-variant-numeric:tabular-nums; }
     .task-time-display.unscheduled { color:#94a3b8; font-weight:650; }
+    .day-header-actions { display:flex; align-items:center; gap:6px; }
+    .day-header-add { width:28px; height:28px; display:grid; place-items:center; padding:0; border:1px solid #cfe0ff; border-radius:7px; background:#f7faff; color:var(--ui-blue); font-size:16px; font-weight:700; cursor:pointer; }
     #day-task-list .todo-text { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
     #day-task-list .todo-text:focus { display:block; overflow:visible; -webkit-line-clamp:unset; }
     .review-question-card { padding:14px; border:1px solid #dfe6f0; border-radius:9px; background:#fff; box-shadow:0 3px 12px rgba(32,52,94,.035); }
@@ -612,11 +616,12 @@
         .primary-nav { display:none; }
         .primary-nav-btn { padding:0 10px; font-size:9.5pt; }
         .primary-nav-btn.inbox-btn .nav-count { top:8px; right:-2px; }
-        .time-nav-zone { display:grid; grid-template-columns:44px minmax(0,1fr) 44px 44px; gap:7px; min-height:92px; padding-top:0; }
-        .time-nav-zone.year-mode { grid-template-columns:44px minmax(0,1fr) 44px 96px; }
-        .period-arrow, .calendar-trigger { width:44px; height:44px; }
-        .current-period-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-size:13.5pt; }
-        .calendar-control { margin:0; }
+        .time-nav-zone { display:grid; grid-template-columns:34px minmax(86px,1fr) 34px 34px 52px; gap:4px; min-height:42px; padding-top:0; }
+        .time-nav-zone.year-mode { grid-template-columns:34px minmax(86px,1fr) 34px 34px 52px; }
+        .period-arrow { width:34px; height:34px; }
+        .current-period-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-size:13pt; cursor:pointer; }
+        .calendar-control { display:contents; }
+        .calendar-trigger { display:none; }
         .context-calendar { position:fixed; left:10px; right:10px; top:116px; width:auto; }
         .calendar-period-grid { grid-template-columns:repeat(3,1fr); }
         .prior-review-strip { margin-left:0; margin-right:0; }
@@ -625,8 +630,8 @@
         .attachment-preview-overlay { padding:0; }
         .attachment-preview-shell { width:100vw; height:100vh; border-radius:0; }
         .planner-create-row { flex-direction:column; }
-        .snap-today-btn { grid-column:1 / 3; width:100%; height:44px; }
-        .plan-entry-btn { grid-column:3 / 5; width:100%; height:44px; padding:0 10px; }
+        .snap-today-btn { grid-column:4; width:34px; height:32px; padding:0; border-radius:7px; font-size:11px; }
+        .plan-entry-btn { grid-column:5; width:52px; height:32px; padding:0 5px; border-radius:7px; font-size:11px; box-shadow:none; }
         .gear-toggle-btn { display:none; }
         .tab-navigator { position:sticky; top:0; z-index:20; overflow-x:auto; justify-content:flex-start; scroll-snap-type:x proximity; scrollbar-width:none; }
         .tab-navigator::-webkit-scrollbar { display:none; }
@@ -649,6 +654,7 @@
         #day-task-list .todo-text:focus { max-height:none; overflow:visible; }
         #day-task-list .task-time-display, #day-task-list .controls-wrapper, #day-task-list .mobile-task-actions { display:none !important; }
         .mobile-task-footer { grid-column:1 / -1; width:100%; min-height:34px; padding:1px 7px 5px 48px; grid-template-columns:minmax(0,1fr) 40px 40px; align-items:center; gap:3px; }
+        .mobile-task-footer.scheduled { grid-template-columns:minmax(0,1fr) 40px 40px; }
         #day-task-list .mobile-task-footer { display:grid; }
         .mobile-time-touch { justify-self:start; min-width:40px; min-height:36px; padding:6px 0; border:0; background:transparent; text-align:left; }
         .mobile-time-pill { display:inline-flex; align-items:center; min-height:22px; max-width:150px; padding:2px 7px; border:1px solid #bfdbfe; border-radius:999px; background:#eff6ff; color:#2563eb; font-size:11px; font-weight:800; line-height:1; white-space:nowrap; font-variant-numeric:tabular-nums; }
@@ -668,7 +674,7 @@
         .day-unscheduled-grid { grid-template-columns:1fr; }
         .day-unscheduled-grid:not(.expanded) .task-row:nth-child(n+4) { display:none; }
         .day-timeline { max-height:none; overflow:visible; padding-right:2px; }
-        .day-timeline-slot { grid-template-columns:46px 12px minmax(0,1fr); column-gap:6px; }
+        .day-timeline-slot { grid-template-columns:44px 12px minmax(0,1fr); column-gap:5px; }
         .day-timeline-cards { grid-template-columns:1fr; }
         .main-task-dropdown-select, .magic-wand-btn { max-width:none; min-height:44px; }
         .focus-overlay { padding:0; }
@@ -754,7 +760,7 @@
         </div>
         <div class="time-nav-zone">
             <button class="period-arrow" onclick="navigatePeriod(-1)" aria-label="上一个周期">‹</button>
-            <div class="current-period-label" id="current-period-label">今日</div>
+            <div class="current-period-label" id="current-period-label" role="button" tabindex="0" onclick="toggleContextCalendar(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleContextCalendar(event)}" aria-label="选择日期">今日</div>
             <button class="period-arrow" onclick="navigatePeriod(1)" aria-label="下一个周期">›</button>
             <select class="year-dropdown-select" id="global-year-selector" onchange="switchYearData(this.value)" aria-label="选择年份" hidden></select>
             <select class="month-dropdown-select" id="global-month-selector" onchange="switchMonthData(this.value)" hidden>
@@ -769,7 +775,7 @@
                 <button class="calendar-trigger" type="button" onclick="toggleContextCalendar(event)" aria-label="打开日期选择">📅</button>
                 <div class="context-calendar" id="context-calendar"></div>
             </div>
-            <button class="snap-today-btn" onclick="snapBackToRealTime()">🧭 ↩ 回到今日</button>
+            <button class="snap-today-btn" id="snap-today-btn" onclick="snapBackToRealTime()" aria-label="回到今日" title="回到今日">今</button>
             <button class="plan-entry-btn" id="plan-entry-btn" onclick="openPlanningOverlay()">安排任务</button>
             <button class="gear-toggle-btn" onclick="toggleToolsDrawer(true)">⚙️</button>
         </div>
@@ -818,10 +824,12 @@
                         <span>今日安排</span>
                         <span class="rate-header-badge" id="live-rate-day-badge">完成率 0%</span>
                     </div>
-                    <button class="rest-toggle-btn" id="btn-rest-day" onclick="toggleRestModeDay()">🛌 今天休息</button>
+                    <div class="day-header-actions">
+                        <button class="day-header-add" onclick="addNewTask('day')" aria-label="添加任务" title="添加任务">＋</button>
+                        <button class="rest-toggle-btn" id="btn-rest-day" onclick="toggleRestModeDay()">🛌 今天休息</button>
+                    </div>
                 </div>
                 <div class="panel-body" id="panel-day-list-body">
-                    <button class="add-task-btn" onclick="addNewTask('day')">＋ 添加任务</button>
                     <ul class="task-group" id="day-task-list"></ul>
                     <div class="day-inbox-reminder" id="day-inbox-reminder"></div>
                     
@@ -1441,7 +1449,15 @@
         const planBtn = document.getElementById('plan-entry-btn');
         if (planBtn) {
             planBtn.style.display = view === 'day' ? '' : 'none';
-            planBtn.innerText = '安排任务';
+            planBtn.innerText = window.matchMedia('(max-width:640px)').matches ? '安排' : '安排任务';
+        }
+        const snapBtn=document.getElementById('snap-today-btn');
+        if(snapBtn){
+            const compact=window.matchMedia('(max-width:640px)').matches;
+            snapBtn.textContent=compact?'今':'回到今日';
+            const selected=currentPeriodDate(),now=new Date();
+            const isToday=view==='day'&&selected.getFullYear()===now.getFullYear()&&selected.getMonth()===now.getMonth()&&selected.getDate()===now.getDate();
+            snapBtn.style.display=isToday?'none':'';
         }
         const fab = document.getElementById('review-fab');
         if (fab) {
@@ -1526,18 +1542,19 @@
         const endField = document.getElementById('range-date-end');
         if (startField && startField.value.slice(0,4) !== String(masterDB.selectedYear)) startField.value = `${masterDB.selectedYear}-${String(masterDB.selectedMonth).padStart(2,'0')}-01`;
         if (endField && endField.value.slice(0,4) !== String(masterDB.selectedYear)) endField.value = `${masterDB.selectedYear}-${String(masterDB.selectedMonth).padStart(2,'0')}-28`;
-        if (view === 'reviews') label.innerText = `${masterDB.selectedYear}年复盘记录`;
-        else if (view === 'year') label.innerText = `${masterDB.selectedYear}年度`;
-        else if (view === 'month') label.innerText = `${masterDB.selectedYear}年${masterDB.selectedMonth}月`;
+        const compact=window.matchMedia('(max-width:640px)').matches;
+        if (view === 'reviews') label.innerText = compact?`${masterDB.selectedYear} 复盘`:`${masterDB.selectedYear}年复盘记录`;
+        else if (view === 'year') label.innerText = compact?`${masterDB.selectedYear}`:`${masterDB.selectedYear}年度`;
+        else if (view === 'month') label.innerText = compact?`${masterDB.selectedYear}.${masterDB.selectedMonth}`:`${masterDB.selectedYear}年${masterDB.selectedMonth}月`;
         else if (view === 'week') {
             const start = currentPeriodDate();
             start.setDate(start.getDate() - (['周一','周二','周三','周四','周五','周六','周日'].indexOf(masterDB.currentDay)));
             const end = new Date(start); end.setDate(start.getDate() + 6);
-            label.innerText = `${masterDB.currentWeek} · ${start.getMonth()+1}月${start.getDate()}日—${end.getMonth()+1}月${end.getDate()}日`;
+            label.innerText = compact?`${start.getMonth()+1}.${start.getDate()} ~ ${end.getMonth()+1}.${end.getDate()}`:`${masterDB.currentWeek} · ${start.getMonth()+1}月${start.getDate()}日—${end.getMonth()+1}月${end.getDate()}日`;
         } else {
             const date = currentPeriodDate();
             const names = ['周日','周一','周二','周三','周四','周五','周六'];
-            label.innerText = `${date.getMonth()+1}月${date.getDate()}日 ${names[date.getDay()]}`;
+            label.innerText = compact?`${date.getMonth()+1}.${date.getDate()} ${names[date.getDay()]}`:`${date.getMonth()+1}月${date.getDate()}日 ${names[date.getDay()]}`;
         }
     }
 
@@ -3807,7 +3824,7 @@
                 ul.appendChild(section);unscheduledGrid=section.querySelector('.day-unscheduled-grid');
             }
             if(listIsDay&&task.startTime&&!timeline){
-                const section=document.createElement('li');section.innerHTML='<div class="day-task-section-label">时间线</div><div class="day-timeline"></div>';
+                const section=document.createElement('li');section.innerHTML='<div class="day-timeline"></div>';
                 ul.appendChild(section);timeline=section.querySelector('.day-timeline');
             }
             const li = document.createElement("li");
@@ -3824,9 +3841,9 @@
                 : '';
             const sourceHtml = task.sourceReview ? '<span class="task-source-tag">昨晚承诺</span>' : '';
             const timeHtml = isDayList ? `<span class="task-time-fields"><input type="time" value="${escapeAttr(task.startTime || '')}" aria-label="开始时间" onchange="updateTaskTime(${index},'startTime',this.value)"><span class="task-time-separator">—</span><input type="time" value="${escapeAttr(task.endTime || '')}" aria-label="结束时间" onchange="updateTaskTime(${index},'endTime',this.value)"></span>` : '';
-            const timeDisplayHtml = isDayList ? `<span class="task-time-display ${task.startTime?'':'unscheduled'}">${task.startTime?escapeHtml(task.startTime)+(task.endTime?'–'+escapeHtml(task.endTime):''):'未定时间'}</span>` : '';
-            const mobileFooterHtml = isDayList ? `<div class="mobile-task-footer">
-                <button class="mobile-time-touch" type="button" onclick="openMobileTimeEditor(event,${index})" aria-label="设置时间"><span class="mobile-time-pill ${task.startTime?'':'unscheduled'}">${task.startTime?escapeHtml(task.startTime)+(task.endTime?' — '+escapeHtml(task.endTime):''):'＋ 时间'}</span></button>
+            const timeDisplayHtml = '';
+            const mobileFooterHtml = isDayList ? `<div class="mobile-task-footer ${task.startTime?'scheduled':''}">
+                ${task.startTime?'<span></span>':`<button class="mobile-time-touch" type="button" onclick="openMobileTimeEditor(event,${index})" aria-label="设置时间"><span class="mobile-time-pill unscheduled">＋ 时间</span></button>`}
                 <button class="mobile-sticky-button ${task.sticky?'active':''}" type="button" onclick="toggleSticky('${elementId}',${index},event)" aria-label="${task.sticky?'取消常驻':'设为常驻'}"></button>
                 <button class="mobile-delete-button" type="button" onclick="deleteTask('${elementId}',${index})" aria-label="删除任务">×</button>
             </div>` : '';
@@ -3909,15 +3926,11 @@
                 unscheduledGrid.appendChild(li);unscheduledCount++;
             } else if(listIsDay){
                 const parts=String(task.startTime||'00:00').split(':').map(Number), minutes=(parts[0]||0)*60+(parts[1]||0);
-                const groupKey=String(Math.floor(minutes/60));
-                let cards=timelineGroups[groupKey];
-                if(!cards){
-                    const slot=document.createElement('div');
-                    const gap=lastTimelineMinutes==null?'':minutes-lastTimelineMinutes<=60?'gap-small':minutes-lastTimelineMinutes<=180?'gap-medium':'gap-large';
-                    slot.className=`day-timeline-slot ${gap}`;
-                    slot.innerHTML=`<div class="day-timeline-time">${escapeHtml(task.startTime)}</div><div class="day-timeline-rail"></div><div class="day-timeline-cards"></div>`;
-                    timeline.appendChild(slot);cards=slot.querySelector('.day-timeline-cards');timelineGroups[groupKey]=cards;lastTimelineMinutes=minutes;
-                }
+                const slot=document.createElement('div');
+                const gap=lastTimelineMinutes==null?'':minutes-lastTimelineMinutes<=60?'gap-small':minutes-lastTimelineMinutes<=180?'gap-medium':'gap-large';
+                slot.className=`day-timeline-slot ${gap}`;
+                slot.innerHTML=`<button class="day-timeline-time" type="button" onclick="openMobileTimeEditor(event,${index})" aria-label="修改时间 ${escapeAttr(task.startTime)} 至 ${escapeAttr(task.endTime||'未填写')}"><span class="day-time-mini-card"><span>${escapeHtml(task.startTime)}</span><span class="time-wave">~</span><span>${escapeHtml(task.endTime||'--:--')}</span></span></button><div class="day-timeline-rail"></div><div class="day-timeline-cards"></div>`;
+                timeline.appendChild(slot);const cards=slot.querySelector('.day-timeline-cards');lastTimelineMinutes=minutes;
                 cards.appendChild(li);
             } else ul.appendChild(li);
         });
