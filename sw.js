@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fupan-task-v13';
+const CACHE_NAME = 'fupan-task-v14';
 const APP_SHELL = [
   './',
   './index.html',

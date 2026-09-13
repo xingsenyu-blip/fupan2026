@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>复盘任务 · PWA版 V13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>复盘任务 · PWA版 V14</title>
 <meta name="theme-color" content="#1769e8">
 <meta name="application-name" content="复盘任务">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -367,7 +367,7 @@
     .inbox-kind-badge { display:inline-flex; align-items:center; margin-bottom:6px; padding:2px 7px; border-radius:999px; background:#f1f5f9; color:#64748b; font-size:7.5pt; font-weight:850; }
     .inbox-kind-badge.image { background:#eff6ff; color:#2563eb; }
     .inbox-kind-badge.file { background:#f5f3ff; color:#7c3aed; }
-    .mobile-bottom-nav, .mobile-more-overlay, .mobile-task-actions { display:none; }
+    .mobile-bottom-nav, .mobile-more-overlay, .mobile-task-actions, .mobile-task-footer, .mobile-time-overlay { display:none; }
     .inbox-item-text { font-size:9pt; white-space:pre-wrap; word-break:break-word; }
     .inbox-actions { display:flex; justify-content:flex-end; gap:6px; margin-top:7px; }
 
@@ -602,9 +602,12 @@
     }
 
     @media (max-width: 640px) {
-        html { -webkit-text-size-adjust:100%; }
-        body { padding:env(safe-area-inset-top) 10px calc(82px + env(safe-area-inset-bottom)); }
-        .app-header { position:sticky; top:env(safe-area-inset-top); margin:0 -10px 10px; padding:6px 10px 10px; }
+        html { height:100%; overflow:hidden; -webkit-text-size-adjust:100%; }
+        body { height:var(--app-height,100dvh); overflow:hidden; padding:env(safe-area-inset-top) 10px 0; }
+        .dashboard-container { height:100%; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+        .app-header { position:relative; top:auto; z-index:800; flex:0 0 auto; margin:0 -10px 8px; padding:6px 10px 8px; }
+        .rollover-alert-bar { flex:0 0 auto; max-height:116px; overflow:auto; }
+        .drag-section:not(.primary-view-hidden) { flex:1 1 auto; min-height:0; overflow-x:hidden; overflow-y:auto; padding-bottom:calc(78px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
         .header-left { display:none; }
         .primary-nav { display:none; }
         .primary-nav-btn { padding:0 10px; font-size:9.5pt; }
@@ -625,7 +628,7 @@
         .snap-today-btn { grid-column:1 / 3; width:100%; height:44px; }
         .plan-entry-btn { grid-column:3 / 5; width:100%; height:44px; padding:0 10px; }
         .gear-toggle-btn { display:none; }
-        .tab-navigator { overflow-x:auto; justify-content:flex-start; scroll-snap-type:x proximity; scrollbar-width:none; }
+        .tab-navigator { position:sticky; top:0; z-index:20; overflow-x:auto; justify-content:flex-start; scroll-snap-type:x proximity; scrollbar-width:none; }
         .tab-navigator::-webkit-scrollbar { display:none; }
         .tab-cell { flex:0 0 92px; scroll-snap-align:center; padding:9px 5px; }
         #section-day .card-grid > #panel-day-list-outer { min-height:0; }
@@ -636,19 +639,35 @@
         .task-main-line { min-height:48px; padding:7px 8px; flex-wrap:wrap; }
         .task-main-line::before { margin-right:7px; }
         .todo-checkbox { width:24px; height:24px; margin-right:7px; }
-        .todo-text { min-width:calc(100% - 92px); flex:1; font-size:16px; line-height:1.45; }
+        .todo-text { min-width:calc(100% - 92px); flex:1; font-size:15px; line-height:1.4; overflow-wrap:anywhere; }
+        #day-task-list .task-row { overflow:hidden; }
+        #day-task-list .task-main-line { display:grid; grid-template-columns:18px 26px minmax(0,1fr); align-items:start; gap:7px; min-height:38px; padding:8px 8px 2px; }
+        #day-task-list .task-main-line::before { display:none; }
+        #day-task-list .task-drag-handle { margin:1px 0 0; padding:0; }
+        #day-task-list .todo-checkbox { width:22px; height:22px; margin:0; }
+        #day-task-list .todo-text { min-width:0; width:100%; padding:0 2px; font-size:15px; line-height:1.38; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+        #day-task-list .todo-text:focus { display:block; -webkit-line-clamp:unset; overflow:visible; }
+        #day-task-list .task-time-display, #day-task-list .controls-wrapper, #day-task-list .mobile-task-actions { display:none !important; }
+        .mobile-task-footer { grid-column:1 / -1; width:100%; min-height:34px; padding:1px 7px 5px 48px; grid-template-columns:minmax(0,1fr) 40px 40px; align-items:center; gap:3px; }
+        #day-task-list .mobile-task-footer { display:grid; }
+        .mobile-time-touch { justify-self:start; min-width:40px; min-height:36px; padding:6px 0; border:0; background:transparent; text-align:left; }
+        .mobile-time-pill { display:inline-flex; align-items:center; min-height:22px; max-width:150px; padding:2px 7px; border:1px solid #bfdbfe; border-radius:999px; background:#eff6ff; color:#2563eb; font-size:11px; font-weight:800; line-height:1; white-space:nowrap; font-variant-numeric:tabular-nums; }
+        .mobile-time-pill.unscheduled { border-style:dashed; border-color:#cbd5e1; background:#f8fafc; color:#8492a6; font-weight:700; }
+        .mobile-sticky-button, .mobile-delete-button { width:40px; height:36px; display:grid; place-items:center; border:0; border-radius:8px; background:transparent; }
+        .mobile-sticky-button::before { content:""; width:13px; height:13px; border:2px solid #94a3b8; border-radius:50%; background:#fff; }
+        .mobile-sticky-button.active::before { border-color:#10b981; background:#10b981; box-shadow:0 0 0 3px #d1fae5; }
+        .mobile-delete-button { color:#94a3b8; font-size:21px; font-weight:400; }
         .mobile-task-actions { display:inline-flex; width:44px; height:44px; align-items:center; justify-content:center; flex:0 0 44px; border:0; border-radius:8px; background:#f1f5f9; color:#64748b; font-size:15pt; }
         .controls-wrapper { display:none; width:100%; flex-wrap:wrap; justify-content:flex-start; gap:8px; margin:8px 0 0 44px; padding-top:8px; border-top:1px dashed #e2e8f0; opacity:1; }
         .task-row.mobile-actions-open .controls-wrapper { display:flex; }
         .controls-wrapper button, .controls-wrapper .main-task-del-x, .controls-wrapper .sticky-knob { min-width:44px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; }
         .subtask-panel-bubble { margin:0 8px 10px; }
-        .task-time-fields { margin-right:auto; }
         .task-time-fields { width:100%; margin:0; }
         .task-time-fields input { flex:1; width:auto; min-width:0; min-height:44px; font-size:16px; }
         .task-time-display { flex:0 0 100%; margin:0 0 2px 44px; }
         .day-unscheduled-grid { grid-template-columns:1fr; }
         .day-unscheduled-grid:not(.expanded) .task-row:nth-child(n+4) { display:none; }
-        .day-timeline { max-height:55dvh; padding-right:2px; }
+        .day-timeline { max-height:none; overflow:visible; padding-right:2px; }
         .day-timeline-slot { grid-template-columns:46px 12px minmax(0,1fr); column-gap:6px; }
         .day-timeline-cards { grid-template-columns:1fr; }
         .main-task-dropdown-select, .magic-wand-btn { max-width:none; min-height:44px; }
@@ -663,9 +682,15 @@
         .plan-mini-btn { min-height:40px; }
         .plan-footer { position:sticky; bottom:0; padding:10px 12px calc(10px + env(safe-area-inset-bottom)); background:#fff; }
         .plan-footer-note { display:none; }
-        .review-drawer, .inbox-drawer, .drawer-content { width:100vw; max-width:none; }
-        .review-drawer-body { padding:12px; }
-        .review-note-card textarea { min-height:calc(100dvh - 210px); }
+        .review-drawer-overlay { height:var(--app-height,100dvh); overflow:hidden; }
+        .review-drawer, .inbox-drawer, .drawer-content { width:100vw; max-width:none; height:100%; overflow:hidden; }
+        .review-drawer-head { flex:0 0 auto; padding:12px 14px; }
+        .review-drawer-body { flex:1 1 auto; min-height:0; padding:12px; overflow:auto; }
+        #review-drawer-body { overflow:hidden; }
+        .review-note-card { height:100%; min-height:0; display:flex; flex-direction:column; }
+        .review-note-card textarea { flex:1 1 auto; min-height:0; resize:none; }
+        .review-sentence-actions { flex:0 0 auto; max-height:112px; overflow:auto; }
+        .review-save-line { flex:0 0 auto; position:sticky; bottom:0; padding-top:8px; background:#fff; }
         .review-fab { right:14px; bottom:calc(76px + env(safe-area-inset-bottom)); min-height:44px; }
         .inbox-compose { flex-direction:column; }
         .inbox-compose-actions { flex-direction:column; }
@@ -683,6 +708,19 @@
         .mobile-more-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:11pt; font-weight:850; }
         .mobile-more-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
         .mobile-more-grid button { min-height:58px; border:1px solid #dfe6ef; border-radius:10px; background:#f8fafc; color:#334155; font-size:9pt; font-weight:800; }
+        .mobile-time-overlay { position:fixed; z-index:1750; inset:0; height:var(--app-height,100dvh); background:rgba(15,23,42,.34); align-items:flex-end; }
+        .mobile-time-overlay.open { display:flex; }
+        .mobile-time-sheet { width:100%; padding:14px 16px calc(16px + env(safe-area-inset-bottom)); border-radius:16px 16px 0 0; background:#fff; box-shadow:0 -14px 40px rgba(15,23,42,.18); }
+        .mobile-time-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+        .mobile-time-title { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:15px; font-weight:850; }
+        .mobile-time-entry { display:grid; grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr); align-items:center; gap:7px; }
+        .mobile-time-entry input { width:100%; min-width:0; height:46px; padding:8px 10px; border:1px solid #cbd5e1; border-radius:9px; background:#f8fafc; color:#1e293b; text-align:center; font-size:18px; font-weight:750; font-variant-numeric:tabular-nums; outline:none; }
+        .mobile-time-entry input.invalid { border-color:#ef4444; background:#fff1f2; color:#b91c1c; }
+        .mobile-time-dash { text-align:center; color:#64748b; font-size:18px; }
+        .mobile-time-preview { min-height:24px; padding:8px 2px 2px; color:#2563eb; font-size:12px; font-weight:750; }
+        .mobile-time-preview.error { color:#dc2626; }
+        .mobile-time-actions { display:grid; grid-template-columns:1fr 1fr 1.25fr; gap:8px; margin-top:10px; }
+        .mobile-time-actions button { min-height:44px; }
         #focal-chart-week, #focal-chart-month, #focal-chart-year { width:100% !important; min-height:220px; }
         #panel-week-review-body .focal-impact-box > div,
         #panel-month-review-body .focal-impact-box > div { flex-direction:column; }
@@ -1006,6 +1044,26 @@
     </div>
 </div>
 
+<div class="mobile-time-overlay" id="mobile-time-overlay" onclick="if(event.target===this) closeMobileTimeEditor()">
+    <div class="mobile-time-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-time-title">
+        <div class="mobile-time-head">
+            <div class="mobile-time-title" id="mobile-time-title">设置任务时间</div>
+            <button class="focus-close" type="button" onclick="closeMobileTimeEditor()" aria-label="关闭">×</button>
+        </div>
+        <div class="mobile-time-entry">
+            <input id="mobile-time-start" type="text" inputmode="decimal" autocomplete="off" placeholder="9.35" aria-label="开始时间" oninput="updateMobileTimePreview()" onblur="normalizeMobileTimeField(this)" onkeydown="if(event.key==='Enter') saveMobileTime()">
+            <span class="mobile-time-dash">—</span>
+            <input id="mobile-time-end" type="text" inputmode="decimal" autocomplete="off" placeholder="11.20" aria-label="结束时间" oninput="updateMobileTimePreview()" onblur="normalizeMobileTimeField(this)" onkeydown="if(event.key==='Enter') saveMobileTime()">
+        </div>
+        <div class="mobile-time-preview" id="mobile-time-preview">可只填写开始时间，例如 9.35</div>
+        <div class="mobile-time-actions">
+            <button class="secondary-btn" type="button" onclick="clearMobileTime()">清除时间</button>
+            <button class="secondary-btn" type="button" onclick="closeMobileTimeEditor()">取消</button>
+            <button class="primary-btn" id="mobile-time-save" type="button" onclick="saveMobileTime()">确定</button>
+        </div>
+    </div>
+</div>
+
 <div class="focus-overlay" id="planning-overlay" onclick="if(event.target===this) closePlanningOverlay()">
     <div class="focus-dialog" role="dialog" aria-modal="true" aria-labelledby="planning-title">
         <div class="focus-dialog-header">
@@ -1279,6 +1337,94 @@
         document.querySelectorAll('.task-row.mobile-actions-open').forEach(item=>item.classList.remove('mobile-actions-open'));
         row.classList.toggle('mobile-actions-open', opening);
         button.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    }
+
+    let mobileTimeTaskIndex=null;
+
+    function canonicalToQuickTime(value) {
+        if(!value) return '';
+        const parts=String(value).split(':');
+        if(parts.length!==2) return String(value);
+        return `${Number(parts[0])}.${parts[1]}`;
+    }
+
+    function parseQuickTime(rawValue) {
+        const raw=String(rawValue||'').trim().replace(/[。．：，,]/g,'.').replace(/\s+/g,'');
+        if(!raw) return {empty:true,value:'',minutes:null};
+        let hour,minute;
+        if(/^\d{1,2}$/.test(raw)) {
+            hour=Number(raw);minute=0;
+        } else {
+            const match=raw.match(/^(\d{1,2})\.(\d{2})$/);
+            if(!match) return {error:'请写成 9.35；分钟必须是两位数字'};
+            hour=Number(match[1]);minute=Number(match[2]);
+        }
+        if(hour<0||hour>23) return {error:'小时必须在 0—23 之间'};
+        if(minute<0||minute>59) return {error:'分钟必须在 00—59 之间'};
+        const value=`${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`;
+        return {value,minutes:hour*60+minute,empty:false};
+    }
+
+    function openMobileTimeEditor(event,index) {
+        if(event) event.stopPropagation();
+        const tasks=getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks;
+        const task=tasks[index];if(!task)return;
+        mobileTimeTaskIndex=index;
+        const start=document.getElementById('mobile-time-start'),end=document.getElementById('mobile-time-end');
+        start.value=canonicalToQuickTime(task.startTime);end.value=canonicalToQuickTime(task.endTime);
+        start.classList.remove('invalid');end.classList.remove('invalid');
+        document.getElementById('mobile-time-title').textContent=task.text||'设置任务时间';
+        document.getElementById('mobile-time-overlay').classList.add('open');
+        updateMobileTimePreview();
+        setTimeout(()=>start.focus(),80);
+    }
+
+    function closeMobileTimeEditor() {
+        document.getElementById('mobile-time-overlay')?.classList.remove('open');
+        mobileTimeTaskIndex=null;
+    }
+
+    function getMobileTimeEntry() {
+        const startInput=document.getElementById('mobile-time-start'),endInput=document.getElementById('mobile-time-end');
+        const start=parseQuickTime(startInput.value),end=parseQuickTime(endInput.value);
+        startInput.classList.toggle('invalid',Boolean(start.error));
+        endInput.classList.toggle('invalid',Boolean(end.error));
+        if(start.error) return {error:start.error,start,end};
+        if(end.error) return {error:end.error,start,end};
+        if(start.empty&&!end.empty) return {error:'请先填写开始时间',start,end};
+        if(!start.empty&&!end.empty&&end.minutes<=start.minutes) return {error:'结束时间必须晚于开始时间',start,end};
+        return {start,end};
+    }
+
+    function updateMobileTimePreview() {
+        const result=getMobileTimeEntry(),preview=document.getElementById('mobile-time-preview'),save=document.getElementById('mobile-time-save');
+        if(result.error) {
+            preview.textContent=result.error;preview.classList.add('error');save.disabled=true;return;
+        }
+        preview.classList.remove('error');save.disabled=false;
+        if(result.start.empty&&result.end.empty) preview.textContent='未设置时间；点击确定保持未定时间';
+        else preview.textContent=`将显示为 ${result.start.value}${result.end.empty?'':` — ${result.end.value}`}`;
+    }
+
+    function normalizeMobileTimeField(input) {
+        const result=parseQuickTime(input.value);
+        if(!result.error&&!result.empty) input.value=result.value;
+        updateMobileTimePreview();
+    }
+
+    function clearMobileTime() {
+        const start=document.getElementById('mobile-time-start'),end=document.getElementById('mobile-time-end');
+        start.value='';end.value='';start.classList.remove('invalid');end.classList.remove('invalid');updateMobileTimePreview();
+    }
+
+    function saveMobileTime() {
+        if(mobileTimeTaskIndex===null)return;
+        const result=getMobileTimeEntry();if(result.error){updateMobileTimePreview();return;}
+        const tasks=getMonthScope().weeks[masterDB.currentWeek].days[masterDB.currentDay].tasks;
+        const task=tasks[mobileTimeTaskIndex];if(!task)return;
+        task.startTime=result.start.empty?'':result.start.value;
+        task.endTime=result.end.empty?'':result.end.value;
+        commit();closeMobileTimeEditor();renderAllPage();
     }
 
     function applyPrimaryView() {
@@ -3681,6 +3827,12 @@
             const sourceHtml = task.sourceReview ? '<span class="task-source-tag">昨晚承诺</span>' : '';
             const timeHtml = isDayList ? `<span class="task-time-fields"><input type="time" value="${escapeAttr(task.startTime || '')}" aria-label="开始时间" onchange="updateTaskTime(${index},'startTime',this.value)"><span class="task-time-separator">—</span><input type="time" value="${escapeAttr(task.endTime || '')}" aria-label="结束时间" onchange="updateTaskTime(${index},'endTime',this.value)"></span>` : '';
             const timeDisplayHtml = isDayList ? `<span class="task-time-display ${task.startTime?'':'unscheduled'}">${task.startTime?escapeHtml(task.startTime)+(task.endTime?'–'+escapeHtml(task.endTime):''):'未定时间'}</span>` : '';
+            const mobileFooterHtml = isDayList ? `<div class="mobile-task-footer">
+                <button class="mobile-time-touch" type="button" onclick="openMobileTimeEditor(event,${index})" aria-label="设置时间"><span class="mobile-time-pill ${task.startTime?'':'unscheduled'}">${task.startTime?escapeHtml(task.startTime)+(task.endTime?' — '+escapeHtml(task.endTime):''):'＋ 时间'}</span></button>
+                <button class="mobile-sticky-button ${task.sticky?'active':''}" type="button" onclick="toggleSticky('${elementId}',${index},event)" aria-label="${task.sticky?'取消常驻':'设为常驻'}"></button>
+                <button class="mobile-delete-button" type="button" onclick="deleteTask('${elementId}',${index})" aria-label="删除任务">×</button>
+            </div>` : '';
+            const mobileActionsHtml = isDayList ? '' : `<button class="mobile-task-actions" type="button" aria-label="展开任务操作" aria-expanded="false" onclick="toggleMobileTaskActions(event,this)">•••</button>`;
 
             // 🌟 核心注入：常驻旋钮 UI
             let stickyHtml = `<div class="sticky-knob ${task.sticky ? 'active' : ''}" onclick="toggleSticky('${elementId}', ${index}, event)" title="设为常驻，明日自动继承"></div>`;
@@ -3691,7 +3843,7 @@
                     ${timeDisplayHtml}
                     <div class="todo-checkbox" onclick="toggleTaskCheck('${elementId}', ${index})"></div>
                     <div class="todo-text" contenteditable="true" onblur="updateTaskText('${elementId}', ${index}, this)">${task.text}</div>
-                    <button class="mobile-task-actions" type="button" aria-label="展开任务操作" aria-expanded="false" onclick="toggleMobileTaskActions(event,this)">•••</button>
+                    ${mobileActionsHtml}
                     <div class="controls-wrapper">
                         ${timeHtml}
                         ${sourceHtml}
@@ -3701,6 +3853,7 @@
                         <span class="main-task-del-x" onclick="deleteTask('${elementId}', ${index})">×</span>
                     </div>
                 </div>
+                ${mobileFooterHtml}
             `;
             
             li.addEventListener('dragstart', (e) => {
@@ -4030,6 +4183,14 @@
             }
         });
     });
+
+    function syncMobileAppHeight() {
+        const height=window.visualViewport?.height||window.innerHeight;
+        document.documentElement.style.setProperty('--app-height',`${height}px`);
+    }
+    syncMobileAppHeight();
+    window.addEventListener('resize',syncMobileAppHeight);
+    if(window.visualViewport) window.visualViewport.addEventListener('resize',syncMobileAppHeight);
 
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
