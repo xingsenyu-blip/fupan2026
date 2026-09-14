@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>复盘任务手机版 · PWA版 V18</title>
+<title>复盘任务手机版 · PWA版 V19</title>
 <meta name="theme-color" content="#1769e8">
 <meta name="application-name" content="复盘任务手机版">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -88,6 +88,33 @@
     .planner-split-editor.open { display:block; }
     .planner-split-row { display:flex; gap:6px; align-items:center; margin-top:6px; }
     .planner-split-row input { flex:1; min-width:0; border:1px solid #dbe3ef; border-radius:7px; padding:7px 8px; }
+    .planner-source-actions { display:flex; align-items:center; gap:5px; flex:0 0 auto; }
+    .planner-task-delete { width:28px; height:28px; padding:0; border:0; border-radius:6px; background:transparent; color:#94a3b8; font-size:18px; cursor:pointer; }
+    .planner-task-delete:hover { background:#fff1f2; color:#dc2626; }
+    .planner-source-status { margin-top:5px; color:#71809c; font-size:8pt; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .planner-source-group.schedule-ready { cursor:pointer; }
+    .planner-source-group.schedule-ready:hover { border-color:#bfdbfe; background:#f8fbff; }
+    .planner-split-save { width:100%; margin-top:8px; }
+    .dispatch-board { display:flex; flex-direction:column; gap:6px; }
+    .dispatch-target.planner-lane { min-height:42px; display:grid; grid-template-columns:58px minmax(0,1fr); gap:7px; align-items:start; padding:6px; border-style:solid; cursor:default; }
+    .planner-lane .dispatch-target-title { display:flex; min-height:30px; align-items:center; justify-content:center; margin:0; border-radius:6px; background:#eef3fa; color:#4f5f7c; font-size:8.5pt; }
+    .planner-lane-items { min-width:0; display:flex; flex-direction:column; gap:4px; }
+    .planner-lane .dispatch-card { min-height:30px; margin:0; padding:5px 28px 5px 8px; border-left-width:3px; font-size:8.5pt; line-height:1.25; }
+    .planner-lane .dispatch-card > span { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+    .planner-schedule-overlay { display:none; position:fixed; inset:0; z-index:1850; background:rgba(15,23,42,.34); justify-content:flex-end; }
+    .planner-schedule-overlay.open { display:flex; }
+    .planner-schedule-sheet { width:360px; height:100%; padding:18px; background:#fff; box-shadow:-12px 0 40px rgba(15,23,42,.18); display:flex; flex-direction:column; }
+    .planner-schedule-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .planner-schedule-title { font-size:12pt; font-weight:900; color:#172344; }
+    .planner-schedule-close { width:32px; height:32px; border:0; border-radius:7px; background:#f1f5f9; color:#64748b; font-size:18px; }
+    .planner-schedule-task { margin:8px 0 12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#52617d; font-size:9pt; }
+    .planner-schedule-days { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; }
+    .planner-day-choice { position:relative; min-width:0; height:36px; padding:0; border:1px solid #dbe3ef; border-radius:7px; background:#fff; color:#5b6880; font-size:9pt; font-weight:800; cursor:pointer; }
+    .planner-day-choice.selected { border-color:#1769e8; background:#1769e8; color:#fff; }
+    .planner-day-choice.selected::after { content:"✓"; position:absolute; top:1px; right:3px; font-size:7px; }
+    .planner-schedule-selected { min-height:30px; padding:8px 1px 4px; color:#71809c; font-size:8pt; }
+    .planner-schedule-actions { display:flex; gap:7px; margin-top:auto; }
+    .planner-schedule-actions button { flex:1; min-height:38px; }
     .day-inbox-reminder { display:none; margin-top:10px; padding:9px 10px; border:1px solid #dbe3ef; border-radius:9px; background:#f8fafc; }
     .day-inbox-reminder.visible { display:block; }
     .day-inbox-head { display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:8.5pt; font-weight:800; color:#475569; }
@@ -689,8 +716,22 @@
         .planner-period-bar { padding:9px 12px 0; }
         .plan-workspace { display:flex; flex-direction:column; padding:10px 12px; overflow:auto; }
         .plan-pane { flex:0 0 auto; max-height:none; overflow:visible; }
-        .dispatch-target { min-height:56px; }
+        .dispatch-target { min-height:44px; }
         .plan-mini-btn { min-height:40px; }
+        .planner-source-actions .plan-mini-btn { min-height:28px; padding:3px 7px; }
+        .planner-task-delete { min-width:28px; min-height:28px; }
+        .planner-split-editor { padding:9px; }
+        .planner-split-row { align-items:center; margin-top:7px; }
+        .planner-split-row input { min-height:40px; }
+        .planner-split-save { min-height:40px; }
+        .dispatch-target.planner-lane { grid-template-columns:48px minmax(0,1fr); min-height:40px; padding:5px; }
+        .planner-lane .dispatch-target-title { min-height:30px; font-size:11px; }
+        .planner-lane .dispatch-card { min-height:30px; padding-top:5px; padding-bottom:5px; }
+        .planner-schedule-overlay { align-items:flex-end; }
+        .planner-schedule-sheet { width:100%; height:auto; min-height:178px; padding:12px 14px calc(12px + env(safe-area-inset-bottom)); border-radius:15px 15px 0 0; box-shadow:0 -14px 40px rgba(15,23,42,.18); }
+        .planner-schedule-task { margin:5px 0 9px; }
+        .planner-day-choice { height:34px; font-size:12px; }
+        body.planner-schedule-open .mobile-bottom-nav { transform:translateY(calc(100% + env(safe-area-inset-bottom))); opacity:0; pointer-events:none; }
         .plan-footer { position:sticky; bottom:0; padding:10px 12px calc(10px + env(safe-area-inset-bottom)); background:#fff; }
         .plan-footer-note { display:none; }
         .review-drawer-overlay { height:100dvh; overflow:hidden; }
@@ -1137,6 +1178,22 @@
     </div>
 </div>
 
+<div class="planner-schedule-overlay" id="planner-schedule-overlay" onclick="if(event.target===this) closePlannerSchedule()">
+    <aside class="planner-schedule-sheet" role="dialog" aria-modal="true" aria-labelledby="planner-schedule-title">
+        <div class="planner-schedule-head">
+            <div class="planner-schedule-title" id="planner-schedule-title">安排到本周</div>
+            <button class="planner-schedule-close" type="button" onclick="closePlannerSchedule()" aria-label="关闭">×</button>
+        </div>
+        <div class="planner-schedule-task" id="planner-schedule-task"></div>
+        <div class="planner-schedule-days" id="planner-schedule-days"></div>
+        <div class="planner-schedule-selected" id="planner-schedule-selected">未选择日期，将保留在待安排</div>
+        <div class="planner-schedule-actions">
+            <button class="secondary-btn" type="button" onclick="clearPlannerSchedule()">取消安排</button>
+            <button class="primary-btn" type="button" onclick="savePlannerSchedule()">完成</button>
+        </div>
+    </aside>
+</div>
+
 <div class="review-drawer-overlay" id="review-drawer-overlay" onclick="if(event.target===this) closeReviewDrawer()">
     <aside class="review-drawer">
         <div class="review-drawer-head">
@@ -1291,6 +1348,8 @@
     let calendarCursorYear = Number(masterDB.selectedYear || 2026);
     let calendarCursorMonth = Number(masterDB.selectedMonth || 1) - 1;
     let selectedDispatchItem = null;
+    let plannerScheduleItem = null;
+    let plannerScheduleSelection = new Set();
 
     function finalizeActiveDraft() {
         let removed = false;
@@ -1756,7 +1815,19 @@
     }
 
     function dispatchItemKey(item) { return `${item.kind}:${item.mainIndex}:${item.subIndex==null?'main':item.subIndex}`; }
-    function getDispatchTarget(task,item) { return item.kind==='main' ? Object.keys(task.mainDispatches||{})[0]||'' : Object.keys((task.dispatches||{})[item.subIndex]||{})[0]||''; }
+    function getDispatchTargets(task,item) { return item.kind==='main' ? Object.keys(task.mainDispatches||{}) : Object.keys((task.dispatches||{})[item.subIndex]||{}); }
+    function getDispatchTarget(task,item) { return getDispatchTargets(task,item)[0]||''; }
+    function plannerColorForId(id) {
+        const colors=['#3b82f6','#10b981','#8b5cf6','#f59e0b','#ec4899','#0891b2'];
+        let hash=0;for(const char of String(id||''))hash=(hash*31+char.charCodeAt(0))>>>0;
+        return colors[hash%colors.length];
+    }
+    function plannerItemColor(item) { return plannerColorForId(getPlannerTasks()[item.mainIndex]?.id||dispatchItemKey(item)); }
+    function compactTargetLabel(target) {
+        if(/^周[一二三四五六日]$/.test(target))return target.slice(1);
+        const weekMap={'第一周':'1周','第二周':'2周','第三周':'3周','第四周':'4周','第五周':'5周','第六周':'6周'};
+        return weekMap[target]||target;
+    }
     function assignSelectedDispatch(target) {
         if (!selectedDispatchItem) return;
         const item=selectedDispatchItem, task=getPlannerTasks()[item.mainIndex]; if (!task) return;
@@ -1789,20 +1860,91 @@
         getPlannerTasks().forEach((task,index)=>{
             const children=(task.subtasks||[]).map((text,subIndex)=>({text:String(text||'').trim(),mainIndex:index,subIndex,kind:'sub'})).filter(item=>item.text);
             const base=children.length?children:(String(task.text||'').trim()?[{text:task.text.trim(),mainIndex:index,subIndex:null,kind:'main'}]:[]);
-            base.forEach(item=>{item.target=getDispatchTarget(task,item);output.push(item);});
+            base.forEach(item=>{item.targets=getDispatchTargets(task,item);item.target=item.targets[0]||'';output.push(item);});
         });
         return output;
     }
 
-    function createDispatchCardV5(item,removable) {
+    function createDispatchCardV5(item,removable,target='') {
         const key=dispatchItemKey(item), card=document.createElement('div');
         card.className=(removable?'dispatch-card':'plan-task-card')+(selectedDispatchItem&&dispatchItemKey(selectedDispatchItem)===key?' is-selected':'');
         card.draggable=true;
-        card.innerHTML=removable?`<span>${escapeHtml(item.text)}</span><button class="dispatch-card-remove" type="button" title="退回待安排">×</button>`:`<div class="plan-task-head"><div class="plan-task-name">${escapeHtml(item.text)}</div></div><div style="font-size:7.8pt;color:#94a3b8;margin-top:4px;">待安排</div>`;
-        card.onclick=event=>{if(event.target.closest('.dispatch-card-remove'))return;selectedDispatchItem=item;renderPlanningOverlay();};
+        card.style.borderLeftColor=plannerItemColor(item);
+        const targets=getDispatchTargets(getPlannerTasks()[item.mainIndex],item);
+        const status=targets.length?`已安排：${targets.map(compactTargetLabel).join('、')}`:'待安排';
+        card.innerHTML=removable?`<span>${escapeHtml(item.text)}</span><button class="dispatch-card-remove" type="button" title="从${escapeAttr(target)}移除">×</button>`:`<div class="plan-task-head"><div class="plan-task-name">${escapeHtml(item.text)}</div></div><div style="font-size:7.8pt;color:${targets.length?'#1769e8':'#94a3b8'};margin-top:4px;">${escapeHtml(status)}</div>`;
+        card.onclick=event=>{if(event.target.closest('.dispatch-card-remove'))return;openPlannerSchedule(item,event);};
         card.ondragstart=event=>{selectedDispatchItem=item;event.dataTransfer.setData('text/plain',key);event.dataTransfer.effectAllowed='move';};
-        if(removable)card.querySelector('.dispatch-card-remove').onclick=event=>{event.stopPropagation();selectedDispatchItem=item;assignSelectedDispatch('');};
+        if(removable)card.querySelector('.dispatch-card-remove').onclick=event=>{event.stopPropagation();const next=targets.filter(value=>value!==target);setPlannerItemTargets(item,next);commit();renderPlanningOverlay();};
         return card;
+    }
+
+    function plannerTargetList(target) {
+        const scope=getPlannerMonthScope();
+        return planningLevel==='month'?scope.weeks[target]?.tasks:scope.weeks[plannerWeek]?.days[target]?.tasks;
+    }
+
+    function setPlannerItemTargets(item,targets) {
+        const task=getPlannerTasks()[item.mainIndex];if(!task)return;
+        const cleanTargets=[...new Set((targets||[]).filter(target=>plannerTargets().includes(target)))];
+        const oldMap=item.kind==='main'?(task.mainDispatches||{}):((task.dispatches||{})[item.subIndex]||{});
+        const nextMap={};
+        Object.entries(oldMap).forEach(([target,id])=>{
+            const list=plannerTargetList(target),index=list?.findIndex(entry=>entry.id===id);
+            if(!cleanTargets.includes(target)&&index>=0)list.splice(index,1);
+        });
+        cleanTargets.forEach(target=>{
+            const list=plannerTargetList(target);if(!list)return;
+            let id=oldMap[target],linked=id?list.find(entry=>entry.id===id):null;
+            if(!linked){
+                id=(planningLevel==='month'?'syn_w_':'synced_')+Date.now()+'_'+Math.random();
+                linked={id,text:item.text,completed:false,hasSplit:false,subtasks:[],isSynced:true,sourceTaskId:task.id,linkColor:plannerColorForId(task.id)};
+                list.push(linked);
+            }
+            linked.text=item.text;linked.sourceTaskId=task.id;linked.linkColor=plannerColorForId(task.id);nextMap[target]=id;
+        });
+        if(item.kind==='main'){task.mainDispatches=nextMap;task.isDispatchSource=cleanTargets.length>0;}
+        else {if(!task.dispatches)task.dispatches={};task.dispatches[item.subIndex]=nextMap;}
+    }
+
+    function openPlannerSchedule(item,event) {
+        event?.stopPropagation();
+        plannerScheduleItem={...item};selectedDispatchItem=item;
+        const task=getPlannerTasks()[item.mainIndex];
+        plannerScheduleSelection=new Set(getDispatchTargets(task,item));
+        renderPlannerSchedule();
+        document.getElementById('planner-schedule-overlay').classList.add('open');
+        document.body.classList.add('planner-schedule-open');
+    }
+
+    function renderPlannerSchedule() {
+        if(!plannerScheduleItem)return;
+        document.getElementById('planner-schedule-title').textContent=planningLevel==='month'?'安排到本月':'安排到本周';
+        document.getElementById('planner-schedule-task').textContent=plannerScheduleItem.text;
+        const host=document.getElementById('planner-schedule-days');host.innerHTML='';
+        plannerTargets().forEach(target=>{
+            const button=document.createElement('button');button.type='button';button.className='planner-day-choice'+(plannerScheduleSelection.has(target)?' selected':'');
+            button.textContent=compactTargetLabel(target);button.setAttribute('aria-label',target);button.setAttribute('aria-pressed',plannerScheduleSelection.has(target)?'true':'false');
+            button.onclick=()=>{plannerScheduleSelection.has(target)?plannerScheduleSelection.delete(target):plannerScheduleSelection.add(target);renderPlannerSchedule();};
+            host.appendChild(button);
+        });
+        const values=plannerTargets().filter(target=>plannerScheduleSelection.has(target));
+        document.getElementById('planner-schedule-selected').textContent=values.length?`已选：${values.join('、')}`:'未选择日期，将保留在待安排';
+    }
+
+    function clearPlannerSchedule() { plannerScheduleSelection.clear();renderPlannerSchedule(); }
+    function closePlannerSchedule() { document.getElementById('planner-schedule-overlay')?.classList.remove('open');document.body.classList.remove('planner-schedule-open');plannerScheduleItem=null; }
+    function savePlannerSchedule() {
+        if(!plannerScheduleItem)return;
+        setPlannerItemTargets(plannerScheduleItem,[...plannerScheduleSelection]);commit();closePlannerSchedule();renderAllPage();
+        document.getElementById('planning-overlay').classList.add('open');renderPlanningOverlay();
+    }
+
+    function deletePlannerTask(index,event) {
+        event?.stopPropagation();const tasks=getPlannerTasks(),task=tasks[index];if(!task)return;
+        const items=(task.subtasks||[]).map((text,subIndex)=>({kind:'sub',mainIndex:index,subIndex,text:String(text||'')}));
+        items.push({kind:'main',mainIndex:index,subIndex:null,text:String(task.text||'')});
+        items.forEach(item=>setPlannerItemTargets(item,[]));tasks.splice(index,1);planningTaskIndex=null;selectedDispatchItem=null;commit();renderPlanningOverlay();
     }
 
     function renderPlanningOverlay() {
@@ -1819,12 +1961,20 @@
         getPlannerTasks().forEach((task,index)=>{
             if(!String(task.text||'').trim())return;
             const group=document.createElement('div');group.className='planner-source-group';
-            group.innerHTML=`<div class="planner-source-head"><input class="planner-task-edit" value="${escapeAttr(task.text)}" aria-label="任务名称"><button class="plan-mini-btn" type="button">${(task.subtasks||[]).length?'编辑拆解':'拆解'}</button></div><div class="planner-source-items"></div>`;
+            const taskItems=items.filter(item=>item.mainIndex===index),hasChildren=(task.subtasks||[]).some(text=>String(text||'').trim());
+            const allTargets=[...new Set(taskItems.flatMap(item=>item.targets||[]))];
+            group.classList.toggle('schedule-ready',!hasChildren);
+            group.style.borderLeft=`3px solid ${plannerColorForId(task.id)}`;
+            group.innerHTML=`<div class="planner-source-head"><input class="planner-task-edit" value="${escapeAttr(task.text)}" aria-label="任务名称"><span class="planner-source-actions"><button class="plan-mini-btn" type="button" data-split>${(task.subtasks||[]).length?'编辑拆解':'拆解'}</button><button class="planner-task-delete" type="button" data-delete aria-label="删除任务">×</button></span></div><div class="planner-source-status">${hasChildren?`已拆为 ${taskItems.length} 项`:(allTargets.length?`已安排：${allTargets.map(compactTargetLabel).join('、')}`:'待安排 · 点击选择日期')}</div><div class="planner-source-items"></div>`;
             const input=group.querySelector('input');input.onchange=()=>updatePlannerMainTask(index,input.value);
-            group.querySelector('button').onclick=()=>openPlannerSplitEditor(index);
+            group.querySelector('[data-split]').onclick=event=>{event.stopPropagation();openPlannerSplitEditor(index);};
+            group.querySelector('[data-delete]').onclick=event=>deletePlannerTask(index,event);
             const itemWrap=group.querySelector('.planner-source-items');
-            items.filter(item=>item.mainIndex===index&&!item.target).forEach(item=>itemWrap.appendChild(createDispatchCardV5(item,false)));
-            if(!itemWrap.children.length)itemWrap.innerHTML='<span class="dispatch-empty">已安排到右侧，可继续拖动调整</span>';
+            if(hasChildren)taskItems.forEach(item=>itemWrap.appendChild(createDispatchCardV5(item,false)));
+            else {
+                const mainItem=taskItems[0]||{kind:'main',mainIndex:index,subIndex:null,text:task.text,targets:[]};
+                group.onclick=event=>{if(event.target.closest('input,button'))return;openPlannerSchedule(mainItem,event);};
+            }
             pool.appendChild(group);
         });
         if(!pool.children.length)pool.innerHTML='<div style="font-size:9pt;color:#94a3b8;padding:24px;text-align:center;">先在上方填写任务，或接收一条收集箱记录。</div>';
@@ -1876,7 +2026,7 @@
         const editor=document.getElementById('planning-split-editor'),task=getPlannerTasks()[planningTaskIndex];if(!editor)return;
         if(planningTaskIndex==null||!task){editor.classList.remove('open');editor.innerHTML='';return;}
         editor.classList.add('open');
-        editor.innerHTML=`<div class="planner-source-head"><strong>拆解：${escapeHtml(task.text)}</strong><button class="plan-mini-btn" type="button" data-close>完成</button></div><div data-rows></div><button class="add-task-btn" type="button" data-add>＋ 添加子任务</button>`;
+        editor.innerHTML=`<div class="planner-source-head"><strong>拆解：${escapeHtml(task.text)}</strong><button class="planner-task-delete" type="button" data-close aria-label="关闭拆解">×</button></div><div data-rows></div><button class="add-task-btn" type="button" data-add>＋ 添加子任务</button><button class="primary-btn planner-split-save" type="button" data-save>保存拆解</button>`;
         const rows=editor.querySelector('[data-rows]');
         (task.subtasks||[]).forEach((text,subIndex)=>{
             const row=document.createElement('div');row.className='planner-split-row';
@@ -1888,6 +2038,7 @@
         if(!(task.subtasks||[]).length)rows.innerHTML='<span class="dispatch-empty">大任务可以拆成多个可直接执行的动作；普通任务可以不拆。</span>';
         editor.querySelector('[data-add]').onclick=()=>addPlannerSplitItem(planningTaskIndex);
         editor.querySelector('[data-close]').onclick=()=>{planningTaskIndex=null;renderPlannerSplitEditor();};
+        editor.querySelector('[data-save]').onclick=()=>{planningTaskIndex=null;renderPlannerSplitEditor();renderPlanningOverlay();};
     }
 
     function addPlannerSplitItem(index) {
@@ -1916,23 +2067,24 @@
 
     function renderPlannerDetail(items=collectPlannerItems()) {
         const empty=document.getElementById('planning-detail-empty'), list=document.getElementById('planning-subtasks');
-        empty.style.display='block';
-        document.getElementById('plan-detail-title').innerText=planningLevel==='month'?'安排到具体周':'安排到具体天';
+        empty.style.display='none';
+        document.getElementById('plan-detail-title').innerText=planningLevel==='month'?'各周任务分布':'每天任务分布';
         list.innerHTML='<div class="dispatch-board"></div>';
         const board=list.firstElementChild;
         ['待安排',...plannerTargets()].forEach(target=>{
             const cell=document.createElement('div');cell.className='dispatch-target';
-            cell.innerHTML=`<span class="dispatch-target-title">${target}</span><span class="dispatch-target-hint">${target==='待安排'?'拖回这里即可取消':'拖到这里，或先点任务再点这里'}</span>`;
+            cell.classList.add('planner-lane');
+            cell.innerHTML=`<span class="dispatch-target-title">${target}</span><div class="planner-lane-items"></div>`;
             cell.ondragover=event=>{event.preventDefault();cell.classList.add('selected-target');};
             cell.ondragleave=()=>cell.classList.remove('selected-target');
-            cell.ondrop=event=>{event.preventDefault();cell.classList.remove('selected-target');assignSelectedDispatch(target==='待安排'?'':target);};
-            cell.onclick=event=>{if(event.target.closest('.dispatch-card'))return;assignSelectedDispatch(target==='待安排'?'':target);};
-            const assigned=items.filter(item=>item.target===target);
-            assigned.forEach(item=>cell.appendChild(createDispatchCardV5(item,true)));
-            if(target!=='待安排'&&!assigned.length){const hint=document.createElement('span');hint.className='dispatch-empty';hint.textContent='暂无任务';cell.appendChild(hint);}
+            cell.ondrop=event=>{event.preventDefault();cell.classList.remove('selected-target');if(!selectedDispatchItem)return;const task=getPlannerTasks()[selectedDispatchItem.mainIndex],targets=getDispatchTargets(task,selectedDispatchItem);setPlannerItemTargets(selectedDispatchItem,target==='待安排'?[]:[...targets,target]);commit();renderPlanningOverlay();};
+            const assigned=items.filter(item=>target==='待安排'?!(item.targets||[]).length:(item.targets||[]).includes(target));
+            const host=cell.querySelector('.planner-lane-items');
+            assigned.forEach(item=>host.appendChild(createDispatchCardV5(item,target!=='待安排',target)));
+            if(!assigned.length){const hint=document.createElement('span');hint.className='dispatch-empty';hint.textContent='暂无任务';host.appendChild(hint);}
             board.appendChild(cell);
         });
-        document.getElementById('planning-summary').innerText=selectedDispatchItem?`已选：${selectedDispatchItem.text}`:'先选择或拖动任务';
+        document.getElementById('planning-summary').innerText='点击任务选择一个或多个安排位置';
     }
 
     function detachDispatchedTask(task,item) {
@@ -3829,6 +3981,7 @@
             }
             const li = document.createElement("li");
             li.className = `task-row ${task.completed ? 'completed' : ''} ${elementId.startsWith('month') ? 'row-blue' : elementId.startsWith('week') ? 'row-green' : 'row-orange'} ${task.isSynced ? 'synced-task' : ''} ${listIsDay?(task.startTime?'day-scheduled-row':'day-unscheduled-row'):''}`;
+            if(task.sourceTaskId||task.linkColor)li.style.setProperty('border-left-color',task.linkColor||plannerColorForId(task.sourceTaskId),'important');
             li.dataset.taskId = task.id || '';
             const isMainPool = !elementId.startsWith('day');
             const isDayList = elementId === 'day-task-list';
