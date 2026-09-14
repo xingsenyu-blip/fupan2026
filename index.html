@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>复盘任务手机版 · PWA版 V19</title>
+<title>复盘任务手机版 · PWA版 V20</title>
 <meta name="theme-color" content="#1769e8">
 <meta name="application-name" content="复盘任务手机版">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -394,7 +394,7 @@
     .inbox-kind-badge { display:inline-flex; align-items:center; margin-bottom:6px; padding:2px 7px; border-radius:999px; background:#f1f5f9; color:#64748b; font-size:7.5pt; font-weight:850; }
     .inbox-kind-badge.image { background:#eff6ff; color:#2563eb; }
     .inbox-kind-badge.file { background:#f5f3ff; color:#7c3aed; }
-    .mobile-bottom-nav, .mobile-more-overlay, .mobile-task-actions, .mobile-task-footer, .mobile-time-overlay { display:none; }
+    .mobile-bottom-nav, .mobile-more-overlay, .mobile-task-actions, .mobile-inline-actions, .mobile-task-footer, .mobile-time-overlay { display:none; }
     .inbox-item-text { font-size:9pt; white-space:pre-wrap; word-break:break-word; }
     .inbox-actions { display:flex; justify-content:flex-end; gap:6px; margin-top:7px; }
 
@@ -686,6 +686,10 @@
         #day-task-list .todo-text { grid-column:3 / 4; justify-self:stretch; min-width:0; max-width:none; width:auto; padding:0 1px; font-size:14px; line-height:1.3; display:block; max-height:2.6em; overflow:hidden; white-space:normal; overflow-wrap:anywhere; }
         #day-task-list .todo-text:focus { max-height:none; overflow:visible; }
         #day-task-list .task-time-display, #day-task-list .controls-wrapper, #day-task-list .mobile-task-actions { display:none !important; }
+        #week-task-list .task-main-line, #month-task-list .task-main-line { flex-wrap:nowrap; min-height:42px; padding:5px 6px; }
+        #week-task-list .todo-text, #month-task-list .todo-text { flex:1 1 auto; min-width:0; max-height:2.6em; padding:0 2px; overflow:hidden; line-height:1.3; white-space:normal; overflow-wrap:anywhere; }
+        #week-task-list .controls-wrapper, #month-task-list .controls-wrapper, #week-task-list .mobile-task-actions, #month-task-list .mobile-task-actions { display:none !important; }
+        .mobile-inline-actions { display:flex; align-items:center; justify-content:flex-end; flex:0 0 64px; width:64px; gap:2px; margin-left:3px; }
         .mobile-task-footer, .mobile-task-footer.scheduled { position:absolute; right:4px; top:50%; transform:translateY(-50%); width:64px; min-height:30px; padding:0; grid-template-columns:30px 30px; align-items:center; gap:2px; }
         #day-task-list .mobile-task-footer { display:grid; }
         .mobile-time-touch { justify-self:start; min-width:40px; min-height:36px; padding:6px 0; border:0; background:transparent; text-align:left; }
@@ -3999,7 +4003,10 @@
                 <button class="mobile-sticky-button ${task.sticky?'active':''}" type="button" onclick="toggleSticky('${elementId}',${index},event)" aria-label="${task.sticky?'取消常驻':'设为常驻'}"></button>
                 <button class="mobile-delete-button" type="button" onclick="deleteTask('${elementId}',${index})" aria-label="删除任务">×</button>
             </div>` : '';
-            const mobileActionsHtml = isDayList ? '' : `<button class="mobile-task-actions" type="button" aria-label="展开任务操作" aria-expanded="false" onclick="toggleMobileTaskActions(event,this)">•••</button>`;
+            const mobileActionsHtml = isDayList ? '' : `<div class="mobile-inline-actions">
+                <button class="mobile-sticky-button ${task.sticky?'active':''}" type="button" onclick="toggleSticky('${elementId}',${index},event)" aria-label="${task.sticky?'取消常驻':'设为常驻'}"></button>
+                <button class="mobile-delete-button" type="button" onclick="deleteTask('${elementId}',${index})" aria-label="删除任务">×</button>
+            </div>`;
 
             // 🌟 核心注入：常驻旋钮 UI
             let stickyHtml = `<div class="sticky-knob ${task.sticky ? 'active' : ''}" onclick="toggleSticky('${elementId}', ${index}, event)" title="设为常驻，明日自动继承"></div>`;
